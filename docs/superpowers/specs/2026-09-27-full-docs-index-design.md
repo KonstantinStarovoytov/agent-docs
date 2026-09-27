@@ -1,6 +1,6 @@
 # Full documentation index: design
 
-Status: approved in brainstorming on 2026-09-27; parts 4–7 pending spec review.
+Status: approved on 2026-09-27.
 
 ## Goal
 
@@ -85,7 +85,8 @@ Step 1, free checks:
 - path keywords: `changelog`, `release-notes`, `llms`, `full`, `blog`, `terms`,
   `privacy`, `proposal` → "probably not documentation".
 
-Step 2, a cheap LLM (`REINDEX_REVIEW_MODEL`, default `gpt-4o-mini`) reads
+Step 2, the project's chat model (`OPENAI_CHAT_MODEL`, today `gpt-6-luna`; one
+model everywhere, via the shared `chat_model()`) reads
 the path, title and first ~1,500 characters. It returns `keep` or
 `quarantine`, a category, and a one-sentence plain-language summary of what
 the page is. About 1k tokens per page.
