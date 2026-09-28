@@ -53,6 +53,11 @@ def test_non_doc_path_keywords_are_flagged() -> None:
         assert gate.heuristic_flags(_doc(f"https://x/{path}"), 1, 10.0, {}), path
 
 
+def test_non_doc_keywords_do_not_match_inside_other_words() -> None:
+    assert gate.heuristic_flags(_doc("https://x/docs/determines.md"), 1, 10.0, {}) == []
+    assert gate.heuristic_flags(_doc("https://x/docs/weblogs.md"), 1, 10.0, {}) == []
+
+
 def test_model_quarantine_is_respected_and_reasons_combine() -> None:
     def junk(_: str) -> gate.PageReview:
         return gate.PageReview(
