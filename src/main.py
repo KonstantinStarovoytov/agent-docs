@@ -9,7 +9,7 @@ from src.rag.embeddings import get_embeddings
 def main() -> None:
     print("Loading Claude docs...")
 
-    source_documents = load_all_sources()
+    source_documents = load_all_sources().documents
 
     print(f"Loaded {len(source_documents)} documents")
 

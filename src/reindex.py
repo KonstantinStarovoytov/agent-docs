@@ -321,7 +321,7 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     manifest = load_manifest()
-    documents = load_all_sources()
+    documents = load_all_sources().documents
     plan = diff(manifest, documents)
 
     client = get_qdrant_client()

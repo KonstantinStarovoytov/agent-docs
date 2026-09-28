@@ -34,7 +34,7 @@ def main() -> None:
         )
     print("Loading sources...")
 
-    documents = load_all_sources()
+    documents = load_all_sources().documents
 
     print(f"Loaded {len(documents)} documents")
 
