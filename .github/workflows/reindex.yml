@@ -56,6 +56,8 @@ jobs:
         # and the manifest must say so or the next run re-embeds it all again.
         if: always()
         run: |
+          set -e
+          mkdir -p data/manifests reports/docs-changes
           if git diff --quiet -- data/manifests reports/docs-changes && [ -z "$(git ls-files --others --exclude-standard data/manifests reports/docs-changes)" ]; then
             echo "nothing to commit"; exit 0
           fi
@@ -70,7 +72,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           [ -f out/quarantine.md ] || exit 0
-          existing=$(gh issue list --label docs-review --state open --json number --jq '.[0].number')
+          existing=$(gh issue list --label docs-review --state open --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body-file out/quarantine.md
           else
@@ -88,7 +90,7 @@ jobs:
           \`\`\`
           $(tail -n 40 reindex.log 2>/dev/null || echo "No reindex log: the run failed before the reindex step. Open the run link for the error.")
           \`\`\`"
-          existing=$(gh issue list --label reindex --state open --json number --jq '.[0].number')
+          existing=$(gh issue list --label reindex --state open --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --body "$body"
           else
