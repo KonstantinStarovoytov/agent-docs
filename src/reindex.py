@@ -2,19 +2,21 @@
 
 Runs from a daily GitHub Actions cron. The manifest under `data/` remembers a
 fingerprint per page, so a run where nothing changed costs a few HTTP requests
-and no embeddings. Pages that vanish from a vendor's index are reported, not
-deleted: a rename looks the same as a removal, and that is a human decision.
+and no embeddings. New pages pass a quality gate (flagged ones are
+quarantined), vanished pages are deleted unless a vendor's index looks broken,
+and every run writes a readable change report.
 """
 
 import argparse
 import hashlib
 import json
+import statistics
 import sys
 from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, Protocol
 
 from langchain_core.documents import Document
 from qdrant_client import QdrantClient, models
@@ -22,7 +24,11 @@ from qdrant_client import QdrantClient, models
 from src.config import settings
 from src.ingestion.chunker import chunk_document
 from src.ingestion.ingest import get_hybrid_vector_store, get_qdrant_client
+from src.ingestion import report as rep
+from src.ingestion.gate import PageReview, gate_page
 from src.ingestion.loader import LoadResult, load_all_sources
+from src.ingestion.snapshots import SnapshotStore, snapshot_collection
+from src.ingestion.sources import SOURCES
 from src.models import SourceDocument
 from src.service.core import META_COLLECTION, META_POINT_ID
 
@@ -182,27 +188,146 @@ def orphans(indexed_sources: set[str], documents: list[SourceDocument]) -> list[
     return sorted(indexed_sources - fetched)
 
 
-def apply(
-    plan: Plan,
+class Snapshots(Protocol):
+    def get(self, url: str) -> str | None: ...
+    def put(self, document: SourceDocument, sha256: str) -> None: ...
+    def delete(self, url: str) -> None: ...
+    def all_texts(self) -> dict[str, str]: ...
+
+
+@dataclass
+class Deps:
+    load: Callable[[], LoadResult]
+    snapshots: Snapshots
+    delete_source: Callable[[str], None]
+    add_chunks: Callable[[list[Document]], None]
+    product_of: Callable[[], dict[str, str]]
+    review: Callable[[str], PageReview] | None = None
+    summarize: Callable[[str], str] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class RunResult:
+    manifest: Manifest
+    report: rep.ChangeReport
+    exit_code: int
+
+
+def allowed_urls() -> set[str]:
+    return {url for config in SOURCES for url in config.allow}
+
+
+def _medians(manifest: Manifest, product_of: dict[str, str]) -> dict[str, float]:
+    per: dict[str, list[int]] = {}
+    for url, entry in manifest.documents.items():
+        if entry.status == "indexed":
+            per.setdefault(product_of.get(url, ""), []).append(entry.chunks)
+    return {p: float(statistics.median(c)) for p, c in per.items()}
+
+
+def run(
     manifest: Manifest,
+    deps: Deps,
     *,
-    delete_source: Callable[[str], None],
-    add_chunks: Callable[[list[Document]], None],
     today: date,
-) -> Manifest:
-    """Replace the chunks of every added or changed page; leave the rest alone."""
+    dry_run: bool = False,
+    gate_report_only: bool = False,
+) -> RunResult:
+    load = deps.load()
+    plan = diff(manifest, load.documents)
+    product_of = deps.product_of()
+    removals = decide_removals(manifest, plan.missing, load, product_of)
+    broken = failing_vendors(load)
     documents = dict(manifest.documents)
-    for document in plan.to_index:
+    medians = _medians(manifest, product_of)
+    indexed_texts = deps.snapshots.all_texts() if plan.added else {}
+    allowed = allowed_urls()
+    report = rep.ChangeReport(
+        day=today.isoformat(),
+        added=[],
+        removed=[],
+        changed=[],
+        quarantined=[],
+        fetch_failures=dict(load.failures),
+        blocked={**removals.blocked, **broken},
+        initial_build=not manifest.documents,
+    )
+    summaries = 0
+
+    def index(document: SourceDocument, entry_summary: str) -> None:
         chunks = chunk_document(document)
-        delete_source(document.url)
-        add_chunks(chunks)
+        sha = fingerprint(document.content)
+        if not dry_run:
+            deps.delete_source(document.url)
+            deps.add_chunks(chunks)
+            deps.snapshots.put(document, sha)
         documents[document.url] = ManifestEntry(
-            sha256=fingerprint(document.content),
-            chunks=len(chunks),
-            title=document.title,
+            sha256=sha, chunks=len(chunks), title=document.title, summary=entry_summary
         )
-    indexed_at = today.isoformat() if plan.to_index else manifest.indexed_at
-    return Manifest(indexed_at=indexed_at, documents=documents)
+
+    for document in plan.added:
+        chunks = chunk_document(document)
+        line = rep.PageLine(document.url, document.title, document.product)
+        if document.url in allowed:
+            index(document, "")
+            report.added.append(line)
+            continue
+        verdict = gate_page(
+            document,
+            len(chunks),
+            medians.get(document.product, float(len(chunks))),
+            indexed_texts,
+            review=deps.review,
+        )
+        line.summary = verdict.summary
+        if verdict.keep or gate_report_only:
+            index(document, verdict.summary)
+            report.added.append(line)
+        if not verdict.keep:
+            report.quarantined.append(
+                rep.QuarantineLine(
+                    document.url,
+                    document.title,
+                    document.product,
+                    verdict.summary,
+                    verdict.reasons,
+                )
+            )
+            if not gate_report_only:
+                documents[document.url] = ManifestEntry(
+                    sha256=fingerprint(document.content),
+                    chunks=0,
+                    title=document.title,
+                    status="quarantined",
+                    reason="; ".join(verdict.reasons),
+                    summary=verdict.summary,
+                )
+
+    for document in plan.changed:
+        old = deps.snapshots.get(document.url)
+        line = rep.ChangedLine(document.url, document.title, document.product)
+        if old is not None:
+            line.diff = rep.section_diff(old, document.content)
+            if line.diff.significant and summaries < rep.MAX_CHANGE_SUMMARIES:
+                line.summary = rep.summarize_change(
+                    document.title, old, document.content, summarize=deps.summarize
+                )
+                summaries += 1
+        index(document, documents[document.url].summary)
+        report.changed.append(line)
+
+    for url in removals.delete:
+        if not dry_run:
+            deps.delete_source(url)
+            deps.snapshots.delete(url)
+        documents.pop(url, None)
+        report.removed.append(url)
+
+    indexed_at = (
+        today.isoformat() if (plan.to_index or removals.delete) else manifest.indexed_at
+    )
+    code = 4 if broken else 3 if removals.blocked else 0
+    return RunResult(Manifest(indexed_at=indexed_at, documents=documents), report, code)
 
 
 def _matches_expected(hit: dict[str, str], expected: dict[str, str]) -> bool:
@@ -371,6 +496,52 @@ def _search(query: str) -> list[dict[str, str]]:
     ]
 
 
+class _EmptySnapshots:
+    """Read-only stand-in so a dry run never creates the snapshot collection."""
+
+    def get(self, url: str) -> str | None:
+        return None
+
+    def put(self, document: SourceDocument, sha256: str) -> None:
+        pass
+
+    def delete(self, url: str) -> None:
+        pass
+
+    def all_texts(self) -> dict[str, str]:
+        return {}
+
+
+def _snapshot_store(client: QdrantClient, collection: str, dry_run: bool) -> Snapshots:
+    if dry_run and not client.collection_exists(collection):
+        return _EmptySnapshots()
+    return SnapshotStore(client, collection)
+
+
+def _product_of() -> dict[str, str]:
+    """URL -> product for every page in the hybrid collection."""
+    client = get_qdrant_client()
+    products: dict[str, str] = {}
+    try:
+        offset = None
+        while True:
+            points, offset = client.scroll(
+                settings.qdrant_hybrid_collection,
+                limit=256,
+                offset=offset,
+                with_payload=["metadata.source", "metadata.product"],
+                with_vectors=False,
+            )
+            for p in points:
+                meta = (p.payload or {}).get("metadata", {})
+                if meta.get("source"):
+                    products[str(meta["source"])] = str(meta.get("product", ""))
+            if offset is None:
+                return products
+    finally:
+        client.close()
+
+
 def main(argv: list[str] | None = None) -> int:
     from evals.seed_query_transform_dataset import INTENTS
 
@@ -378,68 +549,79 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--prune",
         action="store_true",
-        help="Delete indexed pages that no source config selects any more "
-        "(after a deliberate change to sources.py).",
+        help="Also delete indexed pages no source config selects.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Fetch, select, gate and report without writing anywhere.",
+    )
+    parser.add_argument(
+        "--gate-report-only",
+        action="store_true",
+        help="Index flagged pages anyway but list them (initial build).",
+    )
+    parser.add_argument(
+        "--out", default=".", help="Where report.md and quarantine.md go."
     )
     args = parser.parse_args(argv)
 
-    path = manifest_path(settings.qdrant_hybrid_collection)
+    collection = settings.qdrant_hybrid_collection
+    path = manifest_path(collection)
     manifest = load_manifest(path)
-    documents = load_all_sources().documents
-    plan = diff(manifest, documents)
-
     client = get_qdrant_client()
     try:
-        print(f"index points: {touch_index(client, settings.qdrant_hybrid_collection)}")
+        print(f"index points: {touch_index(client, collection)}")
+        if not args.dry_run:
+            ensure_payload_indexes(client, collection)
+        store = _snapshot_store(client, snapshot_collection(collection), args.dry_run)
+        loaded = load_all_sources()  # fetched once, shared by run and prune
+        deps = Deps(
+            load=lambda: loaded,
+            snapshots=store,
+            delete_source=_delete_source,
+            add_chunks=_add_chunks,
+            product_of=_product_of,
+        )
+        result = run(
+            manifest,
+            deps,
+            today=datetime.now(UTC).date(),
+            dry_run=args.dry_run,
+            gate_report_only=args.gate_report_only,
+        )
+        if args.prune and not args.dry_run:
+            for url in orphans(_indexed_sources(), loaded.documents):
+                print(f"  prune {url}")
+                _delete_source(url)
+                store.delete(url)
+                result.manifest.documents.pop(url, None)
     finally:
         client.close()
 
-    if args.prune:
-        stale = orphans(_indexed_sources(), documents)
-        print(f"prune: {len(stale)} orphaned pages")
-        for url in stale:
-            print(f"  delete {url}")
-            _delete_source(url)
-        manifest = Manifest(
-            indexed_at=manifest.indexed_at,
-            documents={u: e for u, e in manifest.documents.items() if u not in stale},
+    out = Path(args.out)
+    out.mkdir(parents=True, exist_ok=True)
+    text = rep.render_report(result.report)
+    (out / "report.md").write_text(text)
+    if result.report.quarantined and not args.gate_report_only:
+        (out / "quarantine.md").write_text(
+            rep.render_quarantine_issue(result.report.quarantined)
         )
-        plan = diff(manifest, documents)
-        if not plan.to_index:
-            save_manifest(manifest, path)
-    print(
-        f"added={len(plan.added)} changed={len(plan.changed)} "
-        f"unchanged={len(plan.unchanged)} missing={len(plan.missing)}"
-    )
-    for document in plan.to_index:
-        print(f"  reindex {document.url}")
-
-    if plan.to_index:
-        client = get_qdrant_client()
-        try:
-            ensure_payload_indexes(client, settings.qdrant_hybrid_collection)
-        finally:
-            client.close()
-        manifest = apply(
-            plan,
-            manifest,
-            delete_source=_delete_source,
-            add_chunks=_add_chunks,
-            today=datetime.now(UTC).date(),
-        )
-        write_meta(manifest)
-        save_manifest(manifest, path)
+    print(text)
+    if args.dry_run:
+        return result.exit_code
+    save_manifest(result.manifest, path)
+    if not result.report.empty():
+        daily = Path("reports/docs-changes") / f"{result.report.day}.md"
+        daily.parent.mkdir(parents=True, exist_ok=True)
+        daily.write_text(text)
+    if result.manifest.indexed_at != manifest.indexed_at:
+        write_meta(result.manifest)
         failures = smoke_failures(INTENTS, _search)
         if failures:
             print(f"SMOKE FAILED: expected page missing from top hits for {failures}")
             return 1
-
-    if plan.missing:
-        print("MISSING from vendor index (not deleted; decide by hand):")
-        for url in plan.missing:
-            print(f"  {url}")
-        return 2
-    return 0
+    return result.exit_code
 
 
 if __name__ == "__main__":

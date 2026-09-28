@@ -35,10 +35,11 @@ class SectionDiff:
 def section_diff(old: str, new: str) -> SectionDiff:
     before, after = HEADING.findall(old), HEADING.findall(new)
     old_lines, new_lines = old.splitlines(), new.splitlines()
+    opcodes = difflib.SequenceMatcher(
+        None, old_lines, new_lines, autojunk=False
+    ).get_opcodes()
     changed = sum(
-        1
-        for line in difflib.ndiff(old_lines, new_lines)
-        if line.startswith(("+ ", "- "))
+        (i2 - i1) + (j2 - j1) for tag, i1, i2, j1, j2 in opcodes if tag != "equal"
     )
     return SectionDiff(
         added=[h for h in after if h not in before],
