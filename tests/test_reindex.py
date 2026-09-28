@@ -275,3 +275,68 @@ def test_touch_index_reads_the_hybrid_collection() -> None:
 
     client.count.assert_called_once_with("agent_docs_hybrid_v1")
     assert points == 1106
+
+
+def _load(listed: dict[str, int], failures: dict[str, str] | None = None) -> Any:
+    from src.ingestion.loader import LoadResult
+
+    failures = failures or {}
+    return LoadResult(
+        documents=[],
+        failures=failures,
+        listed=listed,
+        failed_products={u: "p" for u in failures},
+    )
+
+
+def _manifest(n: int, product: str = "p") -> tuple[reindex.Manifest, dict[str, str]]:
+    docs = {
+        f"u{i}": reindex.ManifestEntry(sha256="s", chunks=1, title="T")
+        for i in range(n)
+    }
+    return reindex.Manifest(indexed_at=None, documents=docs), {u: product for u in docs}
+
+
+def test_small_removals_are_applied() -> None:
+    manifest, product_of = _manifest(20)
+
+    decision = reindex.decide_removals(
+        manifest, ["u0", "u1"], _load({"p": 18}), product_of
+    )
+
+    assert decision.delete == ["u0", "u1"] and decision.blocked == {}
+
+
+def test_removing_more_than_ten_percent_is_blocked() -> None:
+    manifest, product_of = _manifest(20)
+
+    decision = reindex.decide_removals(
+        manifest, ["u0", "u1", "u2"], _load({"p": 17}), product_of
+    )
+
+    assert decision.delete == []
+    assert "3 of 20" in decision.blocked["p"]
+
+
+def test_shrunken_index_blocks_removals() -> None:
+    manifest, product_of = _manifest(20)
+
+    decision = reindex.decide_removals(manifest, ["u0"], _load({"p": 9}), product_of)
+
+    assert decision.delete == [] and "llms.txt" in decision.blocked["p"]
+
+
+def test_failed_fetches_are_not_missing() -> None:
+    manifest, product_of = _manifest(20)
+
+    decision = reindex.decide_removals(
+        manifest, ["u0"], _load({"p": 20}, {"u0": "HTTP 500"}), product_of
+    )
+
+    assert decision.delete == []
+
+
+def test_vendor_with_many_fetch_failures_fails_the_run() -> None:
+    load = _load({"p": 10}, {f"u{i}": "HTTP 500" for i in range(2)})
+
+    assert "2 of 10" in reindex.failing_vendors(load)["p"]
