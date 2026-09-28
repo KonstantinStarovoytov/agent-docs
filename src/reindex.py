@@ -272,13 +272,26 @@ def run(
             index(document, "")
             report.added.append(line)
             continue
-        verdict = gate_page(
-            document,
-            len(chunks),
-            medians.get(document.product, float(len(chunks))),
-            indexed_texts,
-            review=deps.review,
-        )
+        try:
+            verdict = gate_page(
+                document,
+                len(chunks),
+                medians.get(document.product, float(len(chunks))),
+                indexed_texts,
+                review=deps.review,
+            )
+        except Exception as error:  # fail closed; no manifest entry, so it retries
+            print(f"  gate failed for {document.url}: {type(error).__name__}")
+            report.quarantined.append(
+                rep.QuarantineLine(
+                    document.url,
+                    document.title,
+                    document.product,
+                    "",
+                    [f"review failed: {type(error).__name__}"],
+                )
+            )
+            continue
         line.summary = verdict.summary
         if verdict.keep or gate_report_only:
             index(document, verdict.summary)
@@ -309,10 +322,15 @@ def run(
         if old is not None:
             line.diff = rep.section_diff(old, document.content)
             if line.diff.significant and summaries < rep.MAX_CHANGE_SUMMARIES:
-                line.summary = rep.summarize_change(
-                    document.title, old, document.content, summarize=deps.summarize
-                )
                 summaries += 1
+                try:
+                    line.summary = rep.summarize_change(
+                        document.title, old, document.content, summarize=deps.summarize
+                    )
+                except Exception as error:
+                    print(
+                        f"  summary failed for {document.url}: {type(error).__name__}"
+                    )
         index(document, documents[document.url].summary)
         report.changed.append(line)
 
