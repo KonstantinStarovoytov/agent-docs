@@ -14,6 +14,14 @@ on:
         description: "Drop indexed pages no source config selects any more (after editing sources.py)"
         type: boolean
         default: false
+      collection:
+        description: "Qdrant collection to build (empty = production default)"
+        type: string
+        default: ""
+      gate_report_only:
+        description: "Index flagged pages but list them (initial build)"
+        type: boolean
+        default: false
 permissions:
   contents: write
   issues: write
@@ -27,6 +35,7 @@ jobs:
       COHERE_API_KEY_FALLBACK: ${{ secrets.COHERE_API_KEY_FALLBACK }}
       QDRANT_URL: ${{ secrets.QDRANT_URL }}
       QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+      QDRANT_HYBRID_COLLECTION: ${{ inputs.collection || vars.QDRANT_HYBRID_COLLECTION || 'agent_docs_hybrid_v1' }}
       TRACING_ENABLED: "false"
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -36,20 +45,38 @@ jobs:
         id: reindex
         run: |
           set -o pipefail
-          uv run python -m src.reindex ${{ inputs.prune && '--prune' || '' }} 2>&1 | tee reindex.log
+          uv run python -u -m src.reindex --out out \
+            ${{ inputs.prune && '--prune' || '' }} \
+            ${{ inputs.gate_report_only && '--gate-report-only' || '' }} 2>&1 | tee reindex.log
+      - name: Job summary
+        if: always()
+        run: '[ -f out/report.md ] && cat out/report.md >> "$GITHUB_STEP_SUMMARY" || true'
       - name: Commit manifest
         # Even after a failed smoke check: the index was already rewritten,
         # and the manifest must say so or the next run re-embeds it all again.
         if: always()
         run: |
-          if git diff --quiet -- data/index-manifest.json && [ -z "$(git ls-files --others --exclude-standard data)" ]; then
-            echo "manifest unchanged"; exit 0
+          if git diff --quiet -- data/manifests reports/docs-changes && [ -z "$(git ls-files --others --exclude-standard data/manifests reports/docs-changes)" ]; then
+            echo "nothing to commit"; exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/index-manifest.json
+          git add data/manifests reports/docs-changes
           git commit -m "chore(index): reindex on $(date -u +%F) [skip ci]"
           git push
+      - name: Quarantine issue
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          [ -f out/quarantine.md ] || exit 0
+          existing=$(gh issue list --label docs-review --state open --json number --jq '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file out/quarantine.md
+          else
+            gh label create docs-review --description "New doc pages waiting for a decision" --force
+            gh issue create --title "Pages waiting for review" --label docs-review --body-file out/quarantine.md
+          fi
       - name: Open an issue on failure
         if: failure()
         env:
