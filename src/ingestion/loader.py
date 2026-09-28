@@ -59,39 +59,47 @@ def _extract_links(
     return [(title, url) for url, title in links.items()]
 
 
-class SourceSelectionError(RuntimeError):
-    """An include pattern matched zero or several pages; a human must look."""
+DATED_SEGMENT = r"(\d{4}-\d{2}-\d{2}|draft)/"
 
 
-def newest_version(links: list[tuple[str, str]], prefix: str) -> str:
-    """Newest `<prefix>YYYY-MM-DD/` segment present in the index."""
+def newest_version(links: list[tuple[str, str]], prefix: str) -> str | None:
+    """Newest `<prefix>YYYY-MM-DD/` segment present in the index, if any."""
     dated = re.compile(re.escape(prefix) + r"(\d{4}-\d{2}-\d{2})/")
     versions = {m.group(1) for _, url in links if (m := dated.search(url))}
-    if not versions:
-        raise SourceSelectionError(f"no dated versions under {prefix!r}")
-    return max(versions)
+    return max(versions) if versions else None
+
+
+def _is_page(url: str) -> bool:
+    return urlsplit(url).path.endswith(".md")
+
+
+def _stale_version(
+    path: str, config: SourceConfig, newest: dict[str, str | None]
+) -> bool:
+    for prefix in config.versioned_prefixes:
+        m = re.match(re.escape(prefix) + DATED_SEGMENT, path)
+        if m:
+            return m.group(1) != newest[prefix]
+    return False
 
 
 def select_links(
     links: list[tuple[str, str]], config: SourceConfig
 ) -> list[tuple[str, str]]:
-    """One page per include pattern, in pattern order."""
-    patterns = config.include
-    if config.versioned_prefix is not None:
-        version = newest_version(links, config.versioned_prefix)
-        patterns = tuple(
-            f"{config.versioned_prefix}{version}{pattern}" for pattern in patterns
-        )
-    selected: list[tuple[str, str]] = []
-    for pattern in patterns:
-        hits = [(title, url) for title, url in links if url.endswith(pattern)]
-        if len(hits) != 1:
-            raise SourceSelectionError(
-                f"{config.product}: pattern {pattern!r} matched {len(hits)} pages "
-                f"in {config.index_url}: {[url for _, url in hits]}"
-            )
-        selected.append(hits[0])
-    return selected
+    """Every markdown page in llms.txt order, minus excludes and stale versions."""
+    newest = {p: newest_version(links, p) for p in config.versioned_prefixes}
+    excludes = [re.compile(p) for p in config.exclude]
+    selected: dict[str, str] = {}
+    for title, url in links:
+        if url in selected or not _is_page(url):
+            continue
+        path = urlsplit(url).path
+        if any(p.search(path) for p in excludes):
+            continue
+        if _stale_version(path, config, newest):
+            continue
+        selected[url] = title
+    return [(title, url) for url, title in selected.items()]
 
 
 def load_source(
