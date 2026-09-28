@@ -209,3 +209,53 @@ def test_dry_run_does_not_create_the_snapshot_collection() -> None:
     assert store.all_texts() == {} and not client.collection_exists("snaps")
     reindex._snapshot_store(client, "snaps", dry_run=False)
     assert client.collection_exists("snaps")
+
+
+def test_failed_review_quarantines_page_without_manifest_entry() -> None:
+    deps, added, _ = _deps(
+        [_doc("https://x/a.md", "# A\ntext"), _doc("https://x/b.md", "# B\ntext")]
+    )
+
+    def review(prompt: str) -> PageReview:
+        if "https://x/b.md" in prompt:
+            raise TimeoutError("slow")
+        return PageReview(keep=True, category="documentation", summary="What it is.")
+
+    deps.review = review
+
+    result = reindex.run(_empty(), deps, today=DAY)
+
+    assert result.exit_code == 0
+    assert result.manifest.documents["https://x/a.md"].status == "indexed"
+    assert "https://x/b.md" not in result.manifest.documents
+    assert {c.metadata["source"] for c in added} == {"https://x/a.md"}
+    [line] = result.report.quarantined
+    assert line.url == "https://x/b.md" and line.reasons == [
+        "review failed: TimeoutError"
+    ]
+
+
+def test_failed_summary_still_indexes_the_change() -> None:
+    old, new = "# A\n## One\nx\n", "# A\n## One\nx\n## Two\ny\n"
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/a.md": reindex.ManifestEntry(
+                sha256=reindex.fingerprint(old), chunks=1, title="A"
+            )
+        },
+    )
+    deps, added, _ = _deps([_doc("https://x/a.md", new)])
+    deps.snapshots.texts["https://x/a.md"] = old
+
+    def boom(_p: str) -> str:
+        raise RuntimeError("api down")
+
+    deps.summarize = boom
+
+    result = reindex.run(manifest, deps, today=DAY)
+
+    assert added and result.report.changed[0].summary == ""
+    assert result.manifest.documents["https://x/a.md"].sha256 == reindex.fingerprint(
+        new
+    )
