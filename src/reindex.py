@@ -14,7 +14,7 @@ from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from langchain_core.documents import Document
 from qdrant_client import QdrantClient, models
@@ -26,8 +26,12 @@ from src.ingestion.loader import load_all_sources
 from src.models import SourceDocument
 from src.service.core import META_COLLECTION, META_POINT_ID
 
-MANIFEST_PATH = Path("data/index-manifest.json")
+MANIFEST_DIR = Path("data/manifests")
 SMOKE_K = 10
+
+
+def manifest_path(collection: str) -> Path:
+    return MANIFEST_DIR / f"{collection}.json"
 
 
 @dataclass(frozen=True, slots=True)
@@ -35,6 +39,9 @@ class ManifestEntry:
     sha256: str
     chunks: int
     title: str
+    status: Literal["indexed", "quarantined"] = "indexed"
+    reason: str = ""
+    summary: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -72,7 +79,7 @@ def fingerprint(content: str) -> str:
     return hashlib.sha256(normalized.encode()).hexdigest()
 
 
-def load_manifest(path: Path = MANIFEST_PATH) -> Manifest:
+def load_manifest(path: Path) -> Manifest:
     if not path.exists():
         return Manifest(indexed_at=None, documents={})
     raw = json.loads(path.read_text())
@@ -84,7 +91,7 @@ def load_manifest(path: Path = MANIFEST_PATH) -> Manifest:
     )
 
 
-def save_manifest(manifest: Manifest, path: Path = MANIFEST_PATH) -> None:
+def save_manifest(manifest: Manifest, path: Path) -> None:
     payload = {
         "indexed_at": manifest.indexed_at,
         "documents": {
@@ -104,6 +111,12 @@ def diff(manifest: Manifest, documents: list[SourceDocument]) -> Plan:
         seen.add(document.url)
         entry = manifest.documents.get(document.url)
         if entry is None:
+            added.append(document)
+        elif entry.status == "quarantined" and entry.sha256 == fingerprint(
+            document.content
+        ):
+            unchanged.append(document.url)
+        elif entry.status == "quarantined":
             added.append(document)
         elif entry.sha256 != fingerprint(document.content):
             changed.append(document)
@@ -320,7 +333,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = parser.parse_args(argv)
 
-    manifest = load_manifest()
+    path = manifest_path(settings.qdrant_hybrid_collection)
+    manifest = load_manifest(path)
     documents = load_all_sources().documents
     plan = diff(manifest, documents)
 
@@ -342,7 +356,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         plan = diff(manifest, documents)
         if not plan.to_index:
-            save_manifest(manifest)
+            save_manifest(manifest, path)
     print(
         f"added={len(plan.added)} changed={len(plan.changed)} "
         f"unchanged={len(plan.unchanged)} missing={len(plan.missing)}"
@@ -364,7 +378,7 @@ def main(argv: list[str] | None = None) -> int:
             today=datetime.now(UTC).date(),
         )
         write_meta(manifest)
-        save_manifest(manifest)
+        save_manifest(manifest, path)
         failures = smoke_failures(INTENTS, _search)
         if failures:
             print(f"SMOKE FAILED: expected page missing from top hits for {failures}")

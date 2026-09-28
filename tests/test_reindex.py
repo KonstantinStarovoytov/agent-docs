@@ -225,6 +225,42 @@ def test_fingerprint_changes_when_the_chunker_logic_version_changes(
     assert before != after
 
 
+def test_manifest_path_follows_the_collection() -> None:
+    assert str(reindex.manifest_path("agent_docs_hybrid_v2")) == (
+        "data/manifests/agent_docs_hybrid_v2.json"
+    )
+
+
+def test_old_manifest_entries_load_as_indexed(tmp_path: Any) -> None:
+    path = tmp_path / "m.json"
+    path.write_text(
+        '{"indexed_at": "2026-09-01", "documents": '
+        '{"u": {"sha256": "s", "chunks": 1, "title": "T"}}}'
+    )
+
+    entry = reindex.load_manifest(path).documents["u"]
+
+    assert entry.status == "indexed" and entry.reason == "" and entry.summary == ""
+
+
+def test_quarantined_page_is_regated_only_when_content_changes() -> None:
+    q = reindex.ManifestEntry(
+        sha256=reindex.fingerprint("same"),
+        chunks=0,
+        title="T",
+        status="quarantined",
+        reason="size",
+        summary="s",
+    )
+    manifest = reindex.Manifest(indexed_at=None, documents={"u/q": q})
+
+    same = reindex.diff(manifest, [_doc("u/q", "same")])
+    edited = reindex.diff(manifest, [_doc("u/q", "edited")])
+
+    assert same.unchanged == ["u/q"] and not same.added
+    assert [d.url for d in edited.added] == ["u/q"]
+
+
 def test_touch_index_reads_the_hybrid_collection() -> None:
     """Qdrant Cloud suspends a free cluster after a week without requests and
     deletes it after four. A quiet week (no doc changes) made no Qdrant call
