@@ -26,3 +26,36 @@ def test_unreachable_index_raises() -> None:
 
     with pytest.raises(RuntimeError, match="llms.txt"):
         loader.load_sources((CFG,), fetch=lambda url: (503, ""))
+
+
+def test_load_all_sources_closes_its_client(monkeypatch) -> None:
+    """`load_all_sources` must not leak the httpx.Client it creates."""
+
+    class FakeClient:
+        closed = False
+
+        def __init__(self, **kwargs: object) -> None:
+            pass
+
+        def get(self, url: str) -> object:
+            class Response:
+                status_code = 200
+                text = ""
+
+            return Response()
+
+        def close(self) -> None:
+            FakeClient.closed = True
+
+        def __enter__(self) -> "FakeClient":
+            return self
+
+        def __exit__(self, *exc_info: object) -> None:
+            self.close()
+
+    monkeypatch.setattr(loader, "SOURCES", ())
+    monkeypatch.setattr(loader, "httpx", type("M", (), {"Client": FakeClient}))
+
+    loader.load_all_sources()
+
+    assert FakeClient.closed is True

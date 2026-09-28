@@ -117,13 +117,13 @@ def select_links(
     return [(title, url) for url, title in selected.items()]
 
 
-def _http_fetch() -> Fetch:
-    client = httpx.Client(timeout=30, follow_redirects=True)
-
+def _client_fetch(client: httpx.Client) -> Fetch:
     def fetch(url: str) -> tuple[int, str]:
         try:
             response = client.get(url)
         except httpx.HTTPError as error:
+            # Transport-level failures (timeouts, connection errors, ...) are
+            # reported as status 0 with the exception class name as the text.
             return 0, type(error).__name__
         return response.status_code, response.text
 
@@ -167,7 +167,10 @@ def load_sources(configs: Sequence[SourceConfig], fetch: Fetch) -> LoadResult:
 
 
 def load_all_sources(fetch: Fetch | None = None) -> LoadResult:
-    return load_sources(SOURCES, fetch or _http_fetch())
+    if fetch is not None:
+        return load_sources(SOURCES, fetch)
+    with httpx.Client(timeout=30, follow_redirects=True) as client:
+        return load_sources(SOURCES, _client_fetch(client))
 
 
 if __name__ == "__main__":
