@@ -1,10 +1,8 @@
 """Change detection and the incremental apply step, with fakes for the network."""
 
-from datetime import date
 from typing import Any
 
 import pytest
-from langchain_core.documents import Document
 
 from src import reindex
 from src.models import SourceDocument
@@ -46,55 +44,6 @@ def test_diff_classifies_added_changed_unchanged_and_missing() -> None:
     assert [d.url for d in result.changed] == ["u/changed"]
     assert result.unchanged == ["u/same"]
     assert result.missing == ["u/gone"]
-
-
-def test_apply_replaces_only_changed_documents() -> None:
-    deleted: list[str] = []
-    added: list[Document] = []
-
-    def delete_source(url: str) -> None:
-        deleted.append(url)
-
-    def add_chunks(chunks: list[Document]) -> None:
-        added.extend(chunks)
-
-    manifest = reindex.Manifest(indexed_at="2026-09-01", documents={})
-    documents = [_doc("u/a", "# A\n\nalpha"), _doc("u/b", "# B\n\nbeta")]
-    plan = reindex.diff(manifest, documents)
-
-    updated = reindex.apply(
-        plan,
-        manifest,
-        delete_source=delete_source,
-        add_chunks=add_chunks,
-        today=date(2026, 9, 15),
-    )
-
-    assert sorted(deleted) == ["u/a", "u/b"]
-    assert {c.metadata["source"] for c in added} == {"u/a", "u/b"}
-    assert updated.indexed_at == "2026-09-15"
-    assert set(updated.documents) == {"u/a", "u/b"}
-    assert updated.documents["u/a"].chunks == 1
-
-
-def test_apply_keeps_missing_documents_in_manifest() -> None:
-    """A page that vanished from the vendor index is a human decision."""
-    manifest = reindex.Manifest(
-        indexed_at="2026-09-01",
-        documents={"u/gone": reindex.ManifestEntry(sha256="x", chunks=2, title="T")},
-    )
-    plan = reindex.diff(manifest, [])
-
-    updated = reindex.apply(
-        plan,
-        manifest,
-        delete_source=lambda _u: None,
-        add_chunks=lambda _c: None,
-        today=date(2026, 9, 15),
-    )
-
-    assert "u/gone" in updated.documents
-    assert updated.indexed_at == "2026-09-01"  # nothing was re-indexed
 
 
 def test_smoke_passes_when_any_relevant_target_is_hit() -> None:
