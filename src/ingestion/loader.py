@@ -1,10 +1,25 @@
 import re
+from collections.abc import Callable, Sequence
+from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
 from urllib.parse import urlsplit, urlunsplit
 
 import httpx
 
 from src.ingestion.sources import SOURCES, SourceConfig
 from src.models import SourceDocument
+
+FETCH_CONCURRENCY = 6
+Fetch = Callable[[str], tuple[int, str]]
+
+
+@dataclass(frozen=True, slots=True)
+class LoadResult:
+    documents: list[SourceDocument]
+    failures: dict[str, str]
+    listed: dict[str, int]
+    failed_products: dict[str, str]
+
 
 MARKDOWN_LINK_RE = re.compile(r"\[([^\]]+)]\((https?://[^)\s]+)\)")
 
@@ -102,52 +117,61 @@ def select_links(
     return [(title, url) for url, title in selected.items()]
 
 
-def load_source(
-    config: SourceConfig,
-) -> list[SourceDocument]:
-    documents: list[SourceDocument] = []
+def _http_fetch() -> Fetch:
+    client = httpx.Client(timeout=30, follow_redirects=True)
 
-    with httpx.Client(
-        timeout=30,
-        follow_redirects=True,
-    ) as client:
-        index_response = client.get(config.index_url)
-        index_response.raise_for_status()
-
-        selected_links = select_links(_extract_links(index_response.text), config)
-
-        print(f"{config.vendor}/{config.product}: {len(selected_links)} pages")
-
-        for title, url in selected_links:
+    def fetch(url: str) -> tuple[int, str]:
+        try:
             response = client.get(url)
-            response.raise_for_status()
+        except httpx.HTTPError as error:
+            return 0, type(error).__name__
+        return response.status_code, response.text
 
+    return fetch
+
+
+def load_sources(configs: Sequence[SourceConfig], fetch: Fetch) -> LoadResult:
+    documents: list[SourceDocument] = []
+    failures: dict[str, str] = {}
+    failed_products: dict[str, str] = {}
+    listed: dict[str, int] = {}
+    for config in configs:
+        status, index = fetch(config.index_url)
+        if status != 200:
+            raise RuntimeError(f"{config.index_url}: llms.txt answered {status}")
+        links = select_links(_extract_links(index), config)
+        listed[config.product] = len(links)
+        print(f"{config.vendor}/{config.product}: {len(links)} pages")
+        with ThreadPoolExecutor(FETCH_CONCURRENCY) as pool:
+            responses = list(pool.map(lambda link: fetch(link[1]), links))
+        for (title, url), (status, text) in zip(links, responses, strict=True):
+            if status != 200:
+                failures[url] = f"HTTP {status}" if status else text
+                failed_products[url] = config.product
+                continue
             documents.append(
                 SourceDocument(
                     title=title,
-                    content=response.text,
+                    content=text,
                     url=url,
                     vendor=config.vendor,
                     product=config.product,
                 )
             )
+    return LoadResult(
+        documents=documents,
+        failures=failures,
+        listed=listed,
+        failed_products=failed_products,
+    )
 
-    return documents
 
-
-def load_all_sources() -> list[SourceDocument]:
-    documents: list[SourceDocument] = []
-
-    for config in SOURCES:
-        source_documents = load_source(config)
-
-        documents.extend(source_documents)
-
-    return documents
+def load_all_sources(fetch: Fetch | None = None) -> LoadResult:
+    return load_sources(SOURCES, fetch or _http_fetch())
 
 
 if __name__ == "__main__":
-    documents = load_all_sources()
+    documents = load_all_sources().documents
 
     for document in documents:
         print(
