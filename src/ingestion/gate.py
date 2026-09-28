@@ -44,7 +44,7 @@ LOCALES = {
     "zh-tw",
 }
 NON_DOC = re.compile(
-    r"(changelog|release-notes|llms|(?<![a-z])full(?![a-z])|blog|terms|privacy|proposal)"
+    r"(?<![a-z])(changelog|release-notes|llms|full|blog|terms|privacy|proposal)(?![a-z])"
 )
 
 PROMPT = """You review one page found in a software vendor's documentation index.

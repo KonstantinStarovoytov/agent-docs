@@ -572,7 +572,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Fetch, select, gate and report without writing anywhere.",
+        help=(
+            "Fetch, select, gate and report to --out without writing to Qdrant, "
+            "the manifest or reports/."
+        ),
     )
     parser.add_argument(
         "--gate-report-only",

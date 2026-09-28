@@ -1,8 +1,19 @@
-# Daily incremental re-index. Fetches every source page, re-embeds only the
-# ones whose content changed, records the build date in Qdrant for the
-# service, and commits the manifest so git history shows what changed when.
-# Pages that vanish from a vendor index are reported, not deleted: the run
-# fails and an issue is opened so a human decides.
+# Daily incremental re-index. Every markdown page in each vendor's llms.txt,
+# minus excludes, is indexed: new pages must pass a quality gate, and
+# suspicious ones are quarantined in the "Pages waiting for review" issue for
+# a human to decide. Pages that vanish from a vendor index are deleted,
+# unless the removal guard judges the drop too large to be safe, in which
+# case the run fails and an issue is opened so a human decides. Every run
+# writes a readable change report to the job summary and to
+# reports/docs-changes/, and commits the manifest so git history shows what
+# changed when.
+#
+# The scheduled cron must not touch production (agent_docs_hybrid_v1) with
+# the new, ~560-page reindex until the owner opts in: set the repository
+# variable FULL_DOCS_LIVE to "true" once production has moved to the full
+# index. Until then, scheduled runs only keep the free Qdrant cluster awake;
+# a manual workflow_dispatch run (e.g. against agent_docs_hybrid_v2) always
+# reindexes.
 
 name: Reindex
 on:
@@ -41,8 +52,13 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
       - run: uv sync --locked
+      - name: Keep Qdrant awake
+        if: github.event_name == 'schedule' && vars.FULL_DOCS_LIVE != 'true'
+        run: |
+          uv run python -c "from src.config import settings; from src.ingestion.ingest import get_qdrant_client; c = get_qdrant_client(); print('index points:', c.count(settings.qdrant_hybrid_collection).count); c.close()"
       - name: Reindex changed pages
         id: reindex
+        if: github.event_name != 'schedule' || vars.FULL_DOCS_LIVE == 'true'
         run: |
           set -o pipefail
           uv run python -u -m src.reindex --out out \
