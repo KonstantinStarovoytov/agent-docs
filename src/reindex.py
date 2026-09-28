@@ -22,12 +22,15 @@ from qdrant_client import QdrantClient, models
 from src.config import settings
 from src.ingestion.chunker import chunk_document
 from src.ingestion.ingest import get_hybrid_vector_store, get_qdrant_client
-from src.ingestion.loader import load_all_sources
+from src.ingestion.loader import LoadResult, load_all_sources
 from src.models import SourceDocument
 from src.service.core import META_COLLECTION, META_POINT_ID
 
 MANIFEST_DIR = Path("data/manifests")
 SMOKE_K = 10
+REMOVAL_GUARD = 0.10
+SHRINK_GUARD = 0.5
+FETCH_FAILURE_GUARD = 0.10
 
 
 def manifest_path(collection: str) -> Path:
@@ -124,6 +127,53 @@ def diff(manifest: Manifest, documents: list[SourceDocument]) -> Plan:
             unchanged.append(document.url)
     missing = sorted(url for url in manifest.documents if url not in seen)
     return Plan(added=added, changed=changed, unchanged=unchanged, missing=missing)
+
+
+@dataclass(frozen=True, slots=True)
+class RemovalDecision:
+    delete: list[str]
+    blocked: dict[str, str]
+
+
+def decide_removals(
+    manifest: Manifest,
+    missing: list[str],
+    load: LoadResult,
+    product_of: dict[str, str],
+) -> RemovalDecision:
+    """Delete vanished pages, unless a vendor's index looks broken."""
+    gone = [u for u in missing if u not in load.failures]
+    indexed: dict[str, int] = {}
+    for url, entry in manifest.documents.items():
+        if entry.status == "indexed":
+            product = product_of.get(url, "")
+            indexed[product] = indexed.get(product, 0) + 1
+    by_product: dict[str, list[str]] = {}
+    for url in gone:
+        by_product.setdefault(product_of.get(url, ""), []).append(url)
+    delete: list[str] = []
+    blocked: dict[str, str] = {}
+    for product, urls in by_product.items():
+        before = indexed.get(product, 0)
+        listed = load.listed.get(product, 0)
+        if before and listed < before * SHRINK_GUARD:
+            blocked[product] = f"llms.txt lists {listed} pages, was {before}"
+        elif before and len(urls) > before * REMOVAL_GUARD:
+            blocked[product] = f"{len(urls)} of {before} pages would be removed"
+        else:
+            delete.extend(urls)
+    return RemovalDecision(delete=sorted(delete), blocked=blocked)
+
+
+def failing_vendors(load: LoadResult) -> dict[str, str]:
+    failed: dict[str, int] = {}
+    for product in load.failed_products.values():
+        failed[product] = failed.get(product, 0) + 1
+    return {
+        product: f"{n} of {load.listed[product]} pages failed to fetch"
+        for product, n in failed.items()
+        if n > load.listed.get(product, 0) * FETCH_FAILURE_GUARD
+    }
 
 
 def orphans(indexed_sources: set[str], documents: list[SourceDocument]) -> list[str]:
