@@ -59,7 +59,7 @@ jobs:
           body="Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
           \`\`\`
-          $(tail -n 40 reindex.log)
+          $(tail -n 40 reindex.log 2>/dev/null || echo "No reindex log: the run failed before the reindex step. Open the run link for the error.")
           \`\`\`"
           existing=$(gh issue list --label reindex --state open --json number --jq '.[0].number')
           if [ -n "$existing" ]; then
