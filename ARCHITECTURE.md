@@ -174,6 +174,7 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 12 | RRF is deterministic | Repeated identical queries | Results changed between calls | **Fixed** with tie-break |
 | 13 | `gpt-6-luna` is at least as good | 16 + 12 questions, independent judge | Faithfulness 0.975 → 0.994 | **Kept** |
 | 14 | Full corpus keeps quality | See [Evaluation](#evaluation) | See below | See below |
+| 15 | Capping chunks per page in the candidate pool fixes the full-corpus drop | Cap None / 2 / 3, same gate | Cap 2: MRR 0.825 → 0.739, Hit@5 0.957 → 0.872; no more evidence in the pool | Rejected (setting kept, off by default) |
 
 ---
 
@@ -243,10 +244,37 @@ labels were also extended where a newly indexed page was a valid answer.
 Every change is listed with evidence in
 [reports/full-corpus-eval-2026-10.md](reports/full-corpus-eval-2026-10.md).
 
-**Next:** cap how many chunks one page may contribute to the candidate pool,
-because that targets the coverage loss. Then consider ranking guides above
-reference and admin pages. The MCP `schema.md` page was suspected, but it never
-reached the top 10.
+**Tried next: a per-page cap on the candidate pool (experiment 15).** It did
+not help. Re-run in the same session, today's numbers reproduced the failure.
+
+| Dataset | Metric | Gate | No cap | Cap 2 | Cap 3 |
+|---|---|---|---|---|---|
+| `retrieval-v3` | Hit@5 | ≥ 0.949 | 0.957 | **0.872** | n/a |
+| `retrieval-v3` | MRR | ≥ 0.835 | **0.825** | **0.739** | n/a (0.713 without rerank, vs. 0.739) |
+| `retrieval-query-transform-v1` | Hit@5 | ≥ 0.845 | 0.938 | 0.896 | n/a |
+| `retrieval-query-transform-v1` | MRR | ≥ 0.829 | **0.757** | **0.704** | n/a (0.732 without rerank, vs. 0.788) |
+| `evidence-coverage-v1` | Complete coverage | ≥ 0.720 | **0.625** | n/a | n/a |
+| `evidence-coverage-v1` | Faithfulness | ≥ 0.964 | 0.998 | n/a | n/a |
+| `negative-v1` | Correct abstention | 1.000 | 1.000 | n/a | n/a |
+| `full-corpus-v1` | Hit@5 | ≥ 0.9 | 1.000 | n/a | n/a |
+
+"n/a": the Cohere trial key hit its monthly limit of 1000 calls in the middle
+of the cap 2 runs, so those runs could not rerank.
+
+What it means in plain words:
+
+- **Cap 2 makes ranking clearly worse.** It throws away a good second chunk
+  from the right page and lets in more neighbouring pages.
+- **The cap does not bring the missing evidence in.** In the cases that are
+  still incomplete, the pool already has at most two chunks per page. The
+  right page is beaten by other pages: cloud-agent and self-hosted guides,
+  GitHub and GitLab integrations, SDK reference and spec pages.
+- So the setting stays in the code, **off by default**.
+
+**Next:** rank guide pages above enterprise, integration, reference and spec
+pages unless the question asks for them (a page-type prior or tiered index).
+Details in [reports/per-page-cap-2026-10.md](reports/per-page-cap-2026-10.md).
+The MCP `schema.md` page was suspected, but it never reached the top 10.
 
 ---
 
