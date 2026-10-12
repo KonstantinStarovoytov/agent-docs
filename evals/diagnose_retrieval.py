@@ -5,6 +5,10 @@
     uv run python -m evals.diagnose_retrieval threshold  # rerank score floor
     uv run python -m evals.diagnose_retrieval independence  # batch effect on scores
     uv run python -m evals.diagnose_retrieval summary
+    uv run python -m evals.diagnose_retrieval recall --out X.json [--product-filter]
+
+The collection is settings.qdrant_hybrid_collection (QDRANT_HYBRID_COLLECTION),
+so the same command compares two indexes. `recall` needs no rerank data.
 
 None of these call Cohere. The rerank slice is read from the full-corpus gate
 runs stored in Langfuse (2026-10-12, same index, same settings): the
@@ -55,7 +59,12 @@ from src.ingestion.ingest import get_hybrid_vector_store
 from src.rag.context_selector import select_generation_context
 from src.rag.multi_query_retriever import RRF_K
 from src.rag.reranker import RerankResult
-from src.rag.retriever import SearchResult, document_key, search_hybrid
+from src.rag.retriever import (
+    SearchResult,
+    _vendor_filter,
+    document_key,
+    search_hybrid,
+)
 
 REPORT_STEM = Path("reports/retrieval-diagnostics-2026-10")
 DEEP = 150
@@ -323,7 +332,7 @@ class IndexProbe:
         self.client = self.store.client
         self.collection = settings.qdrant_hybrid_collection
         self._vectors: dict[str, tuple[list[float], models.SparseVector]] = {}
-        self._fused: dict[tuple[str, int], list[SearchResult]] = {}
+        self._fused: dict[tuple[str, int, str | None], list[SearchResult]] = {}
         self._single: dict[tuple[str, str], list[str]] = {}
 
     def vectors(self, query: str) -> tuple[list[float], models.SparseVector]:
@@ -357,19 +366,28 @@ class IndexProbe:
             self._single[key] = [str(point.id) for point in points]
         return self._single[key]
 
-    def fused(self, query: str, depth: int) -> list[SearchResult]:
+    def fused(
+        self, query: str, depth: int, vendor: str | None = None
+    ) -> list[SearchResult]:
         """search_hybrid's order for langchain k = depth, before the cut."""
-        key = (query, depth)
+        key = (query, depth, vendor)
         if key not in self._fused:
             dense, sparse = self.vectors(query)
+            where = _vendor_filter(vendor)
             points = self.client.query_points(
                 self.collection,
                 prefetch=[
                     models.Prefetch(
-                        using=self.store.vector_name, query=dense, limit=depth
+                        using=self.store.vector_name,
+                        query=dense,
+                        limit=depth,
+                        filter=where,
                     ),
                     models.Prefetch(
-                        using=self.store.sparse_vector_name, query=sparse, limit=depth
+                        using=self.store.sparse_vector_name,
+                        query=sparse,
+                        limit=depth,
+                        filter=where,
                     ),
                 ],
                 query=models.FusionQuery(fusion=models.Fusion.RRF),
@@ -390,13 +408,17 @@ class IndexProbe:
         return self._fused[key]
 
     def production_pool(
-        self, query: str, prefetch: int | None, pool: int
+        self, query: str, prefetch: int | None, pool: int, vendor: str | None = None
     ) -> list[SearchResult]:
         depth = 3 * pool if prefetch is None else max(prefetch, pool)
-        return self.fused(query, depth)[:pool]
+        return self.fused(query, depth, vendor)[:pool]
 
     def eval_pool(
-        self, queries: list[str], prefetch: int | None, pool: int
+        self,
+        queries: list[str],
+        prefetch: int | None,
+        pool: int,
+        vendor: str | None = None,
     ) -> list[SearchResult]:
         """per_query_k = max(20, pool); depth = prefetch, None = 3 x per_query_k;
         client RRF (k = 60) over the per-query lists; cut at pool."""
@@ -405,7 +427,9 @@ class IndexProbe:
         documents: dict[str, SearchResult] = {}
         scores: dict[str, float] = defaultdict(float)
         for query in queries:
-            for rank, result in enumerate(self.fused(query, depth)[:per_query_k], 1):
+            for rank, result in enumerate(
+                self.fused(query, depth, vendor)[:per_query_k], 1
+            ):
                 key = document_key(result.document)
                 documents[key] = result
                 scores[key] += 1.0 / (RRF_K + rank)
@@ -880,6 +904,179 @@ def summarize(results: list[dict[str, Any]]) -> dict[str, Any]:
     return summary
 
 
+# --------------------------------------------------------------- recall
+
+RECALL_POOLS = (10, 20, 40)
+FULL_CORPUS = "full-corpus"
+
+
+def case_vendor(case: Case) -> str | None:
+    """The vendor every target names, or None (mixed or unlabelled)."""
+    vendors = {t.get("vendor") for group in case.groups for t in group.targets}
+    if len(vendors) != 1:
+        return None
+    return vendors.pop()
+
+
+def loss_class(
+    corpus_matches: int,
+    in_pool: bool,
+    dense_rank: int | None,
+    bm25_rank: int | None,
+    prefetch: int,
+) -> str:
+    """Where a group is lost without a reranker."""
+    if corpus_matches == 0:
+        return "NOT_IN_CORPUS"
+    if in_pool:
+        return "IN_POOL"
+    if any(rank is not None and rank <= prefetch for rank in (dense_rank, bm25_rank)):
+        return "LOST_IN_POOL"
+    return "LOST_BEFORE_FUSION"
+
+
+def recall_table(records: list[dict[str, Any]]) -> dict[str, dict[str, float]]:
+    """dataset -> pool -> share of evidence groups with a correct chunk in it."""
+    hits: dict[str, dict[str, list[bool]]] = defaultdict(lambda: defaultdict(list))
+    for record in records:
+        for pool, values in record["hits"].items():
+            hits[record["dataset"]][pool].extend(values)
+    return {
+        dataset: {pool: sum(v) / len(v) for pool, v in pools.items()}
+        for dataset, pools in hits.items()
+    }
+
+
+def recall_cases() -> list[Case]:
+    """retrieval-v3, query-transform clean_en, evidence-coverage, full-corpus."""
+    from evals.full_corpus_cases import CASES
+
+    cases = [
+        c
+        for c in load_cases()
+        if c.dataset != "negative"
+        and (c.dataset != "query-transform" or c.variant == "clean_en")
+    ]
+    for item in CASES:
+        cases.append(
+            Case(
+                FULL_CORPUS,
+                _slug(item["question"]),
+                item["question"],
+                [Group("relevant", item["relevant"])],
+            )
+        )
+    return cases
+
+
+def run_recall(args: argparse.Namespace) -> None:
+    """recall-in-pool at pools 10/20/40 on the configured collection, no Cohere.
+
+    retrieval-v3 and query-transform use the eval path with the gate's frozen
+    rewrites; evidence-coverage and full-corpus the production path (one
+    query). --product-filter scopes retrieval to the vendor the labels name.
+    """
+    stored = json.loads(Path(f"{REPORT_STEM}-stored.json").read_text())
+    rewrites = {
+        key.split("|", 1)[1]: entry["queries"]
+        for key, entry in stored.items()
+        if entry.get("queries")
+    }
+    probe = IndexProbe()
+    meta = catalog(probe)
+    records = []
+    cases = recall_cases()
+    for index, case in enumerate(cases):
+        vendor = case_vendor(case) if args.product_filter else None
+        eval_path = case.dataset in {"retrieval-v3", "query-transform"}
+        queries = rewrites[case.question] if eval_path else [case.question]
+        prefetch = EVAL_PREFETCH if eval_path else PROD_PREFETCH
+
+        def pool_ids(pool: int) -> list[str]:
+            if eval_path:
+                results = probe.eval_pool(queries, None, pool, vendor)
+            else:
+                results = probe.production_pool(case.question, None, pool, vendor)
+            return [pid(r) for r in results]
+
+        pools = {pool: pool_ids(pool) for pool in RECALL_POOLS}
+        hits: dict[str, list[bool]] = {str(p): [] for p in RECALL_POOLS}
+        groups = []
+        for group in case.groups:
+            correct = {point_id for point_id, md in meta.items() if matches(md, group)}
+            for pool, ids in pools.items():
+                hits[str(pool)].append(bool(correct & set(ids)))
+            dense = min(
+                (r for q in queries if (r := _best(probe.single(q, "dense"), correct))),
+                default=None,
+            )
+            bm25 = min(
+                (
+                    r
+                    for q in queries
+                    if (r := _best(probe.single(q, "sparse"), correct))
+                ),
+                default=None,
+            )
+            groups.append(
+                {
+                    "group": group.id,
+                    "corpus_matches": len(correct),
+                    "dense_rank": dense,
+                    "bm25_rank": bm25,
+                    "pool10_rank": _best(pools[10], correct),
+                    "class_pool10": loss_class(
+                        len(correct),
+                        bool(correct & set(pools[10])),
+                        dense,
+                        bm25,
+                        prefetch,
+                    ),
+                }
+            )
+        records.append(
+            {
+                "dataset": case.dataset,
+                "case_id": case.case_id,
+                "vendor_filter": vendor,
+                "hits": hits,
+                "groups": groups,
+            }
+        )
+        print(f"[{index + 1}/{len(cases)}] {case.dataset} {case.case_id}", flush=True)
+    out = Path(args.out)
+    payload = {
+        "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "collection": probe.collection,
+        "product_filter": args.product_filter,
+        "recall": recall_table(records),
+        "cases": records,
+    }
+    out.write_text(json.dumps(payload, ensure_ascii=False, indent=1))
+    print(recall_markdown(payload))
+
+
+def recall_markdown(payload: dict[str, Any]) -> str:
+    lines = [
+        f"collection {payload['collection']}, product filter: {payload['product_filter']}",
+        "",
+        "| dataset | groups | " + " | ".join(f"pool {p}" for p in RECALL_POOLS) + " |",
+        "|---|---|" + "---|" * len(RECALL_POOLS),
+    ]
+    for dataset, pools in sorted(payload["recall"].items()):
+        n = sum(len(c["groups"]) for c in payload["cases"] if c["dataset"] == dataset)
+        cells = [f"{pools[str(p)]:.3f}" for p in RECALL_POOLS]
+        lines.append(f"| {dataset} | {n} | " + " | ".join(cells) + " |")
+    classes: dict[str, Counter[str]] = defaultdict(Counter)
+    for case in payload["cases"]:
+        for g in case["groups"]:
+            classes[case["dataset"]][g["class_pool10"]] += 1
+    lines += ["", "Loss slices at pool 10:", ""]
+    for dataset, counter in sorted(classes.items()):
+        lines.append(f"- {dataset}: {dict(counter)}")
+    return "\n".join(lines) + "\n"
+
+
 # --------------------------------------------------------------- screen
 
 
@@ -1185,6 +1382,9 @@ def main() -> None:
         help="skip checking the rebuilt production pool against search_hybrid",
     )
     slices.add_argument("--refetch", action="store_true")
+    recall = sub.add_parser("recall")
+    recall.add_argument("--out", required=True, help="JSON output path")
+    recall.add_argument("--product-filter", action="store_true")
     sub.add_parser("screen")
     sub.add_parser("threshold")
     sub.add_parser("independence")
@@ -1193,6 +1393,8 @@ def main() -> None:
     args = parser.parse_args()
     if args.command == "slices":
         run_slices(args)
+    elif args.command == "recall":
+        run_recall(args)
     elif args.command == "screen":
         run_screen(args)
     elif args.command == "threshold":
