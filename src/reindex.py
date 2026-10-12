@@ -23,7 +23,11 @@ from qdrant_client import QdrantClient, models
 
 from src.config import settings
 from src.ingestion.chunker import chunk_document
-from src.ingestion.ingest import get_hybrid_vector_store, get_qdrant_client
+from src.ingestion.ingest import (
+    ensure_hybrid_collection,
+    get_hybrid_vector_store,
+    get_qdrant_client,
+)
 from src.ingestion import report as rep
 from src.ingestion.gate import PageReview, gate_page
 from src.ingestion.loader import LoadResult, load_all_sources
@@ -592,6 +596,8 @@ def main(argv: list[str] | None = None) -> int:
     manifest = load_manifest(path)
     client = get_qdrant_client()
     try:
+        if not args.dry_run and ensure_hybrid_collection(client, collection):
+            print(f"created {collection} (sparse modifier: IDF)")
         print(f"index points: {touch_index(client, collection)}")
         if not args.dry_run:
             ensure_payload_indexes(client, collection)

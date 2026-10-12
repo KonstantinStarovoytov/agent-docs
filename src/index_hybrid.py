@@ -1,18 +1,13 @@
 import argparse
 
-from langchain_qdrant import (
-    QdrantVectorStore,
-    RetrievalMode,
-)
-
 from src.config import settings
 from src.ingestion.chunker import chunk_documents
-from src.ingestion.ingest import get_qdrant_client
-from src.ingestion.loader import load_all_sources
-from src.rag.embeddings import (
-    get_embeddings,
-    get_sparse_embeddings,
+from src.ingestion.ingest import (
+    ensure_hybrid_collection,
+    get_hybrid_vector_store,
+    get_qdrant_client,
 )
+from src.ingestion.loader import load_all_sources
 
 
 def main() -> None:
@@ -24,14 +19,18 @@ def main() -> None:
     )
     args = parser.parse_args()
     client = get_qdrant_client()
+    collection = settings.qdrant_hybrid_collection
     try:
-        exists = client.collection_exists(settings.qdrant_hybrid_collection)
+        exists = client.collection_exists(collection)
+        if exists and not args.recreate:
+            parser.error(
+                "Collection already exists. Use --recreate only for an intentional full rebuild."
+            )
+        if exists:
+            client.delete_collection(collection)
+        ensure_hybrid_collection(client, collection)
     finally:
         client.close()
-    if exists and not args.recreate:
-        parser.error(
-            "Collection already exists. Use --recreate only for an intentional full rebuild."
-        )
     print("Loading sources...")
 
     documents = load_all_sources().documents
@@ -46,18 +45,7 @@ def main() -> None:
 
     print("Building hybrid Qdrant index...")
 
-    api_key = settings.qdrant_api_key
-
-    QdrantVectorStore.from_documents(
-        documents=chunks,
-        embedding=get_embeddings(),
-        sparse_embedding=get_sparse_embeddings(),
-        retrieval_mode=RetrievalMode.HYBRID,
-        url=settings.qdrant_url,
-        api_key=api_key.get_secret_value() if api_key else None,
-        collection_name=(settings.qdrant_hybrid_collection),
-        force_recreate=args.recreate,
-    )
+    get_hybrid_vector_store().add_documents(chunks)
 
     print(f"Hybrid index created: {settings.qdrant_hybrid_collection}")
 
