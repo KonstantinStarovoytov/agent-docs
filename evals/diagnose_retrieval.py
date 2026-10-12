@@ -1045,6 +1045,7 @@ def run_recall(args: argparse.Namespace) -> None:
         )
         print(f"[{index + 1}/{len(cases)}] {case.dataset} {case.case_id}", flush=True)
     out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "collection": probe.collection,
