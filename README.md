@@ -31,8 +31,8 @@ flowchart TD
     S["Hybrid search in Qdrant<br/>dense (meaning) + BM25 (keywords)<br/>3x overfetch"] --> F["RRF fusion<br/>ties broken by chunk id"]
     F -->|"ask_docs: 10 candidates<br/>search_docs: 20 candidates"| R["Cohere rerank<br/>against the original question"]
 
-    R -->|search_docs| P["Best passages,<br/>ranked with scores"]
-    R -->|ask_docs| TH{"Any candidate<br/>scores 0.35 or more?"}
+    R -->|search_docs| P["Best passage of each page,<br/>ranked with scores"]
+    R -->|ask_docs| TH{"Best candidate<br/>scores 0.55 or more?"}
     TH -->|no| NO["Answer: not covered<br/>by the documentation"]
     TH -->|yes| SEL["Pick 8 chunks<br/>at most 2 per section"]
     SEL --> G["gpt-6-luna writes the answer<br/>with citations 1, 2, 3"]
@@ -44,11 +44,12 @@ flowchart TD
 | **Hybrid search** | Each query is searched by meaning (embedding) and by exact words (BM25) in Qdrant. It asks for 3x more results than needed. | Meaning finds concepts; BM25 finds exact names like `.cursorrules`. |
 | **RRF fusion** | The result lists are merged by rank; equal scores are ordered by chunk id. | Scores of the two searches are not comparable; ranks are. The tie-break makes the same question return the same results. |
 | **Rerank** | Cohere reads the question with each candidate and scores the match. | Search is fast but rough; the reranker is precise. |
-| **Threshold** (`ask_docs`) | Candidates scoring below 0.35 are dropped. If none remain, the bot says so. | This is how it refuses to guess. |
+| **Threshold** (`ask_docs`) | If even the best candidate scores below 0.55, the bot says the docs do not cover it, without calling the model. Otherwise candidates below 0.35 are dropped. | This is how it refuses to guess. |
 | **Context selection** | The 8 best chunks go to the model, at most 2 from one section. | One section must not fill the whole context. |
 | **Answer** | gpt-6-luna answers only from those 8 chunks and cites them. | Every claim can be checked. |
 
-`search_docs` stops after the rerank and returns the passages. The calling
+`search_docs` stops after the rerank and returns the best passage of each
+page, so one long page cannot fill the list. The calling
 agent reads them itself, which is cheaper. Every request is traced in Langfuse.
 
 ## Fresh every day
@@ -101,7 +102,7 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
 | Tool | Returns |
 |---|---|
 | `ask_docs(question)` | A grounded answer with sources |
-| `search_docs(query, limit=8, product=None, response_format="concise")` | Ranked passages only (cheaper; the agent reasons itself). `product`: `claude-code`, `cursor`, `codex`, `mcp` |
+| `search_docs(query, limit=8, product=None, response_format="concise")` | Ranked passages only, one per page (cheaper; the agent reasons itself; one call per part of a multi-part question). `product`: `claude-code`, `cursor`, `codex`, `mcp` |
 
 **Over REST:**
 
