@@ -13,7 +13,7 @@ design choice is backed by an experiment.
 
 ## How it works
 
-Your agent calls a **remote MCP server** with one of two tools. Every step
+Your agent calls a **remote MCP server** with one of its tools. Every step
 below runs in order, one after another.
 
 ```mermaid
@@ -51,6 +51,10 @@ flowchart TD
 `search_docs` stops after the rerank and returns the best passage of each
 page, so one long page cannot fill the list. The calling
 agent reads them itself, which is cheaper. Every request is traced in Langfuse.
+
+To read whole sections, an agent calls `find_pages` (same ranking, one card per
+page: description and outline), picks 1–3 pages, then `read_section` (the
+section's text from the stored page, no model call).
 
 ## Fresh every day
 
@@ -103,6 +107,8 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
 |---|---|
 | `ask_docs(question)` | A grounded answer with sources |
 | `search_docs(query, limit=8, product=None, response_format="concise")` | Ranked passages only, one per page (cheaper; the agent reasons itself; one call per part of a multi-part question). `product`: `claude-code`, `cursor`, `codex`, `mcp` |
+| `find_pages(query, product=None, limit=5)` | Ranked page cards: title, URL, one-sentence description, outline (h1–h3). One call per part of a question |
+| `read_section(url, heading=None, offset=0)` | One section of a page, verbatim, up to 8,000 characters (`next_offset` for the rest); no heading gives the full outline |
 
 **Over REST:**
 
@@ -117,6 +123,8 @@ curl -X POST https://agent-docs-mcp.onrender.com/ask \
 | `GET /health` | Liveness, no token |
 | `POST /ask` | Answer with citations |
 | `POST /search` | Passages only |
+| `POST /pages` | Page cards (`find_pages`) |
+| `POST /section` | One section of a page (`read_section`) |
 | `POST /mcp/` | MCP (streamable HTTP) |
 | `GET /docs` | Interactive API docs (use **Authorize** with the token) |
 
