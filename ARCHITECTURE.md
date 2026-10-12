@@ -117,8 +117,13 @@ flowchart TD
 ```
 
 - **Which pages:** every Markdown page in each vendor's `llms.txt`, minus
-  excludes for translations, changelogs, weekly news, concatenated dumps, old
-  MCP spec versions, community pages and MCP proposals (`src/ingestion/sources.py`).
+  excludes for translations, changelogs and release notes, weekly news,
+  concatenated dumps, old MCP spec versions, community pages, MCP proposals,
+  legal and marketing pages, and pages that only link elsewhere
+  (`src/ingestion/sources.py`). Large references (settings, env vars, errors,
+  SDK and API references, the MCP schema) are on an allow list so the size
+  check does not quarantine them. Decisions per page:
+  [reports/index-v2-2026-10.md](reports/index-v2-2026-10.md).
 - **Page gate:** each new page is checked for free first (size, language,
   near-duplicate, suspicious path). Then the LLM reads its beginning and says in
   one sentence what the page is. Anything flagged goes to quarantine.
@@ -179,6 +184,10 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 15 | Capping chunks per page in the candidate pool fixes the full-corpus drop | Cap None / 2 / 3, same gate | Cap 2: MRR 0.825 → 0.739, Hit@5 0.957 → 0.872; no more evidence in the pool | Rejected (setting kept, off by default) |
 | 16 | The full-corpus misses are a search problem | Where each correct chunk is lost, on the real index, with the gate's stored rerank scores (89 questions and evidence groups) | 10 misses: 7 outside the pool of 10, 3 not in the top 30 of either search, 0 lost by the reranker. Chunks ranked above the right one are 65% guide pages; MRR falls in 3 intents | **Partly confirmed:** coverage loss is the pool cut; the MRR loss is ranking among plausible pages and two unlabelled correct answers |
 | 17 | A deeper prefetch or a bigger pool brings the right chunk back | Recall@pool for prefetch 30/60/100/150 × pool 10/20/40/60, no reranker | Prefetch changes nothing. Pool 20 / 40: complete coverage in the pool 0.625 → 0.750 / 0.875 | **Pending:** rerank runs wait for the Cohere quota; defaults unchanged |
+| 18 | BM25 needs IDF (v1 sparse vector has no `modifier=IDF`) | Index v2 built with IDF; recall-in-pool at pools 10/20/40, no reranker | Recall unchanged on all four datasets; first-correct rank before rerank slightly lower | **Pending** reranked gate on v2 (November) |
+| 19 | Excluding changelogs, legal, marketing and link-hub pages cleans the pool | 40 quarantined pages excluded, 20 large references allowed; same recall run | Same groups lost as in v1 | Kept in v2 (corpus hygiene); no recall effect |
+| 20 | One reference entry per chunk (`####` split, 12-row tables with header) | Chunk counts per big page; same recall run | e.g. hooks 125 → 184 chunks, median 2,571 → 1,188 chars; recall unchanged | **Pending** reranked gate |
+| 21 | A product filter on answers recovers evidence | v2 with the vendor the labels name (56 of 91 cases) | Coverage recall pool 10 0.765 → 0.794, pool 40 0.912 → 0.941; retrieval-v3 pool 40 → 1.000 | **Accepted** as optional `product` on `ask_docs` and `/ask` |
 
 ---
 
@@ -311,9 +320,18 @@ which was used up for October. The score floor stays at 0.35. A floor of 0.40
 would gain one automatic refusal with only 0.016 to spare above the weakest
 needed chunk.
 
-**Next:** confirm pool 40 with the reranker. Decide the two label gaps. Give
-the BM25 index its missing IDF weighting (fastembed's BM25 expects it, and the
-collection was created without it). Try one query per part of a multi-part
+**Index v2 (experiments 18–21).** A second index, `agent_docs_hybrid_v2`, adds
+BM25 IDF, the new excludes, one chunk per reference entry, and an optional
+product filter for answers. Without the reranker, recall in the pool is the
+same as v1; only the product filter brings evidence back (coverage pool 10
+0.765 → 0.794). Details: [reports/index-v2-2026-10.md](reports/index-v2-2026-10.md).
+Production stays on v1. Switching means setting
+`QDRANT_HYBRID_COLLECTION=agent_docs_hybrid_v2` on Render and in the reindex
+workflow variable, after the reranked gate passes on v2 in November.
+
+**Next:** run the reranked gate on v1 and v2 when the Cohere quota returns;
+confirm pool 40. Decide the two label gaps and the 9 pages quarantined in v2.
+Try one query per part of a multi-part
 question (experiment 10). Rank admin and security pages lower only when the
 question does not ask about them. The per-page cap on the candidate pool is
 measured separately.
