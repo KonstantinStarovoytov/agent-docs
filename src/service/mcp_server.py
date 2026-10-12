@@ -197,7 +197,9 @@ def ask_docs(
     Use when the caller needs a written answer with citations. Prefer
     search_docs when you will read the sources yourself or want to avoid a
     generation charge. If every source has a low rerank_score, the docs
-    probably do not cover the question; rephrase or narrow it.
+    probably do not cover the question; rephrase or narrow it. For a
+    multi-part question, several search_docs calls (one per part) usually
+    find more.
 
     Errors: empty or overlong questions are rejected with the reason; an
     empty index returns an answer that says no relevant documentation was
@@ -247,7 +249,8 @@ def search_docs(
 
     Use when you will reason over the sources yourself. Cheaper than ask_docs
     because it skips the generator. Do not use when the caller needs a
-    finished cited answer; call ask_docs instead.
+    finished cited answer; call ask_docs instead. Results are one passage
+    per page; for a multi-part question, call once per part.
 
     Errors: empty or overlong queries are rejected with the reason; an empty
     index returns {"passages": []}.

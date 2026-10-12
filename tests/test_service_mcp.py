@@ -91,6 +91,13 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: None) -> None:
     assert "Not for" in (ask.description or "")
     assert "snapshot" in (ask.description or "")
     assert "Errors:" in (search.description or "")
+    # Results are one passage per page, so multi-part questions need one
+    # search per part; both tools say so.
+    search_text = " ".join((search.description or "").split())
+    ask_text = " ".join((ask.description or "").split())
+    assert "one passage per page" in search_text
+    assert "once per part" in search_text
+    assert "one per part" in ask_text
 
     question = ask.input_schema["properties"]["question"]
     assert question["minLength"] == 1
