@@ -6,10 +6,11 @@
 - with `EVAL_CACHE_DIR` set, keeps every (model, query, document) score on
   disk and sends Cohere only the documents it has not scored yet.
 
-Cohere scores each query-document pair on its own (verified in
-evals/diagnose_retrieval.py: the same pair scores the same in a 10-document
-and a 90-document call), so a cached score stands in for a repeat call and the
-ranking is identical. Without `EVAL_CACHE_DIR` nothing is cached.
+Cohere scores each query-document pair on its own: across the stored
+2026-10-12 runs, 1,054 unambiguous chunks were scored in two or more calls
+with different neighbours, 909 identically and none more than 0.008 apart
+(reports/retrieval-diagnostics-2026-10.md). So a cached score stands in for a
+repeat call. Without `EVAL_CACHE_DIR` nothing is cached.
 
 `rewrite_queries` freezes the LLM query rewrite per question under the same
 directory, so configurations compared in one session see the same rewrites.
