@@ -52,25 +52,38 @@ Short definitions of every term used below.
 
 ## How a question is answered
 
+This is the `ask_docs` path. Every step runs in order.
+
 ```mermaid
-flowchart LR
-    Q[Question] --> T{Russian or<br/>Polish?}
-    T -- yes --> TR[Add English<br/>translation]
-    T -- no --> H
-    TR --> H[Hybrid search<br/>dense + BM25<br/>merged with RRF]
-    H -->|10 candidates| R[Cohere rerank<br/>drop score < 0.35]
-    R --> S[Select context<br/>max 2 chunks per section]
-    S -->|8 chunks| G[gpt-6-luna writes<br/>answer with citations]
-    R -. nothing left .-> A[Answer: not in<br/>the documentation]
+flowchart TD
+    Q["Question"] --> T{"Russian or Polish?"}
+    T -->|yes| TR["Add an English translation:<br/>2 queries"]
+    T -->|no| ONE["1 query"]
+    TR --> H
+    ONE --> H
+    H["Hybrid search per query in Qdrant<br/>dense + BM25, fused with RRF<br/>3x overfetch, ties broken by chunk id"] --> M{"2 queries?"}
+    M -->|yes| RRF2["Merge the 2 result lists<br/>with RRF again"]
+    M -->|no| C10
+    RRF2 --> C10["Top 10 candidates"]
+    C10 --> R["Cohere rerank<br/>against the original question"]
+    R --> TH{"Any score<br/>0.35 or more?"}
+    TH -->|no| A["Answer: not covered<br/>by the documentation"]
+    TH -->|yes| S["Select context:<br/>8 chunks, max 2 per section"]
+    S --> G["gpt-6-luna writes the answer<br/>with numbered citations"]
 ```
 
 | Step | What it does | Why |
 |---|---|---|
-| 1. Translation | Adds an English copy of non-English questions. | The docs are English. Translation lifted Hit@5 from 0.958 to 1.000; rewriting the question broke a case. |
-| 2. Hybrid search | Dense and BM25 search, merged with RRF, ties broken by id. | Docs mix concepts (dense) with exact names of flags and files (BM25). |
-| 3. Rerank | Cohere re-scores 10 candidates against the original question; weak ones (< 0.35) are dropped. | Search is fast but rough; the reranker is precise. The threshold is how the bot learns to abstain. |
-| 4. Context selection | Keeps the 8 best chunks, at most 2 from the same section. | Stops one section from filling the whole context. |
-| 5. Generation | The LLM answers only from the 8 chunks, with numbered citations. | Answers stay grounded and checkable. |
+| 1. Translation | Adds an English copy of Russian or Polish questions; both are searched. | The docs are English. Translation lifted Hit@5 from 0.958 to 1.000; rewriting the question broke a case. |
+| 2. Hybrid search | For each query, Qdrant runs dense and BM25 search, fuses them with RRF, returns 3x more than needed; ties are sorted by chunk id. With two queries, the two lists are fused with RRF once more. | Docs mix concepts (dense) with exact names of flags and files (BM25). The tie-break makes results repeatable. |
+| 3. Rerank | Cohere re-scores the 10 candidates against the original question. | Search is fast but rough; the reranker is precise. |
+| 4. Threshold | Candidates below 0.35 are dropped; if none remain, the bot says the docs do not cover it. | This is how the bot abstains instead of guessing. |
+| 5. Context selection | Keeps the 8 best chunks, at most 2 from the same section. | Stops one section from filling the whole context. |
+| 6. Generation | The LLM answers only from the 8 chunks, with numbered citations. | Answers stay grounded and checkable. |
+
+`search_docs` is shorter: one query (no translation), an optional product
+filter, a pool of 20 candidates, Cohere rerank, and the best `limit` passages
+returned with their scores. There is no 0.35 threshold and no generation.
 
 Every chunk is stored with a short header (vendor, product, page, section)
 added before embedding. Without it, a chunk saying "set `model` in settings"
@@ -121,7 +134,7 @@ flowchart TD
 
 | Decision | Why | Rejected alternative | Evidence |
 |---|---|---|---|
-| Hybrid search (dense + BM25) | Docs are full of exact names that dense search blurs. | Dense only | Retrieval datasets reach Hit@5 = 1.0 with hybrid. |
+| Hybrid search (dense + BM25) | Docs are full of exact names that dense search blurs. | Dense only | Design reasoning; on the original 35-page corpus every retrieval set reached Hit@5 = 1.0. |
 | RRF with equal weights | Scores of the two searches are not comparable; ranks are. The reranker reorders afterwards anyway. | Tuned weights (convex combination) | Literature shows small gains from tuning; our bottleneck is after rerank. |
 | Stable tie-break + 3× overfetch | Without it the same question returned different results. | Trust database order | Repeated runs moved coverage by ±1 case before the fix, 0 after. |
 | Cohere rerank against the **original** question | The precise stage must judge the user's intent, not a rewrite. | Rerank against rewritten queries | — |
@@ -130,7 +143,7 @@ flowchart TD
 | 8 chunks to the LLM | Multi-part questions need room for every part. | 5 chunks | Complete coverage 0.250 → 0.750, faithfulness 0.938 → 0.956. |
 | Max 2 chunks per section | Stops one section from taking every slot. | Per-document cap, MMR | Both alternatives broke cases where one page covers two topics. |
 | Chunks of 3,000 chars, 300 overlap, split by headings first | Reranker judges whole paragraphs better; headings give each chunk an address. | Small chunks | 8 × 3,000 chars fits the context easily. |
-| Context header in every chunk | Same words mean different things per product. | Raw text | The judge flagged citations to the wrong product before the change. |
+| Context header in every chunk | Same words mean different things per product. | Raw text | Design reasoning; the answer judge also checks for citations to the wrong product. |
 | Translate, never rewrite | Rewriting changes meaning. | Semantic query rewrite | Rewrite dropped an English case from MRR 1.0 to 0.25. |
 | Single pass; two-hop search off by default | It did not help on average. | Iterative retrieval | Identical coverage (0.625 / 0.250) with and without it. |
 | `gpt-6-luna` for generation | More faithful, same relevance. | `gpt-5.6-luna` | Faithfulness 0.975 → 0.994, citations 0.980 → 0.994. |
@@ -242,8 +255,8 @@ reached the top 10.
 - **Small datasets.** 16 multi-part questions, ground truth written by the author.
   One case = 0.0625 of complete coverage.
 - **The generator is not deterministic**, even with fixed inputs.
-- **Hit@5 is already 1.0** on the older retrieval sets, so precision@8 and
-  coverage are the metrics that still move.
+- **Ranking dropped with the full corpus** (see above): Hit@5 holds, but the
+  right page ranks lower and multi-part coverage fell. This is being fixed.
 - **Free-tier limits:** Cohere trial (1,000 calls/month per key, 10/minute),
   Render sleeps after 15 minutes idle (first request ~1 minute).
 - **Open:** a smarter context selector (experiment 10); a no-rerank fallback
