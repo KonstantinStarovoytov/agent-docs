@@ -362,3 +362,15 @@ All 1,230 reranked candidates of the stored gate runs, labelled. Full tables:
 - Runners: `run_experiments.py` and `run_answer_quality_experiment.py` follow the settings and take `--name-suffix`; `run_experiments.py` also takes `--skip-no-rerank`.
 - `evals/eval_cache.py`: quota-safe, cacheable `EvalReranker`; frozen rewrites.
 - `evals/diagnose_retrieval.py`: `slices`, `screen`, `threshold`, `independence`, `summary`.
+
+## Label decisions (2026-10-12)
+
+The owner accepted both label gaps. The ground truth now lists the found pages
+as additional valid answers (any match counts):
+
+- "When should I use a skill instead of a subagent?" — added Cursor
+  `subagents.md` > *When to use subagents* and Claude Code `sub-agents.md`.
+- Query-transform "Python files" — added Cursor `skills.md` > *Scoping a skill*.
+
+Both Langfuse datasets were re-seeded (47 and 48 items). The effect on MRR is
+measured in the pending reranked run.

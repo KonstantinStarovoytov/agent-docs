@@ -30,6 +30,13 @@ INTENTS: list[dict[str, Any]] = [
                 "vendor": "cursor",
                 "source_contains": "rules",
             },
+            # Scoping a skill with `paths: "**/*.py"` also answers the natural
+            # wording; accepted on 2026-10-12 (full-corpus diagnostics).
+            {
+                "vendor": "cursor",
+                "source_contains": "cursor.com/docs/skills.md",
+                "heading_contains": "Scoping a skill",
+            },
         ],
         "variants": {
             "clean_en": ("How do I configure Cursor rules only for Python files?"),

@@ -298,11 +298,23 @@ CASES = [
         "question": "When should I use a skill instead of a subagent?",
         "category": "comparison",
         "difficulty": "hard",
+        # The question names no product. Accepted on 2026-10-12 after the
+        # full-corpus diagnostics: both vendors' subagent pages answer it
+        # (reports/retrieval-diagnostics-2026-10.md, "label gap").
         "relevant": [
             {
                 "title": "Extend Claude Code",
                 "heading_contains": "Compare similar features",
-            }
+            },
+            {
+                "vendor": "cursor",
+                "source_contains": "cursor.com/docs/subagents.md",
+                "heading_contains": "When to use subagents",
+            },
+            {
+                "vendor": "anthropic",
+                "source_contains": "docs/en/sub-agents.md",
+            },
         ],
     },
     {
