@@ -8,6 +8,7 @@ from src.ingestion.ingest import (
     get_hybrid_vector_store,
     get_vector_store,
 )
+from src.config import settings
 from src.observability import traced
 
 TIE_BREAK_OVERFETCH = 3
@@ -106,6 +107,29 @@ def search(
     ]
 
 
+def cap_per_source(
+    ranked: list[SearchResult], k: int, max_per_source: int | None
+) -> list[SearchResult]:
+    """First `k` results in order, keeping at most `max_per_source` per page.
+
+    Skipped chunks free their slot for later (over-fetched) candidates, so the
+    pool keeps size `k` when enough distinct pages exist. None = plain cut.
+    """
+    if max_per_source is None:
+        return ranked[:k]
+    counts: dict[str, int] = {}
+    kept: list[SearchResult] = []
+    for result in ranked:
+        source = str(result.document.metadata.get("source", ""))
+        if counts.get(source, 0) >= max_per_source:
+            continue
+        counts[source] = counts.get(source, 0) + 1
+        kept.append(result)
+        if len(kept) == k:
+            break
+    return kept
+
+
 @traced(
     "hybrid-search",
     "retriever",
@@ -131,10 +155,8 @@ def search_hybrid(
 
     ordered = sorted(results, key=lambda row: (-row[1], document_key(row[0])))
 
-    return [
-        SearchResult(
-            document=document,
-            score=score,
-        )
-        for document, score in ordered[:k]
-    ]
+    return cap_per_source(
+        [SearchResult(document=document, score=score) for document, score in ordered],
+        k,
+        settings.max_chunks_per_source_in_pool,
+    )

@@ -59,6 +59,9 @@ class Settings(BaseSettings):
     translate_non_english: bool = True
     retrieval_top_k: int = Field(default=10, ge=1)
     per_query_top_k: int = Field(default=20, ge=1)
+    # Max chunks per page (metadata.source) in the candidate pool before
+    # rerank; the pool refills from over-fetched candidates. None = no cap.
+    max_chunks_per_source_in_pool: int | None = Field(default=None, ge=1)
     qdrant_hybrid_collection: str = "agent_docs_hybrid_v1"
     sparse_embedding_model: str = "Qdrant/bm25"
 

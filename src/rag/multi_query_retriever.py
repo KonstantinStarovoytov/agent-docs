@@ -2,12 +2,14 @@ from collections import defaultdict
 
 from langchain_core.documents import Document
 
+from src.config import settings
 from src.observability import traced
 from src.rag.query_transformer import (
     QueryTransformer,
 )
 from src.rag.retriever import (
     SearchResult,
+    cap_per_source,
     document_key,
     search_hybrid,
 )
@@ -72,13 +74,11 @@ def search_queries_hybrid(
         key=lambda item: (-item[1], item[0]),
     )
 
-    return [
-        SearchResult(
-            document=documents[key],
-            score=score,
-        )
-        for key, score in ranked[:final_k]
-    ]
+    return cap_per_source(
+        [SearchResult(document=documents[key], score=score) for key, score in ranked],
+        final_k,
+        settings.max_chunks_per_source_in_pool,
+    )
 
 
 def search_multi_query_hybrid(
