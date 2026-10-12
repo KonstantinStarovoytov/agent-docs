@@ -45,3 +45,20 @@ def test_coverage_requires_each_independent_evidence_group():
         "value": 0.5,
         "complete": 0.0,
     }
+
+
+def test_coverage_accepts_recorded_alternative_sources():
+    expected = {
+        "evidence_groups": [
+            {
+                "id": "server",
+                "target": {"source_contains": "learn/server-concepts.md"},
+                "alternatives": [{"source_contains": "/server/index.md"}],
+            },
+        ]
+    }
+    spec_page = {
+        "source": "https://modelcontextprotocol.io/specification/x/server/index.md"
+    }
+    assert coverage({"results": [spec_page]}, expected)["complete"] == 1.0
+    assert coverage({"results": [{"source": "other.md"}]}, expected)["complete"] == 0.0
