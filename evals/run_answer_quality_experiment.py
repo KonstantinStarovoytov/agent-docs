@@ -5,7 +5,6 @@ uv run python -m evals.run_answer_quality_experiment --negative # abstentions
 """
 
 import argparse
-import time
 from typing import Any
 
 from langfuse import Langfuse
@@ -17,6 +16,7 @@ from evals.answer_quality import (
     judge_is_independent,
     judge_model,
 )
+from evals.eval_cache import EvalReranker, cache_dir, cohere_calls
 from evals.evidence_coverage import (
     DATASET_NAME,
     complete_evidence_coverage,
@@ -28,13 +28,15 @@ from src.rag.generator import generate_from_selected
 from src.rag.iterative import retrieve_two_hop
 from src.rag.multi_query_retriever import search_queries_hybrid
 from src.rag.planner import EvidencePlanner
-from src.rag.reranker import CohereReranker, RerankResult
-from src.rag.retriever import SearchResult, search_hybrid
+from src.rag.reranker import RerankResult
+from src.rag.retriever import SearchResult, rerank_pool_size, search_hybrid
 
-RETRIEVAL_TOP_K = 10
+# Defaults reproduce the September runs (pool 10, rerank top 10); RERANK_POOL,
+# HYBRID_PREFETCH_DEPTH and RETRIEVAL_TOP_K change them like in production.
+RETRIEVAL_TOP_K = settings.retrieval_top_k
+RERANK_POOL = rerank_pool_size()
 GENERATION_TOP_K = settings.generation_top_k
-PER_QUERY_TOP_K = 20
-COHERE_REQUEST_INTERVAL_SECONDS = 6.5
+PER_QUERY_TOP_K = max(settings.per_query_top_k, RERANK_POOL)
 
 langfuse = Langfuse(
     public_key=settings.langfuse_public_key,
@@ -44,10 +46,9 @@ langfuse = Langfuse(
 
 
 def _rerank(question: str, candidates: list[SearchResult]) -> list[RerankResult]:
-    ranked = CohereReranker().rerank(question, candidates, top_n=RETRIEVAL_TOP_K)
-    # Keep the experiment below Cohere's free-tier request rate.
-    time.sleep(COHERE_REQUEST_INTERVAL_SECONDS)
-    return ranked
+    # EvalReranker keeps calls below the free tier's rate and never falls back
+    # to the second key (evals/eval_cache.py).
+    return EvalReranker().rerank(question, candidates, top_n=RETRIEVAL_TOP_K)
 
 
 def _context_rows(results: list[RerankResult]) -> list[dict[str, Any]]:
@@ -131,7 +132,7 @@ def _answer_output(
 
 def baseline_task(*, item, **_kwargs) -> dict[str, Any]:
     question = item.input["question"]
-    ranked = _rerank(question, search_hybrid(question, k=RETRIEVAL_TOP_K))
+    ranked = _rerank(question, search_hybrid(question, k=RERANK_POOL))
     selected = select_generation_context(
         ranked, GENERATION_TOP_K, min_rerank_score=settings.min_rerank_score
     )
@@ -150,7 +151,7 @@ def iterative_task(*, item, **_kwargs) -> dict[str, Any]:
         question,
         [question],
         retrieve=lambda queries: search_queries_hybrid(
-            queries, per_query_k=PER_QUERY_TOP_K, final_k=RETRIEVAL_TOP_K
+            queries, per_query_k=PER_QUERY_TOP_K, final_k=RERANK_POOL
         ),
         rerank=_rerank,
         assess=EvidencePlanner().assess,
@@ -171,6 +172,10 @@ def _metadata(mode: str) -> dict[str, Any]:
         "retriever": "Qdrant hybrid dense+BM25 RRF",
         "reranker": settings.cohere_rerank_model,
         "retrieval_top_k": RETRIEVAL_TOP_K,
+        "rerank_pool": RERANK_POOL,
+        "hybrid_prefetch_depth": settings.hybrid_prefetch_depth,
+        "max_chunks_per_source_in_pool": settings.max_chunks_per_source_in_pool,
+        "rerank_cache": cache_dir() is not None,
         "generation_top_k": GENERATION_TOP_K,
         "per_query_top_k": PER_QUERY_TOP_K if mode == "iterative" else None,
         "answer_model": settings.openai_chat_model,
@@ -191,11 +196,13 @@ def main() -> None:
         action="store_true",
         help="run the unanswerable set and score whether the system abstained",
     )
+    parser.add_argument("--name-suffix", default="", help="appended to the run names")
     args = parser.parse_args()
+    suffix = args.name_suffix
     if args.negative:
         dataset = langfuse.get_dataset(negative_cases.DATASET_NAME)
         result = dataset.run_experiment(
-            name=f"negative-abstention-k{GENERATION_TOP_K}",
+            name=f"negative-abstention-k{GENERATION_TOP_K}{suffix}",
             description=(
                 "Questions outside the corpus; the system should say the "
                 "documentation does not cover them."
@@ -218,7 +225,7 @@ def main() -> None:
         "max_concurrency": 1,
     }
     baseline = dataset.run_experiment(
-        name=f"answer-quality-baseline-k{GENERATION_TOP_K}",
+        name=f"answer-quality-baseline-k{GENERATION_TOP_K}{suffix}",
         description=(
             "Single-pass hybrid retrieval, Cohere rerank, answer generation, and "
             "strict groundedness/relevance/context/citation evaluation."
@@ -228,11 +235,12 @@ def main() -> None:
         **common,
     )
     print(baseline.format())
+    print(f"Cohere calls made by this process: {cohere_calls()}")
     if not args.compare_iterative:
         langfuse.flush()
         return
     iterative = dataset.run_experiment(
-        name=f"answer-quality-iterative-k{GENERATION_TOP_K}",
+        name=f"answer-quality-iterative-k{GENERATION_TOP_K}{suffix}",
         description=(
             "Bounded two-hop retrieval, answer generation, and strict "
             "groundedness/relevance/context/citation evaluation."
