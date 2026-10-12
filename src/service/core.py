@@ -155,10 +155,13 @@ def one_per_page(reranked: list[RerankResult]) -> list[RerankResult]:
     return sorted(best.values(), key=lambda result: -result.rerank_score)
 
 
-def search(
+def rerank_pages(
     question: str, *, limit: int | None = None, vendor: str | None = None
-) -> list[Passage]:
-    """Retrieval without generation, for callers that want to read the sources."""
+) -> list[RerankResult]:
+    """The best-scoring chunk of each of the top `limit` pages, best first.
+
+    Shared by search_docs and find_pages: one hybrid search, one Cohere call.
+    """
     question = _validated_question(question)
     k = limit if limit is not None else settings.retrieval_top_k
     if k < 1:
@@ -182,7 +185,14 @@ def search(
     reranked = CohereReranker().rerank(
         query=question, results=candidates, top_n=len(candidates)
     )
-    best_per_page = one_per_page(reranked)[:k]
+    return one_per_page(reranked)[:k]
+
+
+def search(
+    question: str, *, limit: int | None = None, vendor: str | None = None
+) -> list[Passage]:
+    """Retrieval without generation, for callers that want to read the sources."""
+    best_per_page = rerank_pages(question, limit=limit, vendor=vendor)
 
     passages = []
     for rank, result in enumerate(best_per_page, start=1):

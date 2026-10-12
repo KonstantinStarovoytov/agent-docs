@@ -15,7 +15,7 @@ from pydantic import SecretStr
 
 from src.config import settings
 from src.service import app as app_module
-from src.service import core
+from src.service import core, pages
 from src.service.mcp_server import build_mcp_server
 
 TOKEN = "test-token"
@@ -64,11 +64,16 @@ def stub_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 @pytest.mark.anyio
-async def test_client_sees_both_tools(stub_pipeline: None) -> None:
+async def test_client_sees_all_tools(stub_pipeline: None) -> None:
     async with Client(build_mcp_server()) as client:
         tools = await client.list_tools()
 
-    assert {tool.name for tool in tools.tools} == {"ask_docs", "search_docs"}
+    assert {tool.name for tool in tools.tools} == {
+        "ask_docs",
+        "search_docs",
+        "find_pages",
+        "read_section",
+    }
 
 
 @pytest.mark.anyio
@@ -280,7 +285,9 @@ async def test_mounted_http_transport_serves_tools(
                 "ask_docs", {"question": "How do hooks work?"}
             )
 
-    assert {tool.name for tool in tools.tools} == {"ask_docs", "search_docs"}
+    assert {"ask_docs", "search_docs", "find_pages", "read_section"} == {
+        tool.name for tool in tools.tools
+    }
     payload = result.structured_content
     assert payload is not None
     assert payload["answer"] == "Answer to How do hooks work? [1]."
@@ -367,3 +374,102 @@ async def test_ask_docs_maps_product_to_vendor(
         assert seen["vendor"] == "openai"
         await client.call_tool("ask_docs", {"question": "q"})
         assert seen["vendor"] is None
+
+
+@pytest.fixture
+def stub_pages(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
+    seen: dict[str, Any] = {}
+
+    def find_pages(
+        question: str, *, limit: int = 5, vendor: str | None = None
+    ) -> list[pages.PageCard]:
+        seen.update(question=question, limit=limit, vendor=vendor)
+        return [
+            pages.PageCard(
+                rank=1,
+                title="Hooks",
+                url="https://docs.test/hooks.md",
+                product="claude-code",
+                score=0.8,
+                description="Explains hooks.",
+                outline=["# Hooks", "## Configure hooks"],
+            )
+        ]
+
+    def read_section(
+        url: str, heading: str | None = None, offset: int = 0
+    ) -> pages.SectionRead:
+        if url == "https://docs.test/missing.md":
+            raise pages.PageNotFound(f"{url} is not a page of the index")
+        seen.update(url=url, heading=heading, offset=offset)
+        return pages.SectionRead(
+            url=url,
+            title="Hooks",
+            description="Explains hooks.",
+            outline=[],
+            heading="Hooks > Configure hooks",
+            text="## Configure hooks\nbody",
+            offset=offset,
+            next_offset=None,
+            total_chars=24,
+        )
+
+    monkeypatch.setattr(pages, "find_pages", find_pages)
+    monkeypatch.setattr(pages, "read_section", read_section)
+    return seen
+
+
+@pytest.mark.anyio
+async def test_page_tools_advertise_the_reading_flow(stub_pipeline: None) -> None:
+    async with Client(build_mcp_server()) as client:
+        tools = {tool.name: tool for tool in (await client.list_tools()).tools}
+
+    find, read = tools["find_pages"], tools["read_section"]
+    for tool in (find, read):
+        assert tool.annotations is not None
+        assert tool.annotations.read_only_hint is True
+        assert tool.annotations.destructive_hint is False
+        assert tool.annotations.open_world_hint is False
+        assert tool.output_schema is not None
+    find_text = " ".join((find.description or "").split())
+    assert "read_section" in find_text and "one find_pages per part" in find_text
+    assert "read_section" in " ".join((tools["search_docs"].description or "").split())
+    assert "find_pages" in " ".join((read.description or "").split())
+    assert find.input_schema["properties"]["limit"]["maximum"] == 10
+    assert "pages" in find.output_schema["properties"]  # type: ignore[index]
+    assert "next_offset" in read.output_schema["properties"]  # type: ignore[index]
+
+
+@pytest.mark.anyio
+async def test_find_pages_returns_cards_and_maps_product(
+    stub_pipeline: None, stub_pages: dict[str, Any]
+) -> None:
+    async with Client(build_mcp_server()) as client:
+        result = await client.call_tool(
+            "find_pages", {"query": "hooks", "product": "claude-code"}
+        )
+
+    assert stub_pages == {"question": "hooks", "limit": 5, "vendor": "anthropic"}
+    card = result.structured_content["pages"][0]  # type: ignore[index]
+    assert card["description"] == "Explains hooks."
+    assert card["outline"] == ["# Hooks", "## Configure hooks"]
+    assert "index_snapshot" in result.structured_content  # type: ignore[operator]
+
+
+@pytest.mark.anyio
+async def test_read_section_returns_text_and_reports_unknown_pages(
+    stub_pipeline: None, stub_pages: dict[str, Any]
+) -> None:
+    async with Client(build_mcp_server()) as client:
+        found = await client.call_tool(
+            "read_section",
+            {"url": "https://docs.test/hooks.md", "heading": "configure", "offset": 0},
+        )
+        missing = await client.call_tool(
+            "read_section", {"url": "https://docs.test/missing.md"}
+        )
+
+    assert found.structured_content["text"].startswith("## Configure hooks")  # type: ignore[index]
+    assert stub_pages["heading"] == "configure"
+    assert missing.is_error is True
+    assert "not a page of the index" in missing.content[0].text  # type: ignore[union-attr]

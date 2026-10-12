@@ -245,3 +245,76 @@ def test_ask_rejects_unknown_product(
     )
 
     assert response.status_code == 422
+
+
+def test_pages_and_section_need_a_token(client: Any) -> None:
+    assert client.post("/pages", json={"query": "hooks"}).status_code == 401
+    assert client.post("/section", json={"url": "https://x"}).status_code == 401
+
+
+def test_pages_returns_cards(client: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    from src.service import pages
+
+    seen: dict[str, Any] = {}
+
+    def find_pages(question: str, **kwargs: Any) -> list[pages.PageCard]:
+        seen.update(question=question, **kwargs)
+        return [
+            pages.PageCard(1, "Hooks", "https://x/h.md", "cursor", 0.7, "D.", ["# H"])
+        ]
+
+    monkeypatch.setattr(pages, "find_pages", find_pages)
+
+    response = client.post(
+        "/pages",
+        json={"query": "hooks", "limit": 3, "product": "cursor"},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["pages"][0]["outline"] == ["# H"]
+    assert seen == {"question": "hooks", "limit": 3, "vendor": "cursor"}
+
+
+def test_section_maps_unknown_page_to_404_and_bad_heading_to_422(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.service import pages
+
+    def read_section(url: str, heading: str | None = None, offset: int = 0) -> Any:
+        if heading:
+            raise pages.SectionNotFound("No heading matches")
+        raise pages.PageNotFound("not a page")
+
+    monkeypatch.setattr(pages, "read_section", read_section)
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    missing = client.post("/section", json={"url": "https://x"}, headers=headers)
+    bad = client.post(
+        "/section", json={"url": "https://x", "heading": "nope"}, headers=headers
+    )
+
+    assert missing.status_code == 404
+    assert bad.status_code == 422 and "No heading" in bad.json()["detail"]
+
+
+def test_section_returns_text(client: Any, monkeypatch: pytest.MonkeyPatch) -> None:
+    from src.service import pages
+
+    monkeypatch.setattr(
+        pages,
+        "read_section",
+        lambda url, heading=None, offset=0: pages.SectionRead(
+            url, "T", "D.", [], "T > H", "## H\nbody", offset, None, 9
+        ),
+    )
+
+    response = client.post(
+        "/section",
+        json={"url": "https://x/h.md", "heading": "H", "offset": 0},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["text"] == "## H\nbody"
+    assert response.json()["next_offset"] is None
