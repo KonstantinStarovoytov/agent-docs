@@ -55,6 +55,16 @@ class Settings(BaseSettings):
     # weakest genuinely relevant chunk scored 0.35 (128 chunks, only 4
     # below 0.4, none below 0.3). None disables the floor.
     min_rerank_score: float | None = Field(default=0.35, ge=0.0, le=1.0)
+    # ask_docs answers "couldn't find relevant documentation" without calling
+    # the LLM when even the best reranked candidate scores below this.
+    # None disables it. See reports/dedup-abstain-2026-10.md.
+    min_top_rerank_score: float | None = Field(default=0.55, ge=0.0, le=1.0)
+
+    @field_validator("min_top_rerank_score", mode="before")
+    @classmethod
+    def _blank_top_score_is_unset(cls, value: object) -> object:
+        return None if value == "" else value
+
     retrieval_strategy: Literal["dense", "hybrid", "hybrid-english"] = "hybrid"
     translate_non_english: bool = True
     retrieval_top_k: int = Field(default=10, ge=1)
