@@ -196,7 +196,7 @@ def orphans(indexed_sources: set[str], documents: list[SourceDocument]) -> list[
 
 class Snapshots(Protocol):
     def get(self, url: str) -> str | None: ...
-    def put(self, document: SourceDocument, sha256: str) -> None: ...
+    def put(self, document: SourceDocument, sha256: str, summary: str = "") -> None: ...
     def delete(self, url: str) -> None: ...
     def all_texts(self) -> dict[str, str]: ...
 
@@ -266,7 +266,7 @@ def run(
         if not dry_run:
             deps.delete_source(document.url)
             deps.add_chunks(chunks)
-            deps.snapshots.put(document, sha)
+            deps.snapshots.put(document, sha, entry_summary)
         documents[document.url] = ManifestEntry(
             sha256=sha, chunks=len(chunks), title=document.title, summary=entry_summary
         )
@@ -527,7 +527,7 @@ class _EmptySnapshots:
     def get(self, url: str) -> str | None:
         return None
 
-    def put(self, document: SourceDocument, sha256: str) -> None:
+    def put(self, document: SourceDocument, sha256: str, summary: str = "") -> None:
         pass
 
     def delete(self, url: str) -> None:
@@ -541,6 +541,20 @@ def _snapshot_store(client: QdrantClient, collection: str, dry_run: bool) -> Sna
     if dry_run and not client.collection_exists(collection):
         return _EmptySnapshots()
     return SnapshotStore(client, collection)
+
+
+def backfill_summaries(manifest: Manifest, store: SnapshotStore) -> int:
+    """Copy the gate's page summaries into the stored pages (payload only).
+
+    The service reads them from Qdrant at runtime: data/ is not in the image.
+    """
+    return store.set_summaries(
+        {
+            url: entry.summary
+            for url, entry in manifest.documents.items()
+            if entry.status == "indexed"
+        }
+    )
 
 
 def _product_of() -> dict[str, str]:
@@ -592,12 +606,28 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--out", default=".", help="Where report.md and quarantine.md go."
     )
+    parser.add_argument(
+        "--backfill-summaries",
+        action="store_true",
+        help=(
+            "Only copy manifest summaries into the stored pages' payloads "
+            "(no fetch, no embedding), then exit."
+        ),
+    )
     args = parser.parse_args(argv)
 
     collection = settings.qdrant_hybrid_collection
     path = manifest_path(collection)
     manifest = load_manifest(path)
     client = get_qdrant_client()
+    if args.backfill_summaries:
+        try:
+            pages = SnapshotStore(client, snapshot_collection(collection), create=False)
+            updated = backfill_summaries(manifest, pages)
+        finally:
+            client.close()
+        print(f"{snapshot_collection(collection)}: {updated} page summaries written")
+        return 0
     try:
         if not args.dry_run and ensure_hybrid_collection(client, collection):
             print(f"created {collection} (sparse modifier: IDF)")
