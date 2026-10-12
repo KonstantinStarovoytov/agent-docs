@@ -62,6 +62,13 @@ class Settings(BaseSettings):
     # Max chunks per page (metadata.source) in the candidate pool before
     # rerank; the pool refills from over-fetched candidates. None = no cap.
     max_chunks_per_source_in_pool: int | None = Field(default=None, ge=1)
+    # How deep Qdrant reads each side (dense and BM25) before RRF; it is also
+    # the length of the fused list. None = 3 x the requested k (the tie-break
+    # overfetch). Never less than k.
+    hybrid_prefetch_depth: int | None = Field(default=None, ge=1)
+    # How many fused candidates the answer pipeline sends to Cohere. The rerank
+    # output stays retrieval_top_k. None = retrieval_top_k.
+    rerank_pool: int | None = Field(default=None, ge=1)
     qdrant_hybrid_collection: str = "agent_docs_hybrid_v1"
     sparse_embedding_model: str = "Qdrant/bm25"
 

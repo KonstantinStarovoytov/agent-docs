@@ -107,6 +107,19 @@ def search(
     ]
 
 
+def prefetch_limit(k: int) -> int:
+    """Qdrant's per-side prefetch limit (and fused-list length) for a cut at k."""
+    depth = settings.hybrid_prefetch_depth
+    if depth is None:
+        return k * TIE_BREAK_OVERFETCH
+    return max(depth, k)
+
+
+def rerank_pool_size() -> int:
+    """How many fused candidates go to the reranker in the answer pipeline."""
+    return settings.rerank_pool or settings.retrieval_top_k
+
+
 def cap_per_source(
     ranked: list[SearchResult], k: int, max_per_source: int | None
 ) -> list[SearchResult]:
@@ -146,9 +159,11 @@ def search_hybrid(
     # RRF scores take few distinct values, so many candidates tie. Qdrant returns
     # tied documents in an arbitrary order, which makes the cut at k drop a
     # different document on each call. Over-fetch, then break ties by content id.
+    # langchain-qdrant uses this one k as the limit of both prefetches (dense
+    # and BM25) and of the fused list.
     results = vector_store.similarity_search_with_score(
         query=query,
-        k=k * TIE_BREAK_OVERFETCH,
+        k=prefetch_limit(k),
         filter=_vendor_filter(vendor),
         hybrid_fusion=models.FusionQuery(fusion=models.Fusion.RRF),
     )
