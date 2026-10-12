@@ -34,7 +34,7 @@ from src.ingestion.loader import LoadResult, load_all_sources
 from src.ingestion.snapshots import SnapshotStore, snapshot_collection
 from src.ingestion.sources import SOURCES
 from src.models import SourceDocument
-from src.service.core import META_COLLECTION, META_POINT_ID
+from src.service.core import META_COLLECTION, meta_point_id
 
 MANIFEST_DIR = Path("data/manifests")
 SMOKE_K = 10
@@ -473,7 +473,7 @@ def touch_index(client: QdrantClient, collection: str) -> int:
     return int(client.count(collection).count)
 
 
-def write_meta(manifest: Manifest) -> None:
+def write_meta(manifest: Manifest, collection: str) -> None:
     """One point the service reads to report when the index was built."""
     client = get_qdrant_client()
     try:
@@ -488,9 +488,10 @@ def write_meta(manifest: Manifest) -> None:
             META_COLLECTION,
             points=[
                 models.PointStruct(
-                    id=META_POINT_ID,
+                    id=meta_point_id(collection),
                     vector=[0.0],
                     payload={
+                        "collection": collection,
                         "indexed_at": manifest.indexed_at,
                         "document_count": len(manifest.documents),
                         "written_at": datetime.now(UTC).isoformat(),
@@ -643,7 +644,7 @@ def main(argv: list[str] | None = None) -> int:
         daily.parent.mkdir(parents=True, exist_ok=True)
         daily.write_text(text)
     if result.manifest.indexed_at != manifest.indexed_at:
-        write_meta(result.manifest)
+        write_meta(result.manifest, collection)
         failures = smoke_failures(INTENTS, _search)
         if failures:
             print(f"SMOKE FAILED: expected page missing from top hits for {failures}")

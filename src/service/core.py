@@ -5,6 +5,7 @@ The HTTP endpoint and the MCP server must answer identically, so both go through
 """
 
 import logging
+from uuid import NAMESPACE_URL, uuid5
 import time
 from dataclasses import dataclass
 from typing import Any
@@ -17,9 +18,16 @@ from src.rag.retriever import rerank_pool_size, search_hybrid
 
 logger = logging.getLogger(__name__)
 
-# The re-index job writes one point here; see src/reindex.py.
+# The re-index job writes one point per hybrid collection here; see
+# src/reindex.py. Point 1 is the single point written before that.
 META_COLLECTION = "agent_docs_meta"
 META_POINT_ID = 1
+
+
+def meta_point_id(collection: str) -> str:
+    return str(uuid5(NAMESPACE_URL, f"agent-docs-meta/{collection}"))
+
+
 SNAPSHOT_TTL_SECONDS = 600.0
 
 _snapshot_cache: tuple[float, str | None] | None = None
@@ -32,10 +40,17 @@ class QuestionRejected(ValueError):
 def _read_index_meta() -> dict[str, Any]:
     client = get_qdrant_client()
     try:
-        points = client.retrieve(META_COLLECTION, ids=[META_POINT_ID])
+        if not client.collection_exists(META_COLLECTION):
+            return {}
+        own = meta_point_id(settings.qdrant_hybrid_collection)
+        points = {
+            str(point.id): point
+            for point in client.retrieve(META_COLLECTION, ids=[own, META_POINT_ID])
+        }
     finally:
         client.close()
-    return dict(points[0].payload or {}) if points else {}
+    point = points.get(own) or points.get(str(META_POINT_ID))
+    return dict(point.payload or {}) if point else {}
 
 
 def index_snapshot() -> str | None:
