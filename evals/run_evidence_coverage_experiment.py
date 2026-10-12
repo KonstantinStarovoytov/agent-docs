@@ -2,6 +2,8 @@
 
 import argparse
 
+from functools import lru_cache
+
 from langfuse import Langfuse
 
 from evals.eval_cache import EvalReranker, cache_dir, cohere_calls
@@ -23,11 +25,18 @@ RETRIEVAL_TOP_K = rerank_pool_size()
 GENERATION_TOP_K = settings.generation_top_k
 PER_QUERY_TOP_K = 20
 
-langfuse = Langfuse(
-    public_key=settings.langfuse_public_key,
-    secret_key=settings.langfuse_secret_key.get_secret_value(),
-    base_url=settings.langfuse_base_url,
-)
+
+@lru_cache(maxsize=1)
+def langfuse_client() -> Langfuse:
+    """Built on first use, so importing this module needs no Langfuse keys."""
+    secret = settings.langfuse_secret_key
+    if secret is None:
+        raise ValueError("LANGFUSE_SECRET_KEY must be set to run experiments")
+    return Langfuse(
+        public_key=settings.langfuse_public_key,
+        secret_key=secret.get_secret_value(),
+        base_url=settings.langfuse_base_url,
+    )
 
 
 def _result_row(result: SearchResult) -> dict:
@@ -123,7 +132,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
-    dataset = langfuse.get_dataset(DATASET_NAME)
+    dataset = langfuse_client().get_dataset(DATASET_NAME)
     common = {
         "evaluators": [evidence_coverage, complete_evidence_coverage],
         "max_concurrency": 1,
@@ -138,7 +147,7 @@ def main(argv: list[str] | None = None) -> None:
     print(baseline.format())
     print(f"Cohere calls made by this process: {cohere_calls()}")
     if args.baseline_only:
-        langfuse.flush()
+        langfuse_client().flush()
         return
     iterative = dataset.run_experiment(
         name=f"evidence-coverage-iterative-v3-section-diverse{args.name_suffix}",
@@ -148,7 +157,7 @@ def main(argv: list[str] | None = None) -> None:
         **common,
     )
     print(iterative.format())
-    langfuse.flush()
+    langfuse_client().flush()
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+from types import SimpleNamespace
+
 from evals import run_evidence_coverage_experiment as runner
 
 
@@ -19,7 +21,7 @@ def test_baseline_only_skips_iterative(monkeypatch) -> None:
             names.append(name)
             return FakeResult()
 
-    monkeypatch.setattr(runner.langfuse, "get_dataset", lambda _name: FakeDataset())
-    monkeypatch.setattr(runner.langfuse, "flush", lambda: None)
+    fake = SimpleNamespace(get_dataset=lambda _name: FakeDataset(), flush=lambda: None)
+    monkeypatch.setattr(runner, "langfuse_client", lambda: fake)
     runner.main(["--baseline-only", "--name-suffix=-x"])
     assert names == ["evidence-coverage-baseline-v3-section-diverse-x"]
