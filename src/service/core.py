@@ -13,7 +13,7 @@ from typing import Any
 from src.config import settings
 from src.ingestion.ingest import get_qdrant_client
 from src.rag.pipeline import RetrievalStrategy, answer_question
-from src.rag.reranker import CohereReranker
+from src.rag.reranker import CohereReranker, RerankResult
 from src.rag.retriever import rerank_pool_size, search_hybrid
 
 logger = logging.getLogger(__name__)
@@ -142,6 +142,19 @@ def answer(
     )
 
 
+def one_per_page(reranked: list[RerankResult]) -> list[RerankResult]:
+    """The best-scoring chunk of each page (`metadata.source`), best first.
+
+    A chunk without a source is never merged with another one.
+    """
+    best: dict[object, RerankResult] = {}
+    for index, result in enumerate(reranked):
+        page: object = result.document.metadata.get("source") or index
+        if page not in best or result.rerank_score > best[page].rerank_score:
+            best[page] = result
+    return sorted(best.values(), key=lambda result: -result.rerank_score)
+
+
 def search(
     question: str, *, limit: int | None = None, vendor: str | None = None
 ) -> list[Passage]:
@@ -163,10 +176,16 @@ def search(
     candidates = search_hybrid(query=question, k=pool, vendor=vendor)
     if not candidates:
         return []
-    reranked = CohereReranker().rerank(query=question, results=candidates, top_n=k)
+    # Cohere returns the whole pool (still one call) so that `k` distinct pages
+    # can be filled; a page's weaker chunks would otherwise crowd out other
+    # pages. Only the best-scoring passage of each page is kept.
+    reranked = CohereReranker().rerank(
+        query=question, results=candidates, top_n=len(candidates)
+    )
+    best_per_page = one_per_page(reranked)[:k]
 
     passages = []
-    for rank, result in enumerate(reranked, start=1):
+    for rank, result in enumerate(best_per_page, start=1):
         metadata = result.document.metadata
         heading = " > ".join(
             value
