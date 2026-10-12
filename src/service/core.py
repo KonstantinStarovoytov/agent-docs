@@ -13,7 +13,7 @@ from src.config import settings
 from src.ingestion.ingest import get_qdrant_client
 from src.rag.pipeline import RetrievalStrategy, answer_question
 from src.rag.reranker import CohereReranker
-from src.rag.retriever import search_hybrid
+from src.rag.retriever import rerank_pool_size, search_hybrid
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +139,9 @@ def search(
     # best `k` of it. Reranking only `k` candidates would merely reorder what
     # RRF already chose, and past the first few results RRF is mostly ties
     # (reports/mcp-audit-2026-09-15.md #4a). Same single Cohere call either way.
-    pool = max(k, settings.per_query_top_k)
+    # Never narrower than the answer pipeline's pool, so search_docs sees at
+    # least the candidates ask_docs would.
+    pool = max(k, settings.per_query_top_k, rerank_pool_size())
     candidates = search_hybrid(query=question, k=pool, vendor=vendor)
     if not candidates:
         return []

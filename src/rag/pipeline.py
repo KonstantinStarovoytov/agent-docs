@@ -10,7 +10,7 @@ from src.rag.language import needs_english_translation
 from src.rag.multi_query_retriever import search_queries_hybrid
 from src.rag.planner import EvidencePlanner, translate_query
 from src.rag.reranker import CohereReranker
-from src.rag.retriever import search, search_hybrid
+from src.rag.retriever import rerank_pool_size, search, search_hybrid
 
 RetrievalStrategy = Literal["dense", "hybrid", "hybrid-english"]
 
@@ -33,6 +33,8 @@ def _answer_trace_metadata(
         "retrieval_top_k": settings.retrieval_top_k,
         "generation_top_k": settings.generation_top_k,
         "per_query_top_k": settings.per_query_top_k,
+        "rerank_pool": rerank_pool_size(),
+        "hybrid_prefetch_depth": settings.hybrid_prefetch_depth,
     }
 
 
@@ -60,6 +62,9 @@ def answer_question(
     if not query:
         raise ValueError("Question must not be empty")
     strategy = strategy if strategy is not None else settings.retrieval_strategy
+    # The pool is what Cohere reads; retrieval_top_k is what it returns.
+    pool = rerank_pool_size()
+    per_query_k = max(settings.per_query_top_k, pool)
     if iterative:
         if strategy == "dense":
             raise ValueError("Iterative mode requires hybrid retrieval")
@@ -72,8 +77,8 @@ def answer_question(
             queries,
             retrieve=lambda qs: search_queries_hybrid(
                 qs,
-                per_query_k=settings.per_query_top_k,
-                final_k=settings.retrieval_top_k,
+                per_query_k=per_query_k,
+                final_k=pool,
             ),
             rerank=lambda q, rs: reranker.rerank(q, rs, top_n=settings.retrieval_top_k),
             assess=EvidencePlanner().assess,
@@ -83,16 +88,16 @@ def answer_question(
             query=query, results=outcome.results, top_k=settings.generation_top_k
         )
     if strategy == "dense":
-        candidates = search(query=query, k=settings.retrieval_top_k)
+        candidates = search(query=query, k=pool)
     elif strategy in {"hybrid", "hybrid-english"}:
         queries = _translated_queries(query, always=strategy == "hybrid-english")
         if len(queries) == 1:
-            candidates = search_hybrid(query=queries[0], k=settings.retrieval_top_k)
+            candidates = search_hybrid(query=queries[0], k=pool)
         else:
             candidates = search_queries_hybrid(
                 queries=queries,
-                per_query_k=settings.per_query_top_k,
-                final_k=settings.retrieval_top_k,
+                per_query_k=per_query_k,
+                final_k=pool,
             )
     else:
         raise ValueError(f"Unknown retrieval strategy: {strategy}")
