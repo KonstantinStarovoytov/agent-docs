@@ -4,12 +4,12 @@ from typing import Literal
 
 from src.config import settings
 from src.observability import traced
-from src.rag.generator import GeneratedAnswer, generate_answer
+from src.rag.generator import GeneratedAnswer, generate_answer, generate_from_selected
 from src.rag.iterative import retrieve_two_hop
 from src.rag.language import needs_english_translation
 from src.rag.multi_query_retriever import search_queries_hybrid
 from src.rag.planner import EvidencePlanner, translate_query
-from src.rag.reranker import CohereReranker
+from src.rag.reranker import CohereReranker, RerankResult
 from src.rag.retriever import rerank_pool_size, search, search_hybrid
 
 RetrievalStrategy = Literal["dense", "hybrid", "hybrid-english"]
@@ -56,6 +56,18 @@ def _translated_queries(query: str, *, always: bool) -> list[str]:
     if translated.casefold() == query.casefold():
         return [query]
     return [query, translated]
+
+
+def _best_is_too_weak(reranked: list[RerankResult]) -> bool:
+    """True when even the best candidate is below `min_top_rerank_score`.
+
+    The docs then probably do not cover the question, so the pipeline returns
+    the no-documentation answer without paying for the LLM.
+    """
+    threshold = settings.min_top_rerank_score
+    if threshold is None or not reranked:
+        return False
+    return max(result.rerank_score for result in reranked) < threshold
 
 
 @traced(
@@ -126,6 +138,8 @@ def answer_question(
         results=candidates,
         top_n=settings.retrieval_top_k,
     )
+    if _best_is_too_weak(reranked):
+        return generate_from_selected(query, [])
     return generate_answer(
         query=query, results=reranked, top_k=settings.generation_top_k
     )

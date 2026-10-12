@@ -19,3 +19,7 @@ for name in (
 
 os.environ["TRACING_ENABLED"] = "false"
 os.environ["LANGFUSE_TRACING_ENABLED"] = "false"
+
+# Most pipeline tests stub the reranker with bare objects that carry no score.
+# The top-score abstain rule is tested on its own (test_abstain_top_score.py).
+os.environ["MIN_TOP_RERANK_SCORE"] = ""
