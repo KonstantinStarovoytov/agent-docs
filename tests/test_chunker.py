@@ -64,3 +64,65 @@ def test_raw_content_is_what_generator_and_reranker_should_display() -> None:
 
     assert "Vendor:" not in chunk.metadata["raw_content"]
     assert "Product:" not in chunk.metadata["raw_content"]
+
+
+def _table(rows: int) -> str:
+    lines = ["| Key | Description |", "| :- | :- |"]
+    lines += [f"| `key{i}` | Does thing {i} |" for i in range(rows)]
+    return "\n".join(lines)
+
+
+def test_h4_headings_split_entries() -> None:
+    doc = _doc(
+        "# SDK\n\n## Functions\n\n### `tool()`\n\nMakes a tool.\n\n"
+        "#### Parameters\n\nname, description\n\n#### Returns\n\nA definition.\n"
+    )
+
+    chunks = chunk_document(doc)
+
+    raws = [c.metadata["raw_content"] for c in chunks]
+    assert any("Parameters" in r and "Returns" not in r for r in raws)
+    returns = next(c for c in chunks if "A definition." in c.metadata["raw_content"])
+    assert returns.metadata["h3"] == "`tool()`"
+    assert returns.metadata["h4"] == "Returns"
+    assert "Section: SDK > Functions > `tool()` > Returns" in returns.page_content
+
+
+def test_long_table_is_split_into_groups_repeating_the_header() -> None:
+    doc = _doc(f"# Settings\n\n## Keys\n\nAll keys:\n\n{_table(30)}\n\nAfter text.\n")
+
+    chunks = chunk_document(doc)
+
+    table_chunks = [c for c in chunks if "`key" in c.metadata["raw_content"]]
+    assert len(table_chunks) >= 2
+    for chunk in table_chunks:
+        raw = chunk.metadata["raw_content"]
+        assert raw.lstrip().startswith("| Key | Description |\n| :- | :- |")
+        assert raw.count("`key") <= 15
+        assert chunk.metadata["h2"] == "Keys"
+        assert "Section: Settings > Keys" in chunk.page_content
+    seen = "".join(c.metadata["raw_content"] for c in table_chunks)
+    assert all(f"`key{i}`" in seen for i in range(30))
+    assert any("All keys:" in c.metadata["raw_content"] for c in chunks)
+    assert any("After text." in c.metadata["raw_content"] for c in chunks)
+
+
+def test_short_table_stays_with_its_text() -> None:
+    doc = _doc(f"# Settings\n\nIntro.\n\n{_table(5)}\n\nOutro.\n")
+
+    chunks = chunk_document(doc)
+
+    assert len(chunks) == 1
+    assert "Intro." in chunks[0].metadata["raw_content"]
+    assert "`key4`" in chunks[0].metadata["raw_content"]
+
+
+def test_table_cell_padding_is_collapsed() -> None:
+    doc = _doc(
+        "# T\n\n| a      | b        |\n| :-     | :-       |\n| x      | y        |\n"
+    )
+
+    raw = chunk_document(doc)[0].metadata["raw_content"]
+
+    assert "| a | b |" in raw
+    assert all("  " not in line for line in raw.splitlines() if line.startswith("|"))
