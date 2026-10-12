@@ -21,12 +21,14 @@ def _doc(url: str, content: str, product: str = "p") -> SourceDocument:
 @dataclass
 class FakeSnapshots:
     texts: dict[str, str] = field(default_factory=dict)
+    summaries: dict[str, str] = field(default_factory=dict)
 
     def get(self, url: str) -> str | None:
         return self.texts.get(url)
 
-    def put(self, document: SourceDocument, sha256: str) -> None:
+    def put(self, document: SourceDocument, sha256: str, summary: str = "") -> None:
         self.texts[document.url] = document.content
+        self.summaries[document.url] = summary
 
     def delete(self, url: str) -> None:
         self.texts.pop(url, None)
@@ -287,3 +289,51 @@ def test_allowing_a_quarantined_page_indexes_it_on_the_next_run(
     assert added
     assert result.manifest.documents["https://x/q.md"].status == "indexed"
     assert not result.report.quarantined
+
+
+def test_snapshot_keeps_the_gate_summary_for_new_and_changed_pages() -> None:
+    deps, _, _ = _deps([_doc("https://x/a.md", "# A\ntext")])
+
+    reindex.run(_empty(), deps, today=DAY)
+
+    assert deps.snapshots.summaries["https://x/a.md"] == "What it is."
+
+    old, new = "# B\nold\n", "# B\nnew\n"
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/b.md": reindex.ManifestEntry(
+                sha256=reindex.fingerprint(old), chunks=1, title="B", summary="B is."
+            )
+        },
+    )
+    deps, _, _ = _deps([_doc("https://x/b.md", new)])
+
+    reindex.run(manifest, deps, today=DAY)
+
+    assert deps.snapshots.summaries["https://x/b.md"] == "B is."
+
+
+def test_backfill_copies_manifest_summaries_into_stored_pages() -> None:
+    from qdrant_client import QdrantClient
+
+    from src.ingestion.snapshots import SnapshotStore
+
+    store = SnapshotStore(QdrantClient(":memory:"), "c_pages")
+    store.put(_doc("https://x/a.md", "# A"), "sha")
+    store.put(_doc("https://x/b.md", "# B"), "sha")
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/a.md": reindex.ManifestEntry("s", 1, "A", summary="A is."),
+            "https://x/b.md": reindex.ManifestEntry("s", 1, "B"),
+            "https://x/q.md": reindex.ManifestEntry(
+                "s", 0, "Q", status="quarantined", summary="Q is."
+            ),
+        },
+    )
+
+    assert reindex.backfill_summaries(manifest, store) == 1
+    pages = store.pages(["https://x/a.md", "https://x/b.md"])
+    assert pages["https://x/a.md"].summary == "A is."
+    assert pages["https://x/b.md"].summary == ""
