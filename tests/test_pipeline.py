@@ -74,3 +74,60 @@ def test_empty_candidates_skip_reranker(monkeypatch):
 def test_invalid_input(query, strategy):
     with pytest.raises(ValueError):
         pipeline.answer_question(query, strategy=strategy)
+
+
+def test_vendor_reaches_single_query_hybrid_search(monkeypatch):
+    hybrid = Mock(return_value=[])
+    monkeypatch.setattr(pipeline, "search_hybrid", hybrid)
+
+    pipeline.answer_question("question", strategy="hybrid", vendor="cursor")
+
+    assert hybrid.call_args.kwargs["vendor"] == "cursor"
+
+
+def test_vendor_reaches_multi_query_search(monkeypatch):
+    multi = Mock(return_value=[])
+    monkeypatch.setattr(pipeline, "search_queries_hybrid", multi)
+    monkeypatch.setattr(pipeline, "translate_query", Mock(return_value="English"))
+
+    pipeline.answer_question("вопрос", strategy="hybrid-english", vendor="openai")
+
+    assert multi.call_args.kwargs["vendor"] == "openai"
+
+
+def test_vendor_reaches_iterative_retrieval(monkeypatch):
+    multi = Mock(return_value=[])
+    monkeypatch.setattr(pipeline, "search_queries_hybrid", multi)
+    monkeypatch.setattr(
+        pipeline, "CohereReranker", lambda: SimpleNamespace(rerank=None, assess=None)
+    )
+    monkeypatch.setattr(
+        pipeline, "EvidencePlanner", lambda: SimpleNamespace(rerank=None, assess=None)
+    )
+    monkeypatch.setattr(pipeline, "generate_answer", Mock(return_value="answer"))
+
+    def two_hop(query, queries, *, retrieve, **_kwargs):
+        retrieve(queries)
+        return SimpleNamespace(results=[])
+
+    monkeypatch.setattr(pipeline, "retrieve_two_hop", two_hop)
+
+    pipeline.answer_question("q", strategy="hybrid", iterative=True, vendor="cursor")
+
+    assert multi.call_args.kwargs["vendor"] == "cursor"
+
+
+def test_dense_strategy_rejects_vendor_filter():
+    with pytest.raises(ValueError):
+        pipeline.answer_question("q", strategy="dense", vendor="cursor")
+
+
+def test_multi_query_fusion_filters_every_query_by_vendor(monkeypatch):
+    from src.rag import multi_query_retriever
+
+    hybrid = Mock(return_value=[])
+    monkeypatch.setattr(multi_query_retriever, "search_hybrid", hybrid)
+
+    multi_query_retriever.search_queries_hybrid(["a", "b"], vendor="cursor")
+
+    assert [c.kwargs["vendor"] for c in hybrid.call_args_list] == ["cursor", "cursor"]

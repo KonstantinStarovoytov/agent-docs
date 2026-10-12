@@ -342,3 +342,21 @@ async def test_mounted_http_transport_rejects_missing_token(served_app: str) -> 
         )
 
     assert response.status_code == 401
+
+
+@pytest.mark.anyio
+async def test_ask_docs_maps_product_to_vendor(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    seen: dict[str, Any] = {}
+
+    def answer(question: str, **kwargs: Any) -> core.Answer:
+        seen.update(kwargs)
+        return core.Answer(answer="a", sources=[], strategy="hybrid", iterative=False)
+
+    monkeypatch.setattr(core, "answer", answer)
+    async with Client(build_mcp_server()) as client:
+        await client.call_tool("ask_docs", {"question": "q", "product": "codex"})
+        assert seen["vendor"] == "openai"
+        await client.call_tool("ask_docs", {"question": "q"})
+        assert seen["vendor"] is None

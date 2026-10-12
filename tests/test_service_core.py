@@ -231,3 +231,17 @@ def test_search_pool_never_shrinks_below_limit(monkeypatch: pytest.MonkeyPatch) 
     core.search("q", limit=30)
 
     assert seen == {"k": 30}
+
+
+def test_answer_passes_vendor_to_pipeline(monkeypatch) -> None:
+    seen: dict[str, Any] = {}
+
+    def answer_question(question, **kwargs):
+        seen.update(kwargs)
+        return SimpleNamespace(answer="a", sources=[])
+
+    monkeypatch.setattr(core, "answer_question", answer_question)
+
+    core.answer("q", vendor="cursor")
+
+    assert seen["vendor"] == "cursor"
