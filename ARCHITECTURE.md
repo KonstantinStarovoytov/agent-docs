@@ -31,8 +31,10 @@ Short definitions of every term used below.
 | **RRF** (Reciprocal Rank Fusion) | How the two result lists are merged: each result gets `1 / (60 + its rank)` from each list, and the points are added. It uses ranks, not scores, because the two scores are not comparable. Both lists count equally. |
 | **Tie-break** | RRF often gives several chunks the same score. We sort ties by chunk id so the same question always gets the same results. |
 | **Overfetch** | Asking the database for 3× more results than needed, so a group of tied results is never cut in the middle. |
+| **Prefetch depth** | How far down each list (dense and BM25) the database reads before merging them with RRF. Today 3× the number of results asked for (30 for answers). Setting: `HYBRID_PREFETCH_DEPTH`. |
 | **Reranker** | A second, slower model that reads the question and each candidate together and scores how well they match (0–1). Here: Cohere `rerank-v4.0-fast`. |
-| **Candidate pool** | How many search results go to the reranker (10 for answers, 20 for `search_docs`). |
+| **Candidate pool** | How many search results go to the reranker (10 for answers, 20 for `search_docs`). Setting: `RERANK_POOL`; the reranker still returns `RETRIEVAL_TOP_K`. |
+| **Recall@pool** | Share of questions with at least one correct chunk inside the candidate pool. It is the most the reranker can find. |
 | **top-k / `generation_top_k`** | How many chunks the LLM finally sees when it writes the answer (8). |
 | **Grounded answer** | Every claim in the answer comes from the retrieved chunks and is cited as [1], [2]. |
 | **Abstention** | The bot says "the documentation does not cover this" instead of guessing. |
@@ -175,6 +177,8 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 13 | `gpt-6-luna` is at least as good | 16 + 12 questions, independent judge | Faithfulness 0.975 → 0.994 | **Kept** |
 | 14 | Full corpus keeps quality | See [Evaluation](#evaluation) | See below | See below |
 | 15 | Capping chunks per page in the candidate pool fixes the full-corpus drop | Cap None / 2 / 3, same gate | Cap 2: MRR 0.825 → 0.739, Hit@5 0.957 → 0.872; no more evidence in the pool | Rejected (setting kept, off by default) |
+| 16 | The full-corpus misses are a search problem | Where each correct chunk is lost, on the real index, with the gate's stored rerank scores (89 questions and evidence groups) | 10 misses: 7 outside the pool of 10, 3 not in the top 30 of either search, 0 lost by the reranker. Chunks ranked above the right one are 65% guide pages; MRR falls in 3 intents | **Partly confirmed:** coverage loss is the pool cut; the MRR loss is ranking among plausible pages and two unlabelled correct answers |
+| 17 | A deeper prefetch or a bigger pool brings the right chunk back | Recall@pool for prefetch 30/60/100/150 × pool 10/20/40/60, no reranker | Prefetch changes nothing. Pool 20 / 40: complete coverage in the pool 0.625 → 0.750 / 0.875 | **Pending:** rerank runs wait for the Cohere quota; defaults unchanged |
 
 ---
 
@@ -233,8 +237,9 @@ What it means in plain words:
 - **It is still faithful:** answers stick to the sources.
 - **But the right page now sits a little lower in the ranking**, and multi-part
   questions are fully covered less often. Of the 81 results that ranked above
-  the first correct one, 52 came from newly added pages, mostly enterprise,
-  security and integration guides.
+  the first correct one, 52 came from newly added pages. (Experiments 16–17
+  looked closer: most of them are guide pages, not enterprise or security
+  pages.)
 - This confirms [finding 2](#what-we-learned): more candidates crowd out the
   right ones.
 
@@ -276,6 +281,43 @@ pages unless the question asks for them (a page-type prior or tiered index).
 Details in [reports/per-page-cap-2026-10.md](reports/per-page-cap-2026-10.md).
 The MCP `schema.md` page was suspected, but it never reached the top 10.
 
+**Diagnosis (experiments 16–17).** Each lost chunk was traced through the
+search, using the same index and the gate's stored reranker scores
+([reports/retrieval-diagnostics-2026-10.md](reports/retrieval-diagnostics-2026-10.md)):
+
+- **Evidence is lost before the reranker.** 7 of the 10
+  misses are in the merged search results but outside the 10 candidates sent to
+  the reranker. 3 are not in the top 30 of either search. None is dropped by the
+  reranker once it is a candidate.
+- **Reading deeper does not help.** Going from 30 to 150 results per search
+  brings no missing chunk into the candidates.
+- **More candidates would.** With 20 candidates, every part of the question is
+  among them in 12 of 16 multi-part questions instead of 10; with 40, in 14.
+  Whether the reranker then keeps them is still open: experiment 7 showed a
+  bigger pool can push the second topic out again.
+- **The ranking drop is mostly guide pages, not admin pages.** 65% of the
+  chunks ranked above the right one are guides: a sibling feature, the same
+  feature from another vendor, or a valid answer the labels miss. Enterprise,
+  security and integration pages are 27% on the ranking datasets. Two misses
+  look like valid unlabelled answers; accepting one would bring `retrieval-v3`
+  MRR to about 0.847 (the gate is 0.835).
+
+**Decision.** No default changed. Two settings now separate the prefetch depth
+(`HYBRID_PREFETCH_DEPTH`) from the candidate pool (`RERANK_POOL`); both default
+to today's behaviour. The candidate configuration is a pool of 40 with prefetch
+60. It becomes the default only if the reranked evals confirm it: complete
+coverage ≥ 0.72 and no MRR loss. That run waits for the Cohere trial quota,
+which was used up for October. The score floor stays at 0.35. A floor of 0.40
+would gain one automatic refusal with only 0.016 to spare above the weakest
+needed chunk.
+
+**Next:** confirm pool 40 with the reranker. Decide the two label gaps. Give
+the BM25 index its missing IDF weighting (fastembed's BM25 expects it, and the
+collection was created without it). Try one query per part of a multi-part
+question (experiment 10). Rank admin and security pages lower only when the
+question does not ask about them. The per-page cap on the candidate pool is
+measured separately.
+
 ---
 
 ## Limits and open questions
@@ -286,6 +328,9 @@ The MCP `schema.md` page was suspected, but it never reached the top 10.
 - **Ranking dropped with the full corpus** (see above): Hit@5 holds, but the
   right page ranks lower and multi-part coverage fell. This is being fixed.
 - **Free-tier limits:** Cohere trial (1,000 calls/month per key, 10/minute),
-  Render sleeps after 15 minutes idle (first request ~1 minute).
+  Render sleeps after 15 minutes idle (first request ~1 minute). One day of gate
+  runs used the whole October Cohere quota. Eval runs now stop on a monthly 429
+  instead of switching keys, and can reuse stored scores
+  (`EVAL_CACHE_DIR`, `evals/eval_cache.py`).
 - **Open:** a smarter context selector (experiment 10); a no-rerank fallback
   when the Cohere quota runs out; sampled LLM-judge scoring of production traffic.
