@@ -22,7 +22,7 @@ from starlette.responses import Response
 from src.config import settings
 from src.observability import flush, get_langfuse, trace_url
 from src.rag.pipeline import RetrievalStrategy
-from src.service import auth, core
+from src.service import auth, core, pages
 from src.service.mcp_server import PRODUCT_VENDOR, Product, build_mcp_server
 
 PUBLIC_PATHS = frozenset({"/health", "/docs", "/openapi.json", "/redoc"})
@@ -68,6 +68,44 @@ class PassageResponse(BaseModel):
 
 class SearchResponse(BaseModel):
     passages: list[PassageResponse]
+
+
+class PagesRequest(BaseModel):
+    query: str = Field(min_length=1, max_length=settings.api_max_question_chars)
+    limit: int = Field(default=5, ge=1, le=10)
+    product: Product | None = None
+
+
+class PageCardResponse(BaseModel):
+    rank: int
+    title: str
+    url: str
+    product: str
+    score: float
+    description: str
+    outline: list[str]
+
+
+class PagesResponse(BaseModel):
+    pages: list[PageCardResponse]
+
+
+class SectionRequest(BaseModel):
+    url: str = Field(min_length=1, max_length=500)
+    heading: str | None = Field(default=None, max_length=300)
+    offset: int = Field(default=0, ge=0)
+
+
+class SectionResponse(BaseModel):
+    url: str
+    title: str
+    description: str
+    outline: list[str]
+    heading: str | None
+    text: str
+    offset: int
+    next_offset: int | None
+    total_chars: int
 
 
 def _allowed_hosts() -> list[str]:
@@ -236,6 +274,32 @@ def create_app() -> FastAPI:
         return SearchResponse(
             passages=[PassageResponse(**asdict(passage)) for passage in passages]
         )
+
+    @app.post("/pages", response_model=PagesResponse)
+    def find_pages(request: PagesRequest) -> PagesResponse:
+        """Page cards (description + outline), ranked like /search."""
+        try:
+            cards = pages.find_pages(
+                request.query,
+                limit=request.limit,
+                vendor=PRODUCT_VENDOR[request.product] if request.product else None,
+            )
+        except core.QuestionRejected as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        finally:
+            flush()
+        return PagesResponse(pages=[PageCardResponse(**asdict(card)) for card in cards])
+
+    @app.post("/section", response_model=SectionResponse)
+    def read_section(request: SectionRequest) -> SectionResponse:
+        """One section of a stored page; no heading gives the outline."""
+        try:
+            result = pages.read_section(request.url, request.heading, request.offset)
+        except pages.PageNotFound as error:
+            raise HTTPException(status_code=404, detail=str(error)) from error
+        except core.QuestionRejected as error:
+            raise HTTPException(status_code=422, detail=str(error)) from error
+        return SectionResponse(**asdict(result))
 
     app.mount("/mcp", mcp_app)
     return app
