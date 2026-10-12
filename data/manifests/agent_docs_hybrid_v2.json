@@ -291,11 +291,11 @@
     },
     "https://code.claude.com/docs/en/agents.md": {
       "sha256": "27c62f0035706a1da10e302f8dc772aaa0042c4d4d4c8c201fbbc56de42b40e2",
-      "chunks": 0,
+      "chunks": 5,
       "title": "Run agents in parallel",
-      "status": "quarantined",
-      "reason": "model: other",
-      "summary": "This is a comparison hub that briefly summarizes and links to separate guides for Claude Code’s parallel-work features."
+      "status": "indexed",
+      "reason": "",
+      "summary": ""
     },
     "https://code.claude.com/docs/en/amazon-bedrock.md": {
       "sha256": "4c636584b82df4738f83c34f16e816bff56076a4fb827b4b197d98263c87e78c",
@@ -474,8 +474,8 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan codebases for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "97f321457f973dc5aa77672200b16bbb206c22bb3c4283c1c4ba13c99c9326a2",
-      "chunks": 191,
+      "sha256": "a964995cb55a816485d5d225ca3ade5cd44f617fe2926c60ab288717d39cbc5e",
+      "chunks": 189,
       "title": "Claude Tag",
       "status": "indexed",
       "reason": "",
@@ -1690,7 +1690,7 @@
       "summary": "Explains Cursor Agent’s security guardrails, approval requirements, and controls for first- and third-party tool calls."
     },
     "https://cursor.com/docs/agent/security/run-modes.md": {
-      "sha256": "2a86b32dd841ef926fb2ad07bdfd3a38127d3b291b275e674cb10361bb98afcf",
+      "sha256": "53f85db01bdb76d5697a2f8510183fb9cbc2de64dbcf4f120bd3178247c30ba4",
       "chunks": 27,
       "title": "Run Modes",
       "status": "indexed",
@@ -1730,7 +1730,7 @@
       "summary": "Explains how Cursor runs terminal commands, describes sandboxing, and offers troubleshooting guidance for shell prompts."
     },
     "https://cursor.com/docs/api/origin/acting-as-users.md": {
-      "sha256": "3940f7b191b871ac3fb590a5847859b788517e24c1b4bcb90425eea85d968fa9",
+      "sha256": "53d232389d52353191b43c5a47fd77aaa2c15a7aa5817f3b057860afef58aabf",
       "chunks": 16,
       "title": "Acting As Users",
       "status": "indexed",
@@ -2122,7 +2122,7 @@
       "summary": "Explains Cursor’s security controls and guidance mechanisms for managing LLM agent behavior."
     },
     "https://cursor.com/docs/enterprise/model-and-integration-management.md": {
-      "sha256": "2f162891aee21a10518b828bc4f3dd3f46fac3854143d54e0ef27bdb05de8af5",
+      "sha256": "72633c1d07fd34477ebd521f7e13f80c705bd5027ec852136df069d0986970c3",
       "chunks": 19,
       "title": "Model And Integration Management",
       "status": "indexed",
@@ -2266,7 +2266,7 @@
       "summary": "Explains Grok Bot settings, including account, appearance, Auto-review rules, usage, and updates."
     },
     "https://cursor.com/docs/grok-bot/teams.md": {
-      "sha256": "dc6d5a5eeda3f2ddc13a2a2ed5ff1b8280efe47ccae15a19b9147c42446eb14a",
+      "sha256": "8322936597e8e9299e7ab51be91a1eb4f1a6fa6e3e25b540eb1dbae755975ac4",
       "chunks": 46,
       "title": "Teams",
       "status": "indexed",
@@ -2282,7 +2282,7 @@
       "summary": "Provides practical Grok Bot role examples and starter prompts for common business workflows, with guidance on keeping actions behind approval."
     },
     "https://cursor.com/docs/grok-bot/work.md": {
-      "sha256": "8f65f54ccb163ac9297b420b1f1bc6053fa6c0c41a116d5f4b5ecf69e7d7fb4e",
+      "sha256": "874e869c1e5029f28d6225047a06d1fd7b392dc4106ef40452ac0569f24c9151",
       "chunks": 28,
       "title": "Work",
       "status": "indexed",
@@ -2939,11 +2939,11 @@
     },
     "https://learn.chatgpt.com/docs/configuration.md": {
       "sha256": "d092ff27258690519fc51720816fc4456a72bfe9f7cd50ea466e3d8813c1b074",
-      "chunks": 0,
+      "chunks": 2,
       "title": "Configuration",
-      "status": "quarantined",
-      "reason": "model: other",
-      "summary": "This is a configuration-topic landing page that aggregates links to other documentation rather than providing configuration guidance itself."
+      "status": "indexed",
+      "reason": "",
+      "summary": ""
     },
     "https://learn.chatgpt.com/docs/custom-prompts.md": {
       "sha256": "4344bfc92901c1b7d3eeca25d71dc025030915da0ca24615bd23cab7d80d00c3",
@@ -3858,7 +3858,7 @@
       "summary": "This page explains how to install, configure, and use the Codex Security TypeScript SDK to run repository scans."
     },
     "https://learn.chatgpt.com/docs/security/security-review.md": {
-      "sha256": "f445d1b69e391bde4a784cf3b0f5259777f05fa5b9d86b0c304a89b3fcdb9d27",
+      "sha256": "64884cb5989508f8aadb7edb970af292490796d22ab2264562ded13fb44efd0e",
       "chunks": 7,
       "title": "Security Review",
       "status": "indexed",
@@ -3898,7 +3898,7 @@
       "summary": "Overview of ChatGPT and Codex skills and plugins, explaining what they are and how they support repeatable workflows."
     },
     "https://learn.chatgpt.com/docs/space.md": {
-      "sha256": "adfcd91c91be91490e79f1fb985f60eb01ab90c5f0f7e4cc4d5901a1341aab18",
+      "sha256": "d00c6e1d2bad4c84841b3b7d5ebff66a807ca6e27ce19bf045e5b05e9b50fbf6",
       "chunks": 4,
       "title": "ChatGPT Space",
       "status": "indexed",
@@ -3938,7 +3938,7 @@
       "summary": "Explains how to create and edit pages in ChatGPT Spaces and add content using blocks."
     },
     "https://learn.chatgpt.com/docs/third-party/github.md": {
-      "sha256": "9610574709627fea4853cd8bf05a0af8cddcecc02d3e00d70336bbece3cfb62b",
+      "sha256": "46647dc305007ea941b39fd6e0f07ac16b5ec9d016dd7c1bb923891ac3ff68b1",
       "chunks": 12,
       "title": "Review GitHub pull requests with Codex",
       "status": "indexed",
@@ -3946,7 +3946,7 @@
       "summary": "Explains how to connect a GitHub repository and configure Codex to review pull requests automatically."
     },
     "https://learn.chatgpt.com/docs/third-party/gitlab.md": {
-      "sha256": "3ca538d039669952a2025e4dc204deadb062fa48e8ef97001540374acebe4261",
+      "sha256": "0a6b299763effffca4fbc6eedcd87171e707c26c856f8c325e29cb635339d6d7",
       "chunks": 15,
       "title": "Review GitLab merge requests with Codex",
       "status": "indexed",
@@ -4123,11 +4123,11 @@
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/sdk.md": {
       "sha256": "b3632269f3bbb9c6bbf91dc0e5e348937e48ffdd1c07a3c8f2be17e1640d3724",
-      "chunks": 0,
+      "chunks": 4,
       "title": "SDKs",
-      "status": "quarantined",
-      "reason": "model: other",
-      "summary": "This page is a directory of official MCP SDKs linking to their separate documentation and repositories."
+      "status": "indexed",
+      "reason": "",
+      "summary": ""
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging.md": {
       "sha256": "7b508614908143f889bc29a591f750d98548881a316e7c7eb88ea7723fe6e34c",
@@ -4275,11 +4275,11 @@
     },
     "https://modelcontextprotocol.io/extensions/client-matrix.md": {
       "sha256": "c8fa45956f96157cbad68fdf1bfeaf6c1957ed6c174e2c47913a49049e7e4a8d",
-      "chunks": 0,
+      "chunks": 7,
       "title": "Extension Support Matrix",
-      "status": "quarantined",
-      "reason": "model: other",
-      "summary": "A community-maintained matrix aggregating which MCP clients support each official extension."
+      "status": "indexed",
+      "reason": "",
+      "summary": ""
     },
     "https://modelcontextprotocol.io/extensions/overview.md": {
       "sha256": "f4d1726cd3ab3cb2ff4e75a78123c5cd3d928a8786a890df03c1b0394c8b83f9",
