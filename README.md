@@ -13,33 +13,60 @@ design choice is backed by an experiment.
 
 ## How it works
 
+Your agent calls a **remote MCP server** with one of two tools. Every step
+below runs in order, one after another.
+
 ```mermaid
-flowchart LR
-    A[Agent or app] -->|MCP / REST| S[Service on Render]
-    S --> H[Hybrid search<br/>meaning + keywords]
-    H --> Q[(Qdrant<br/>~600 pages)]
-    H --> R[Cohere rerank]
-    R --> G[gpt-6-luna<br/>answer with citations]
-    G --> A
-    S -.trace.-> L[Langfuse]
+flowchart TD
+    A["Your agent<br/>Claude Code · Cursor · OpenWebUI"] -->|"remote MCP + Bearer token"| T{"Which tool?"}
+
+    T -->|ask_docs| L{"Question in<br/>Russian or Polish?"}
+    L -->|yes| TR["Add an English translation<br/>(2 queries)"]
+    L -->|no| Q1["1 query"]
+    TR --> S
+    Q1 --> S
+
+    T -->|search_docs| S
+
+    S["Hybrid search in Qdrant<br/>dense (meaning) + BM25 (keywords)<br/>3x overfetch"] --> F["RRF fusion<br/>ties broken by chunk id"]
+    F -->|"ask_docs: 10 candidates<br/>search_docs: 20 candidates"| R["Cohere rerank<br/>against the original question"]
+
+    R -->|search_docs| P["Best passages,<br/>ranked with scores"]
+    R -->|ask_docs| TH{"Any candidate<br/>scores 0.35 or more?"}
+    TH -->|no| NO["Answer: not covered<br/>by the documentation"]
+    TH -->|yes| SEL["Pick 8 chunks<br/>at most 2 per section"]
+    SEL --> G["gpt-6-luna writes the answer<br/>with citations 1, 2, 3"]
 ```
 
-1. **Search** the docs two ways at once: by meaning (embeddings) and by exact words (BM25).
-2. **Rerank** the 10 best candidates with Cohere and drop weak matches.
-3. **Answer** from the top 8 passages only, citing each claim as [1], [2].
-   If nothing relevant is found, it says the docs do not cover the question.
+| Step | What happens | Why |
+|---|---|---|
+| **Translation** (`ask_docs` only) | Non-English questions get an English copy; both are searched. | The docs are in English. |
+| **Hybrid search** | Each query is searched by meaning (embedding) and by exact words (BM25) in Qdrant. It asks for 3x more results than needed. | Meaning finds concepts; BM25 finds exact names like `.cursorrules`. |
+| **RRF fusion** | The result lists are merged by rank; equal scores are ordered by chunk id. | Scores of the two searches are not comparable; ranks are. The tie-break makes the same question return the same results. |
+| **Rerank** | Cohere reads the question with each candidate and scores the match. | Search is fast but rough; the reranker is precise. |
+| **Threshold** (`ask_docs`) | Candidates scoring below 0.35 are dropped. If none remain, the bot says so. | This is how it refuses to guess. |
+| **Context selection** | The 8 best chunks go to the model, at most 2 from one section. | One section must not fill the whole context. |
+| **Answer** | gpt-6-luna answers only from those 8 chunks and cites them. | Every claim can be checked. |
+
+`search_docs` stops after the rerank and returns the passages. The calling
+agent reads them itself, which is cheaper. Every request is traced in Langfuse.
 
 ## Fresh every day
 
 ```mermaid
-flowchart LR
-    C[GitHub Actions<br/>daily] --> V[Vendors' llms.txt]
-    V --> N{New, changed<br/>or gone?}
-    N -->|new| GATE[Junk check] -->|ok| I[(Index)]
-    GATE -->|suspicious| QR[Review issue]
-    N -->|changed| I
-    N -->|gone| I
-    I --> REP[Readable change report]
+flowchart TD
+    C["GitHub Actions, daily"] --> V["Read each vendor's llms.txt"]
+    V --> N{"Compare with<br/>the last run"}
+    N -->|new page| GATE{"Junk check<br/>size, language,<br/>duplicate, path, LLM"}
+    GATE -->|looks fine| IDX["Embed and index"]
+    GATE -->|suspicious| QR["Quarantine:<br/>review issue"]
+    N -->|changed page| IDX
+    N -->|page gone| GUARD{"More than 10%<br/>of a vendor gone?"}
+    GUARD -->|no| DEL["Remove from index"]
+    GUARD -->|yes| STOP["Remove nothing,<br/>open an issue"]
+    IDX --> REP["Readable change report"]
+    DEL --> REP
+    QR --> REP
 ```
 
 New pages are indexed automatically; suspicious ones wait for a human. Each run
@@ -134,7 +161,7 @@ by clearing `API_GUEST_TOKEN`.
 | One search (`search_docs`) | ≈ $0 (one embedding + one rerank) |
 | Daily re-index, nothing changed | $0 |
 | Daily re-index, a few pages changed | < $0.01 (embeddings + one short LLM check per new page) |
-| Full rebuild of the index | ≈ $0.10 one-off |
+| Full rebuild of the index | ≈ $0.10–0.30 one-off (embeddings ≈ $0.07 + one short LLM check per page) |
 
 Limits of the free setup: Cohere trial allows 1,000 reranks/month per key
 (two keys) and 10/minute; the API is capped at 60 paid requests/minute.
