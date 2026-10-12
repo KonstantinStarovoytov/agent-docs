@@ -81,14 +81,38 @@ def test_vendor_configs_exclude_known_junk() -> None:
             "https://code.claude.com/docs/_llms/fr.md",
             "https://code.claude.com/docs/en/whats-new/2026-w37.md",
             "https://code.claude.com/docs/en/changelog.md",
+            "https://code.claude.com/docs/en/data-usage.md",
+            "https://code.claude.com/docs/en/legal-and-compliance.md",
+            "https://code.claude.com/docs/en/communications-kit.md",
+            "https://code.claude.com/docs/en/champion-kit.md",
+            "https://code.claude.com/docs/en/platforms.md",
+            "https://code.claude.com/docs/en/agent-sdk/examples.md",
         ],
         "cursor": [
             "https://cursor.com/help/account-and-billing/refunds.md",
             "https://cursor.com/ja/docs/bugbot.md",
             "https://cursor.com/changelog.md",
+            "https://cursor.com/docs/release-notes.md",
+            "https://cursor.com/docs/release-notes/sdk.md",
+            "https://cursor.com/docs.md",
+            "https://cursor.com/docs/grok-bot.md",
+            "https://cursor.com/docs/account/teams/pricing.md",
+            "https://cursor.com/docs/enterprise/baa.md",
         ],
-        "codex": ["https://learn.chatgpt.com/docs/codex-manual.md"],
+        "codex": [
+            "https://learn.chatgpt.com/docs/codex-manual.md",
+            "https://learn.chatgpt.com/docs/whats-new.md",
+            "https://learn.chatgpt.com/docs/whats-new/devday-2026.md",
+            "https://learn.chatgpt.com/docs/security/plugin/changelog.md",
+            "https://learn.chatgpt.com/docs/mcp-server.md",
+            "https://learn.chatgpt.com/docs/open-source.md",
+        ],
         "mcp": [
+            "https://modelcontextprotocol.io/specification/2026-07-28/changelog.md",
+            "https://modelcontextprotocol.io/registry/terms-of-service.md",
+            "https://modelcontextprotocol.io/registry/moderation-policy.md",
+            "https://modelcontextprotocol.io/development/roadmap.md",
+            "https://modelcontextprotocol.io/examples.md",
             "https://modelcontextprotocol.io/community/working-groups/auth.md",
             "https://modelcontextprotocol.io/seps/990-enable.md",
         ],
@@ -108,3 +132,16 @@ def test_vendor_configs_keep_real_docs() -> None:
     }
     for product, url in keep.items():
         assert _urls(loader.select_links([("t", url)], by_product[product])) == [url]
+
+
+def test_large_references_are_allowed_past_the_size_heuristic() -> None:
+    allowed = {url for c in SOURCES for url in c.allow}
+    for url in (
+        "https://code.claude.com/docs/en/settings-reference.md",
+        "https://code.claude.com/docs/en/errors.md",
+        "https://code.claude.com/docs/en/agent-sdk/typescript.md",
+        "https://code.claude.com/docs/en/agent-sdk/python.md",
+        "https://modelcontextprotocol.io/specification/2026-07-28/schema.md",
+        "https://cursor.com/docs/api/origin/mcp/tools.md",
+    ):
+        assert url in allowed, url
