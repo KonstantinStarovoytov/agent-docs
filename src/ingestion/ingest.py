@@ -3,7 +3,7 @@ from langchain_qdrant import (
     QdrantVectorStore,
     RetrievalMode,
 )
-from qdrant_client import QdrantClient
+from qdrant_client import QdrantClient, models
 
 from src.config import settings
 from src.rag.embeddings import (
@@ -20,6 +20,38 @@ def get_qdrant_client() -> QdrantClient:
         url=settings.qdrant_url,
         api_key=api_key.get_secret_value() if api_key else None,
     )
+
+
+# Names langchain-qdrant uses by default; the collection must match them.
+DENSE_VECTOR_NAME = ""
+SPARSE_VECTOR_NAME = "langchain-sparse"
+# text-embedding-3-small
+DENSE_SIZE = 1536
+
+
+def ensure_hybrid_collection(
+    client: QdrantClient, collection: str, *, dense_size: int = DENSE_SIZE
+) -> bool:
+    """Create the hybrid collection if missing; True when it was created.
+
+    langchain-qdrant would otherwise create it without a sparse modifier, and
+    fastembed's Qdrant/bm25 emits term frequencies only: the IDF half of BM25
+    is computed by Qdrant and only when the sparse vector has modifier=IDF.
+    """
+    if client.collection_exists(collection):
+        return False
+    client.create_collection(
+        collection_name=collection,
+        vectors_config={
+            DENSE_VECTOR_NAME: models.VectorParams(
+                size=dense_size, distance=models.Distance.COSINE
+            )
+        },
+        sparse_vectors_config={
+            SPARSE_VECTOR_NAME: models.SparseVectorParams(modifier=models.Modifier.IDF)
+        },
+    )
+    return True
 
 
 def create_vector_store() -> QdrantVectorStore:
