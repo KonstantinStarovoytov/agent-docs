@@ -1,0 +1,2593 @@
+{
+ "generated": "2026-10-12T17:11:47+00:00",
+ "collection": "agent_docs_hybrid_v2",
+ "product_filter": false,
+ "recall": {
+  "retrieval-v3": {
+   "10": 0.9787234042553191,
+   "20": 0.9787234042553191,
+   "40": 0.9787234042553191
+  },
+  "query-transform": {
+   "10": 1.0,
+   "20": 1.0,
+   "40": 1.0
+  },
+  "evidence-coverage": {
+   "10": 0.7647058823529411,
+   "20": 0.8529411764705882,
+   "40": 0.9117647058823529
+  },
+  "full-corpus": {
+   "10": 1.0,
+   "20": 1.0,
+   "40": 1.0
+  }
+ },
+ "cases": [
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-is-skill-md-used-for",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 104,
+     "dense_rank": 3,
+     "bm25_rank": 5,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-is-agents-md",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 9,
+     "dense_rank": 4,
+     "bm25_rank": 5,
+     "pool10_rank": 6,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "which-claude-code-feature-should-i-use-for-reusable-on-deman",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 89,
+     "dense_rank": 25,
+     "bm25_rank": 1,
+     "pool10_rank": 4,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "where-are-project-rules-configured-in-cursor",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 35,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "which-file-gives-repository-wide-instructions-to-codex",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 9,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-should-authorization-be-handled-for-an-mcp-server",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 88,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-is-the-difference-between-an-mcp-client-and-mcp-server",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 524,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-does-an-mcp-server-expose-tools-to-a-client",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 265,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-are-the-main-components-of-mcp-architecture",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 34,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-do-i-create-a-reusable-skill-for-codex",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 18,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-codex-connect-to-an-mcp-server",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 27,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "where-should-repository-instructions-for-codex-be-stored",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 9,
+     "dense_rank": 1,
+     "bm25_rank": 3,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-does-codex-use-agents-md",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 9,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-cursor-delegate-work-to-specialized-subagents",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 46,
+     "dense_rank": 2,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "can-cursor-connect-to-external-tools-using-mcp",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 180,
+     "dense_rank": 2,
+     "bm25_rank": 1,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-i-give-cursor-reusable-instructions-for-a-specific-t",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     false
+    ],
+    "20": [
+     false
+    ],
+    "40": [
+     false
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 30,
+     "dense_rank": 13,
+     "bm25_rank": 95,
+     "pool10_rank": null,
+     "class_pool10": "LOST_IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "where-should-i-define-project-specific-rules-in-cursor",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 35,
+     "dense_rank": 1,
+     "bm25_rank": 4,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "why-does-the-agent-sdk-say-a-skill-is-not-in-the-session-all",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 1,
+     "dense_rank": 1,
+     "bm25_rank": 6,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-i-restrict-which-skills-are-available-in-an-agent-sd",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 22,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "where-does-the-claude-agent-sdk-discover-skills-from",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 1,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-are-skills-loaded-when-using-the-claude-agent-sdk",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 1,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-do-i-choose-between-claude-md-skills-hooks-and-subagents",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 16,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-do-skills-affect-claude-code-context-usage",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 9,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-is-the-difference-between-reusable-skills-and-isolated-",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 130,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "when-should-i-use-a-skill-instead-of-a-subagent",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 69,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-i-package-claude-code-skills-hooks-and-subagents-tog",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 1,
+     "dense_rank": 3,
+     "bm25_rank": 21,
+     "pool10_rank": 4,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-is-the-difference-between-user-level-and-project-level-",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 42,
+     "dense_rank": 2,
+     "bm25_rank": 4,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "can-claude-md-import-instructions-from-another-file",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 42,
+     "dense_rank": 1,
+     "bm25_rank": 3,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-does-claude-code-load-project-memory",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 42,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "where-should-i-put-project-wide-instructions-for-claude-code",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 42,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "can-i-make-an-mcp-server-available-only-to-a-specific-subage",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 150,
+     "dense_rank": 2,
+     "bm25_rank": 2,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "can-claude-code-authenticate-to-a-remote-mcp-server-using-oa",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 86,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-is-the-difference-between-local-project-and-user-mcp-se",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 86,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-do-i-add-an-mcp-server-to-claude-code",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 104,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-claude-code-connect-to-external-tools-and-services",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 86,
+     "dense_rank": 2,
+     "bm25_rank": 35,
+     "pool10_rank": 4,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "are-custom-slash-commands-now-represented-as-skills",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 62,
+     "dense_rank": 2,
+     "bm25_rank": 23,
+     "pool10_rank": 6,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "when-should-i-move-instructions-from-claude-md-into-a-skill",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 79,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-do-i-stop-claude-from-invoking-a-skill-automatically",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 62,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-i-invoke-a-claude-code-skill-manually",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 62,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "where-should-i-store-reusable-instructions-that-claude-loads",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 80,
+     "dense_rank": 7,
+     "bm25_rank": 1,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "what-file-defines-a-claude-code-skill",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 62,
+     "dense_rank": 2,
+     "bm25_rank": 7,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "why-would-i-use-a-subagent-instead-of-doing-the-work-in-the-",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 68,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-a-claude-subagent-remember-information-between-sessi",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 106,
+     "dense_rank": 2,
+     "bm25_rank": 1,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "where-do-i-configure-a-custom-claude-code-subagent",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 8,
+     "dense_rank": 4,
+     "bm25_rank": 4,
+     "pool10_rank": 4,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "can-a-claude-code-subagent-use-mcp-servers",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 64,
+     "dense_rank": 3,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-do-i-restrict-which-tools-a-custom-subagent-can-use",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 11,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "retrieval-v3",
+   "case_id": "how-can-claude-subagents-preload-skills",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 11,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "mcp-authorization:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 88,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "cursor-subagents:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 46,
+     "dense_rank": 2,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "mcp-server-tools:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 31,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "codex-mcp:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 27,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "cursor-mcp:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 180,
+     "dense_rank": 1,
+     "bm25_rank": 4,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "claude-on-demand-workflow:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 88,
+     "dense_rank": 36,
+     "bm25_rank": 1,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "codex-repository-instructions:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 9,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "query-transform",
+   "case_id": "cursor-python-rules:clean_en",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 36,
+     "dense_rank": 2,
+     "bm25_rank": 1,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "hooks-cursor-vs-codex",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "cursor-hooks",
+     "corpus_matches": 63,
+     "dense_rank": 1,
+     "bm25_rank": 12,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "codex-hooks",
+     "corpus_matches": 36,
+     "dense_rank": 8,
+     "bm25_rank": 10,
+     "pool10_rank": 9,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "persistent-instructions-claude-vs-codex",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     false
+    ],
+    "20": [
+     true,
+     false
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "claude-memory",
+     "corpus_matches": 42,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "codex-agents-md",
+     "corpus_matches": 9,
+     "dense_rank": 19,
+     "bm25_rank": 19,
+     "pool10_rank": null,
+     "class_pool10": "LOST_IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "mcp-config-claude-vs-cursor",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "claude-mcp",
+     "corpus_matches": 86,
+     "dense_rank": 4,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "cursor-mcp",
+     "corpus_matches": 38,
+     "dense_rank": 2,
+     "bm25_rank": 47,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "mcp-build-then-connect-cursor",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "mcp-build-server",
+     "corpus_matches": 96,
+     "dense_rank": 33,
+     "bm25_rank": 4,
+     "pool10_rank": 8,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "cursor-mcp",
+     "corpus_matches": 38,
+     "dense_rank": 1,
+     "bm25_rank": 31,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "mcp-versioning-and-client-build",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     false
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "mcp-versioning",
+     "corpus_matches": 4,
+     "dense_rank": 3,
+     "bm25_rank": 4,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "mcp-build-client",
+     "corpus_matches": 106,
+     "dense_rank": 8,
+     "bm25_rank": 34,
+     "pool10_rank": null,
+     "class_pool10": "LOST_IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "mcp-authorization-and-hardening",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "mcp-authorization",
+     "corpus_matches": 21,
+     "dense_rank": 2,
+     "bm25_rank": 6,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "mcp-security-practices",
+     "corpus_matches": 46,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "mcp-server-and-client-concepts",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "mcp-server-concepts",
+     "corpus_matches": 19,
+     "dense_rank": 6,
+     "bm25_rank": 2,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "mcp-client-concepts",
+     "corpus_matches": 16,
+     "dense_rank": 3,
+     "bm25_rank": 21,
+     "pool10_rank": 5,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "codex-skills-and-subagents",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "codex-skills",
+     "corpus_matches": 9,
+     "dense_rank": 2,
+     "bm25_rank": 18,
+     "pool10_rank": 4,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "codex-subagents",
+     "corpus_matches": 17,
+     "dense_rank": 3,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "codex-agents-md-vs-rules",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     false
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "codex-agents-md",
+     "corpus_matches": 9,
+     "dense_rank": 2,
+     "bm25_rank": 1,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "codex-rules",
+     "corpus_matches": 8,
+     "dense_rank": 7,
+     "bm25_rank": 46,
+     "pool10_rank": null,
+     "class_pool10": "LOST_IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "cursor-hooks-and-subagents",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     false,
+     false
+    ],
+    "20": [
+     false,
+     true
+    ],
+    "40": [
+     false,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "cursor-hooks",
+     "corpus_matches": 63,
+     "dense_rank": 133,
+     "bm25_rank": null,
+     "pool10_rank": null,
+     "class_pool10": "LOST_BEFORE_FUSION"
+    },
+    {
+     "group": "cursor-subagents",
+     "corpus_matches": 46,
+     "dense_rank": 7,
+     "bm25_rank": 15,
+     "pool10_rank": null,
+     "class_pool10": "LOST_IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "cursor-skill-vs-rule",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "cursor-skills",
+     "corpus_matches": 30,
+     "dense_rank": 2,
+     "bm25_rank": 5,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "cursor-rules",
+     "corpus_matches": 35,
+     "dense_rank": 5,
+     "bm25_rank": 52,
+     "pool10_rank": 9,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "claude-skill-vs-subagent",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "claude-skills",
+     "corpus_matches": 62,
+     "dense_rank": 2,
+     "bm25_rank": 17,
+     "pool10_rank": 5,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "claude-subagents",
+     "corpus_matches": 64,
+     "dense_rank": 4,
+     "bm25_rank": 3,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "codex-agents-mcp",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "codex-agents-guidance",
+     "corpus_matches": 9,
+     "dense_rank": 1,
+     "bm25_rank": 5,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "codex-mcp-server",
+     "corpus_matches": 2,
+     "dense_rank": 6,
+     "bm25_rank": 45,
+     "pool10_rank": 10,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "mcp-discovery-updates-auth",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true
+    ],
+    "20": [
+     true,
+     true
+    ],
+    "40": [
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "mcp-tools-and-notifications",
+     "corpus_matches": 5,
+     "dense_rank": 102,
+     "bm25_rank": 1,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "mcp-authorization",
+     "corpus_matches": 38,
+     "dense_rank": 2,
+     "bm25_rank": 4,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "claude-plugin-composition",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true,
+     true,
+     false
+    ],
+    "20": [
+     true,
+     true,
+     false
+    ],
+    "40": [
+     true,
+     true,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "claude-plugin-package",
+     "corpus_matches": 20,
+     "dense_rank": 2,
+     "bm25_rank": 5,
+     "pool10_rank": 3,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "claude-feature-composition",
+     "corpus_matches": 1,
+     "dense_rank": 5,
+     "bm25_rank": 24,
+     "pool10_rank": 8,
+     "class_pool10": "IN_POOL"
+    },
+    {
+     "group": "claude-subagents",
+     "corpus_matches": 64,
+     "dense_rank": 30,
+     "bm25_rank": 17,
+     "pool10_rank": null,
+     "class_pool10": "LOST_IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "evidence-coverage",
+   "case_id": "cursor-rules-mcp-subagents",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     false,
+     false,
+     true
+    ],
+    "20": [
+     false,
+     false,
+     true
+    ],
+    "40": [
+     false,
+     false,
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "cursor-mcp",
+     "corpus_matches": 38,
+     "dense_rank": 33,
+     "bm25_rank": 98,
+     "pool10_rank": null,
+     "class_pool10": "LOST_BEFORE_FUSION"
+    },
+    {
+     "group": "cursor-python-rule-glob",
+     "corpus_matches": 1,
+     "dense_rank": null,
+     "bm25_rank": null,
+     "pool10_rank": null,
+     "class_pool10": "LOST_BEFORE_FUSION"
+    },
+    {
+     "group": "cursor-subagents",
+     "corpus_matches": 46,
+     "dense_rank": 4,
+     "bm25_rank": 2,
+     "pool10_rank": 4,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "which-claude-cli-flag-creates-a-new-session-id-when-resuming",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 26,
+     "dense_rank": 12,
+     "bm25_rank": 1,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "what-is-the-default-timeout-for-a-foreground-bash-command-in",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 82,
+     "dense_rank": 3,
+     "bm25_rank": 2,
+     "pool10_rank": 2,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "how-can-i-resume-a-claude-agent-sdk-session-on-a-different-h",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 30,
+     "dense_rank": 2,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "how-often-does-claude-code-check-for-updates-to-server-manag",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 29,
+     "dense_rank": 1,
+     "bm25_rank": 4,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "when-does-the-setup-script-of-a-claude-code-cloud-environmen",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 40,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "which-cursor-cli-option-runs-the-agent-in-a-new-git-worktree",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 20,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "in-what-order-does-cursor-resolve-the-environment-configurat",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 35,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "with-cursor-scim-which-spend-limit-applies-to-a-user-who-bel",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 27,
+     "dense_rank": 1,
+     "bm25_rank": 2,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "how-do-i-pass-short-lived-credentials-as-environment-variabl",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 113,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "why-doesn-t-the-cursor-cli-change-files-in-print-mode-and-ho",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 33,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "which-environment-variable-sets-the-root-directory-for-codex",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 61,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "what-sandbox-presets-does-the-codex-python-sdk-provide",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 8,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "in-what-order-are-codex-requirements-toml-layers-applied-for",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 45,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "what-does-the-safety-strategy-input-of-the-codex-github-acti",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 8,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "how-do-i-get-started-with-codex-cloud-on-my-github-repositor",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 36,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "which-npm-registry-does-the-mcp-registry-accept-for-npm-pack",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 15,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "how-do-i-log-in-to-the-mcp-registry-with-mcp-publisher-using",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 16,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "how-does-an-mcp-apps-tool-tell-the-host-which-interactive-ui",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 22,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "when-should-an-mcp-integration-use-oauth-client-credentials-",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 13,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  },
+  {
+   "dataset": "full-corpus",
+   "case_id": "how-should-i-version-a-server-json-update-to-the-mcp-registr",
+   "vendor_filter": null,
+   "hits": {
+    "10": [
+     true
+    ],
+    "20": [
+     true
+    ],
+    "40": [
+     true
+    ]
+   },
+   "groups": [
+    {
+     "group": "relevant",
+     "corpus_matches": 9,
+     "dense_rank": 1,
+     "bm25_rank": 1,
+     "pool10_rank": 1,
+     "class_pool10": "IN_POOL"
+    }
+   ]
+  }
+ ]
+}
