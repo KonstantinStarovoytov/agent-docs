@@ -1,9 +1,10 @@
 """Compare standard hybrid retrieval with bounded two-hop retrieval coverage."""
 
-import time
+import argparse
 
 from langfuse import Langfuse
 
+from evals.eval_cache import EvalReranker, cache_dir, cohere_calls
 from evals.evidence_coverage import (
     DATASET_NAME,
     complete_evidence_coverage,
@@ -14,13 +15,13 @@ from src.rag.context_selector import select_generation_context
 from src.rag.iterative import retrieve_two_hop
 from src.rag.multi_query_retriever import search_queries_hybrid
 from src.rag.planner import EvidencePlanner
-from src.rag.reranker import CohereReranker
-from src.rag.retriever import SearchResult, search_hybrid
+from src.rag.retriever import SearchResult, rerank_pool_size, search_hybrid
 
-RETRIEVAL_TOP_K = 10
+# The pool sent to Cohere follows RERANK_POOL / HYBRID_PREFETCH_DEPTH like the
+# answer pipeline; the default (10) reproduces the earlier runs.
+RETRIEVAL_TOP_K = rerank_pool_size()
 GENERATION_TOP_K = settings.generation_top_k
 PER_QUERY_TOP_K = 20
-COHERE_REQUEST_INTERVAL_SECONDS = 6.5
 
 langfuse = Langfuse(
     public_key=settings.langfuse_public_key,
@@ -48,9 +49,9 @@ def _result_row(result: SearchResult) -> dict:
 
 
 def _rerank(question: str, candidates: list[SearchResult]) -> list[SearchResult]:
-    ranked = CohereReranker().rerank(question, candidates, top_n=RETRIEVAL_TOP_K)
-    time.sleep(COHERE_REQUEST_INTERVAL_SECONDS)
-    return ranked
+    # Primary key only, paced, stops on a monthly-quota 429, cached with
+    # EVAL_CACHE_DIR (evals/eval_cache.py).
+    return EvalReranker().rerank(question, candidates, top_n=RETRIEVAL_TOP_K)
 
 
 def baseline_task(*, item, **_kwargs) -> dict:
@@ -92,6 +93,8 @@ def _metadata(mode: str) -> dict:
         "retriever": "Qdrant hybrid dense+BM25 RRF",
         "reranker": settings.cohere_rerank_model,
         "retrieval_top_k": RETRIEVAL_TOP_K,
+        "hybrid_prefetch_depth": settings.hybrid_prefetch_depth,
+        "rerank_cache": cache_dir() is not None,
         "generation_top_k": GENERATION_TOP_K,
         "per_query_top_k": PER_QUERY_TOP_K if mode == "iterative" else None,
         "answer_prompt_version": settings.answer_prompt_version or "production:v1",
@@ -103,22 +106,42 @@ def _metadata(mode: str) -> dict:
     }
 
 
-def main() -> None:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Evidence coverage experiments.")
+    parser.add_argument(
+        "--baseline-only",
+        action="store_true",
+        help="run only the single-pass baseline (one Cohere call per item)",
+    )
+    parser.add_argument(
+        "--name-suffix",
+        default="",
+        help="appended to the run names, e.g. '-p60-pool40'",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv: list[str] | None = None) -> None:
+    args = parse_args(argv)
     dataset = langfuse.get_dataset(DATASET_NAME)
     common = {
         "evaluators": [evidence_coverage, complete_evidence_coverage],
         "max_concurrency": 1,
     }
     baseline = dataset.run_experiment(
-        name="evidence-coverage-baseline-v3-section-diverse",
+        name=f"evidence-coverage-baseline-v3-section-diverse{args.name_suffix}",
         description="Single-pass hybrid retrieval, Cohere rerank, and section-diverse final top-5 evidence coverage.",
         task=baseline_task,
         metadata=_metadata("baseline"),
         **common,
     )
     print(baseline.format())
+    print(f"Cohere calls made by this process: {cohere_calls()}")
+    if args.baseline_only:
+        langfuse.flush()
+        return
     iterative = dataset.run_experiment(
-        name="evidence-coverage-iterative-v3-section-diverse",
+        name=f"evidence-coverage-iterative-v3-section-diverse{args.name_suffix}",
         description="Bounded two-hop hybrid retrieval and section-diverse final top-5 evidence coverage.",
         task=iterative_task,
         metadata=_metadata("iterative"),

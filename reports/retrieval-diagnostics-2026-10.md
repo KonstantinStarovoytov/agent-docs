@@ -253,6 +253,38 @@ done
 `EvalReranker` uses the primary key only, waits on a per-minute 429 and stops
 on a monthly one.
 
+### 5a. Pool 40 reranked (2026-10-12, 21:17-21:27 UTC)
+
+Config B only (`RERANK_POOL=40 HYBRID_PREFETCH_DEPTH=60`), production collection,
+`EVAL_CACHE_DIR` with the gate's frozen rewrites, primary Cohere key only.
+Control for retrieval-v3 is the stored 11:38 gate run, re-scored offline on the
+re-seeded labels (`-stored.json` + `evals/evaluators.py`). Control for evidence
+coverage is a same-runner pool-10 rerun served entirely from the score cache
+(0 calls). The evidence runner (`run_evidence_coverage_experiment --baseline-only`,
+k=8, no score floor, code-scored, no LLM) is not the answer-quality path that
+produced the gate's 0.625, so only its own control is comparable.
+
+| Metric | Control (new labels) | Pool 40 | Gate |
+|---|---|---|---|
+| retrieval-v3 hit@1 | 0.766 | 0.766 | – |
+| retrieval-v3 hit@5 | 0.979 | **0.915** | ≥ 0.949 |
+| retrieval-v3 MRR | 0.847 | 0.839 | ≥ 0.835 |
+| retrieval-v3 precision@8 | 0.468 | 0.434 | – |
+| evidence coverage | 0.594 | 0.625 | – |
+| complete evidence coverage | 0.250 | 0.250 | (≥ 0.720 on the answer path) |
+
+Runs: `rewrite-hybrid-cohere-multisource-v1-p60-pool40`,
+`evidence-coverage-baseline-v3-section-diverse-p60-pool40`,
+`evidence-coverage-baseline-v3-section-diverse-control-cached`.
+Cohere calls: 47 + 16 + 0 = 63.
+
+**Decision: pool 40 does not become the default.** Complete coverage does not
+move (0/16 items gained), hit@5 loses three items and falls below the gate,
+MRR and precision@8 drop. The extra pool members outrank the labelled chunks
+in Cohere's ranking. On the new labels the stored control already
+passes MRR (0.847 ≥ 0.835) and hit@5; the open gate failure is complete
+evidence coverage, which a bigger pool does not fix. Defaults unchanged.
+
 ## 6. Rerank score floor
 
 All 1,230 reranked candidates of the stored gate runs, labelled. Full tables:
