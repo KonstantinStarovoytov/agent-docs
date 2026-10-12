@@ -259,3 +259,31 @@ def test_failed_summary_still_indexes_the_change() -> None:
     assert result.manifest.documents["https://x/a.md"].sha256 == reindex.fingerprint(
         new
     )
+
+
+def test_allowing_a_quarantined_page_indexes_it_on_the_next_run(
+    monkeypatch: Any,
+) -> None:
+    """The documented way out of quarantine is adding the URL to `allow`;
+    that must work even though the page's content has not changed."""
+    monkeypatch.setattr(reindex, "allowed_urls", lambda: {"https://x/q.md"})
+    content = "# Q\ntext"
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/q.md": reindex.ManifestEntry(
+                sha256=reindex.fingerprint(content),
+                chunks=0,
+                title="Q",
+                status="quarantined",
+                reason="model: marketing",
+            )
+        },
+    )
+    deps, added, _ = _deps([_doc("https://x/q.md", content)], keep=False)
+
+    result = reindex.run(manifest, deps, today=DAY)
+
+    assert added
+    assert result.manifest.documents["https://x/q.md"].status == "indexed"
+    assert not result.report.quarantined

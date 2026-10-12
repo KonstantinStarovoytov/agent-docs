@@ -125,8 +125,10 @@ def diff(manifest: Manifest, documents: list[SourceDocument]) -> Plan:
         entry = manifest.documents.get(document.url)
         if entry is None:
             added.append(document)
-        elif entry.status == "quarantined" and entry.sha256 == fingerprint(
-            document.content
+        elif (
+            entry.status == "quarantined"
+            and entry.sha256 == fingerprint(document.content)
+            and document.url not in allowed_urls()
         ):
             unchanged.append(document.url)
         elif entry.status == "quarantined":

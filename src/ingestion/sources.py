@@ -33,6 +33,8 @@ ANTHROPIC = SourceConfig(
     # Large references: one page, many entries; the size heuristic would
     # quarantine them as concatenations.
     allow=(
+        # Owner decision 2026-10-12: comparison hub for parallel work.
+        "https://code.claude.com/docs/en/agents.md",
         "https://code.claude.com/docs/en/settings-reference.md",
         "https://code.claude.com/docs/en/errors.md",
         "https://code.claude.com/docs/en/env-vars.md",
@@ -88,6 +90,8 @@ OPENAI_CODEX = SourceConfig(
         r"/enterprise/governance\.md$",
     ),
     allow=(
+        # Owner decision 2026-10-12: original-corpus page.
+        "https://learn.chatgpt.com/docs/configuration.md",
         "https://learn.chatgpt.com/docs/app-server.md",
         "https://learn.chatgpt.com/docs/developer-commands.md?surface=cli",
     ),
@@ -110,6 +114,9 @@ MCP = SourceConfig(
     ),
     # Spec URLs carry the revision date: update these when it changes.
     allow=(
+        # Owner decision 2026-10-12: original-corpus page and client matrix.
+        "https://modelcontextprotocol.io/docs/2026-07-28/sdk.md",
+        "https://modelcontextprotocol.io/extensions/client-matrix.md",
         "https://modelcontextprotocol.io/specification/2026-07-28/schema.md",
         "https://modelcontextprotocol.io/specification/2026-07-28/deprecated.md",
         # Evidence alternative in evidence-coverage-v1.
