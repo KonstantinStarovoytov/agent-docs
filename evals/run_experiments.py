@@ -1,3 +1,4 @@
+import argparse
 import time
 
 from langfuse import Langfuse
@@ -136,7 +137,15 @@ EVALUATORS = [
 
 
 def main() -> None:
-    dataset = langfuse.get_dataset(DATASET_NAME)
+    parser = argparse.ArgumentParser(description="Retrieval experiments.")
+    parser.add_argument(
+        "--dataset",
+        default=DATASET_NAME,
+        help=f"Langfuse dataset name (default: {DATASET_NAME})",
+    )
+    args = parser.parse_args()
+
+    dataset = langfuse.get_dataset(args.dataset)
 
     print("Running rewrite + hybrid...")
 

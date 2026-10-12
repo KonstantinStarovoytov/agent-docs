@@ -53,6 +53,11 @@ CASES: list[dict[str, Any]] = [
                     "vendor": "anthropic",
                     "source_contains": "en/plugins.md",
                 },
+                # The page moved into a plugins/ section on 2026-09-27
+                # (commit dc28368); create.md carries the same content.
+                "alternatives": [
+                    {"vendor": "anthropic", "source_contains": "en/plugins/create.md"},
+                ],
             },
             {
                 "id": "claude-feature-composition",
@@ -233,6 +238,14 @@ CASES: list[dict[str, Any]] = [
                     "vendor": "model-context-protocol",
                     "source_contains": "learn/server-concepts.md",
                 },
+                # Label gap, full corpus 2026-10-12: the spec's server overview
+                # lists the same primitives (prompts, resources, tools).
+                "alternatives": [
+                    {
+                        "vendor": "model-context-protocol",
+                        "source_contains": "/server/index.md",
+                    },
+                ],
             },
             {
                 "id": "mcp-client-concepts",
@@ -393,13 +406,22 @@ def matches_target(result: dict[str, Any], target: dict[str, str]) -> bool:
     return True
 
 
+def group_targets(group: dict[str, Any]) -> list[dict[str, str]]:
+    """The group's target plus any recorded alternative sources (label gaps)."""
+    return [group["target"], *group.get("alternatives", [])]
+
+
 def coverage(output: dict[str, Any], expected_output: dict[str, Any]) -> dict[str, Any]:
     results = output.get("results", [])
     groups = expected_output["evidence_groups"]
     covered = [
         group["id"]
         for group in groups
-        if any(matches_target(result, group["target"]) for result in results)
+        if any(
+            matches_target(result, target)
+            for result in results
+            for target in group_targets(group)
+        )
     ]
     missing = [group["id"] for group in groups if group["id"] not in covered]
     return {

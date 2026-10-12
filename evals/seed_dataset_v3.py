@@ -153,6 +153,13 @@ CASES = [
             {
                 "title": "Extend Claude Code",
             },
+            # Label gap, full corpus 2026-10-12: costs.md has a section with
+            # exactly this advice (reports/full-corpus-eval-2026-10.md).
+            {
+                "vendor": "anthropic",
+                "source_contains": "/docs/en/costs.md",
+                "heading_contains": "Move instructions from CLAUDE.md to skills",
+            },
         ],
     },
     {
@@ -185,7 +192,13 @@ CASES = [
         "relevant": [
             {
                 "title": "Connect Claude Code to tools via MCP",
-            }
+            },
+            # Label gap, full corpus 2026-10-12: the MCP quickstart's
+            # "Add and verify a server" walks through `claude mcp add`.
+            {
+                "vendor": "anthropic",
+                "source_contains": "/docs/en/mcp-quickstart.md",
+            },
         ],
     },
     {
@@ -325,6 +338,13 @@ CASES = [
             {
                 "title": "Extend Claude with skills",
                 "heading_contains": "Skill content lifecycle",
+            },
+            # Label gap, full corpus 2026-10-12: "The context window" section
+            # explains that skills load on demand (descriptions only at start).
+            {
+                "vendor": "anthropic",
+                "source_contains": "/docs/en/how-claude-code-works.md",
+                "heading_contains": "The context window",
             },
         ],
     },
@@ -602,6 +622,13 @@ CASES = [
             {
                 "vendor": "openai",
                 "source_contains": "skill",
+            },
+            # Label gap, full corpus 2026-10-12: glossary > Skill defines a
+            # skill as "A `SKILL.md` file containing instructions...".
+            {
+                "vendor": "anthropic",
+                "source_contains": "/docs/en/glossary.md",
+                "heading_contains": "Skill",
             },
         ],
         "category": "exact-keyword",

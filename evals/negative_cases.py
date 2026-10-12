@@ -1,6 +1,7 @@
 """Questions the indexed documentation does not answer.
 
-The corpus is 35 pages on customising Claude Code, Cursor, Codex and MCP. An
+The corpus is the Claude Code, Cursor, Codex and MCP documentation (617
+pages since 2026-10-11; re-audited then, see reports/full-corpus-eval-2026-10.md). An
 agent that has this MCP server connected will also ask about everything
 around it; the correct answer then is "the documentation does not cover
 this", and until now no eval measured whether the system says so. Each case
@@ -22,20 +23,24 @@ CASES: list[dict[str, str]] = [
         "question": "Where do Windsurf Cascade rules live and how are they scoped?",
         "why_outside": "Windsurf is not an indexed product.",
     },
+    # Replaced 2026-10-12 (full-corpus audit): "claude-api-pricing" is now
+    # answered by Cursor's model-pricing tables (cursor.com/docs/models-and-pricing.md).
     {
-        "id": "claude-api-pricing",
-        "question": "What does Claude Opus cost per million input tokens on the API?",
-        "why_outside": "Claude API pricing is outside the Claude Code docs subset.",
+        "id": "renovate-grouping",
+        "question": "How do I configure Renovate to group dependency updates into one pull request?",
+        "why_outside": "Renovate is not an indexed product.",
     },
     {
         "id": "claude-messages-api-streaming",
         "question": "How do I stream a response from the Claude Messages API in Python?",
         "why_outside": "Messages API reference is not indexed; only Claude Code pages are.",
     },
+    # Replaced 2026-10-12: "cursor-subscription-price" is now answered by
+    # cursor.com/docs/models-and-pricing.md > Plans ("Pro | $20/mo").
     {
-        "id": "cursor-subscription-price",
-        "question": "How much does a Cursor Pro subscription cost per month?",
-        "why_outside": "Cursor pricing pages are not in the include list.",
+        "id": "postgres-gin-index",
+        "question": "When should I use a GIN index instead of a B-tree index in PostgreSQL?",
+        "why_outside": "General database knowledge; no indexed product documents it.",
     },
     {
         "id": "python-decorator",
@@ -52,10 +57,13 @@ CASES: list[dict[str, str]] = [
         "question": "How do I build a hybrid retriever with LangChain and Qdrant?",
         "why_outside": "LangChain and Qdrant docs are not part of the corpus.",
     },
+    # Replaced 2026-10-12: "mcp-spec-2024-transport" is now answered by the
+    # current spec's streamable-http.md > Backward Compatibility > HTTP+SSE
+    # Transport (2024-11-05).
     {
-        "id": "mcp-spec-2024-transport",
-        "question": "What did the 2024-11-05 MCP revision say about HTTP+SSE transport?",
-        "why_outside": "Only the newest MCP docs version is indexed; older revisions are not.",
+        "id": "sentry-django-tracing",
+        "question": "How do I enable Sentry performance tracing in a Django application?",
+        "why_outside": "Sentry and Django are not indexed products.",
     },
     {
         "id": "jetbrains-ai-assistant-mcp",
