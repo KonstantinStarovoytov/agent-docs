@@ -24,6 +24,7 @@ def search_queries_hybrid(
     queries: list[str],
     per_query_k: int = 20,
     final_k: int = 20,
+    vendor: str | None = None,
 ) -> list[SearchResult]:
     """
     Run hybrid retrieval for several query variants
@@ -55,6 +56,7 @@ def search_queries_hybrid(
         results = search_hybrid(
             query=query,
             k=per_query_k,
+            vendor=vendor,
         )
 
         for rank, result in enumerate(

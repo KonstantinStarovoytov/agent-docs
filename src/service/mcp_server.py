@@ -188,6 +188,7 @@ def ask_docs(
             description=QUESTION_DESCRIPTION,
         ),
     ],
+    product: Annotated[Product | None, Field(description=PRODUCT_DESCRIPTION)] = None,
 ) -> AskDocsResult:
     """Answer a question with citations from the indexed agent documentation.
 
@@ -203,7 +204,8 @@ def ask_docs(
     found.
     """
     try:
-        result = core.answer(question)
+        vendor = PRODUCT_VENDOR[product] if product is not None else None
+        result = core.answer(question, vendor=vendor)
     except Exception as error:
         raise _tool_error(error) from error
     finally:

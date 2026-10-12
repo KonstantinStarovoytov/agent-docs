@@ -104,9 +104,12 @@ def answer(
     *,
     strategy: RetrievalStrategy | None = None,
     iterative: bool = False,
+    vendor: str | None = None,
 ) -> Answer:
     question = _validated_question(question)
-    result = answer_question(question, strategy=strategy, iterative=iterative)
+    result = answer_question(
+        question, strategy=strategy, iterative=iterative, vendor=vendor
+    )
     return Answer(
         answer=result.answer,
         sources=[

@@ -23,7 +23,7 @@ from src.config import settings
 from src.observability import flush, get_langfuse, trace_url
 from src.rag.pipeline import RetrievalStrategy
 from src.service import auth, core
-from src.service.mcp_server import build_mcp_server
+from src.service.mcp_server import PRODUCT_VENDOR, Product, build_mcp_server
 
 PUBLIC_PATHS = frozenset({"/health", "/docs", "/openapi.json", "/redoc"})
 
@@ -32,6 +32,8 @@ class AskRequest(BaseModel):
     question: str = Field(min_length=1, max_length=settings.api_max_question_chars)
     strategy: RetrievalStrategy | None = None
     iterative: bool = False
+    # Restricts retrieval to one product's docs, as search_docs/ask_docs do.
+    product: Product | None = None
 
 
 class SourceResponse(BaseModel):
@@ -206,6 +208,7 @@ def create_app() -> FastAPI:
                 request.question,
                 strategy=request.strategy,
                 iterative=request.iterative,
+                vendor=PRODUCT_VENDOR[request.product] if request.product else None,
             )
         except core.QuestionRejected as error:
             raise HTTPException(status_code=422, detail=str(error)) from error

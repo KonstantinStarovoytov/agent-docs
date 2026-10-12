@@ -210,3 +210,38 @@ def test_public_host_does_not_keep_localhost(monkeypatch: pytest.MonkeyPatch) ->
     assert not any("localhost" in host for host in security.allowed_hosts)
     assert not any("localhost" in origin for origin in security.allowed_origins)
     assert "docs.example.test" in security.allowed_hosts
+
+
+def test_ask_passes_product_as_vendor(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    seen: dict[str, Any] = {}
+
+    def answer(*args: Any, **kwargs: Any) -> core.Answer:
+        seen.update(kwargs)
+        return _answer()
+
+    monkeypatch.setattr(core, "answer", answer)
+
+    response = client.post(
+        "/ask",
+        json={"question": "How do skills work?", "product": "mcp"},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 200
+    assert seen["vendor"] == "model-context-protocol"
+
+
+def test_ask_rejects_unknown_product(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(core, "answer", _answer)
+
+    response = client.post(
+        "/ask",
+        json={"question": "q", "product": "copilot"},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 422

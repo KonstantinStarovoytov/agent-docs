@@ -16,18 +16,27 @@ RetrievalStrategy = Literal["dense", "hybrid", "hybrid-english"]
 
 
 def _answer_trace_input(
-    query: str, *, strategy: RetrievalStrategy | None = None, iterative: bool = False
+    query: str,
+    *,
+    strategy: RetrievalStrategy | None = None,
+    iterative: bool = False,
+    vendor: str | None = None,
 ) -> str:
     return query
 
 
 def _answer_trace_metadata(
-    _query: str, *, strategy: RetrievalStrategy | None = None, iterative: bool = False
+    _query: str,
+    *,
+    strategy: RetrievalStrategy | None = None,
+    iterative: bool = False,
+    vendor: str | None = None,
 ) -> dict[str, object]:
     resolved = strategy or settings.retrieval_strategy
     return {
         "strategy": resolved,
         "iterative": iterative,
+        "vendor_scope": vendor,
         "translate_non_english": settings.translate_non_english,
         "needs_english_translation": needs_english_translation(_query),
         "retrieval_top_k": settings.retrieval_top_k,
@@ -56,12 +65,19 @@ def _translated_queries(query: str, *, always: bool) -> list[str]:
     metadata_factory=_answer_trace_metadata,
 )
 def answer_question(
-    query: str, *, strategy: RetrievalStrategy | None = None, iterative: bool = False
+    query: str,
+    *,
+    strategy: RetrievalStrategy | None = None,
+    iterative: bool = False,
+    vendor: str | None = None,
 ) -> GeneratedAnswer:
+    """`vendor` restricts retrieval to one vendor's pages (hybrid only)."""
     query = query.strip()
     if not query:
         raise ValueError("Question must not be empty")
     strategy = strategy if strategy is not None else settings.retrieval_strategy
+    if vendor is not None and strategy == "dense":
+        raise ValueError("A vendor filter requires hybrid retrieval")
     # The pool is what Cohere reads; retrieval_top_k is what it returns.
     pool = rerank_pool_size()
     per_query_k = max(settings.per_query_top_k, pool)
@@ -79,6 +95,7 @@ def answer_question(
                 qs,
                 per_query_k=per_query_k,
                 final_k=pool,
+                vendor=vendor,
             ),
             rerank=lambda q, rs: reranker.rerank(q, rs, top_n=settings.retrieval_top_k),
             assess=EvidencePlanner().assess,
@@ -92,12 +109,13 @@ def answer_question(
     elif strategy in {"hybrid", "hybrid-english"}:
         queries = _translated_queries(query, always=strategy == "hybrid-english")
         if len(queries) == 1:
-            candidates = search_hybrid(query=queries[0], k=pool)
+            candidates = search_hybrid(query=queries[0], k=pool, vendor=vendor)
         else:
             candidates = search_queries_hybrid(
                 queries=queries,
                 per_query_k=per_query_k,
                 final_k=pool,
+                vendor=vendor,
             )
     else:
         raise ValueError(f"Unknown retrieval strategy: {strategy}")
