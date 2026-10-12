@@ -68,7 +68,7 @@ flowchart TD
     M -->|no| C10
     RRF2 --> C10["Top 10 candidates"]
     C10 --> R["Cohere rerank<br/>against the original question"]
-    R --> TH{"Any score<br/>0.35 or more?"}
+    R --> TH{"Best score<br/>0.55 or more?"}
     TH -->|no| A["Answer: not covered<br/>by the documentation"]
     TH -->|yes| S["Select context:<br/>8 chunks, max 2 per section"]
     S --> G["gpt-6-luna writes the answer<br/>with numbered citations"]
@@ -79,13 +79,13 @@ flowchart TD
 | 1. Translation | Adds an English copy of Russian or Polish questions; both are searched. | The docs are English. Translation lifted Hit@5 from 0.958 to 1.000; rewriting the question broke a case. |
 | 2. Hybrid search | For each query, Qdrant runs dense and BM25 search, fuses them with RRF, returns 3x more than needed; ties are sorted by chunk id. With two queries, the two lists are fused with RRF once more. | Docs mix concepts (dense) with exact names of flags and files (BM25). The tie-break makes results repeatable. |
 | 3. Rerank | Cohere re-scores the 10 candidates against the original question. | Search is fast but rough; the reranker is precise. |
-| 4. Threshold | Candidates below 0.35 are dropped; if none remain, the bot says the docs do not cover it. | This is how the bot abstains instead of guessing. |
+| 4. Threshold | If the best candidate scores below 0.55, the bot says the docs do not cover it, without calling the LLM. Otherwise candidates below 0.35 are dropped. | This is how the bot abstains instead of guessing. |
 | 5. Context selection | Keeps the 8 best chunks, at most 2 from the same section. | Stops one section from filling the whole context. |
 | 6. Generation | The LLM answers only from the 8 chunks, with numbered citations. | Answers stay grounded and checkable. |
 
 `search_docs` is shorter: one query (no translation), an optional product
-filter, a pool of 20 candidates, Cohere rerank, and the best `limit` passages
-returned with their scores. There is no 0.35 threshold and no generation.
+filter, a pool of 20 candidates, Cohere rerank, and the best passage of each
+page; the first `limit` are returned with their scores. There is no 0.35 threshold and no generation.
 
 Every chunk is stored with a short header (vendor, product, page, section)
 added before embedding. Without it, a chunk saying "set `model` in settings"
@@ -158,6 +158,8 @@ flowchart TD
 | Typed tool errors | The agent should know whether to retry or tell the user. | Generic errors | — |
 | Index everything minus excludes, with a gate | Users wanted the whole documentation; new pages arrive by themselves. | Hand-picked allow-list | 35 → ~600 pages. |
 | Free hosting (Render, Qdrant Cloud, Langfuse Hobby) | Zero fixed cost, no bank card. | Paid hosting | See README → Cost. |
+| `search_docs` returns one passage per page | Several chunks of one page filled the list; the agent can search again per part. | All chunks in score order | retrieval-v3, limit 5: distinct pages 3.1 → 5.0, page hit@5 0.936 → 0.979 (experiment 22). |
+| Abstain when the best score is below 0.55 (`MIN_TOP_RERANK_SCORE`) | Saves the LLM call when nothing in the docs fits. | Raise the 0.35 per-chunk floor | Lowest top score of 131 answerable questions 0.64 (margin 0.09); catches 8 of 12 negatives (experiment 23). |
 
 ---
 
@@ -188,6 +190,8 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 19 | Excluding changelogs, legal, marketing and link-hub pages cleans the pool | 40 quarantined pages excluded, 20 large references allowed; same recall run | Same groups lost as in v1 | Kept in v2 (corpus hygiene); no recall effect |
 | 20 | One reference entry per chunk (`####` split, 12-row tables with header) | Chunk counts per big page; same recall run | e.g. hooks 125 → 184 chunks, median 2,571 → 1,188 chars; recall unchanged | **Pending** reranked gate |
 | 21 | A product filter on answers recovers evidence | v2 with the vendor the labels name (56 of 91 cases) | Coverage recall pool 10 0.765 → 0.794, pool 40 0.912 → 0.941; retrieval-v3 pool 40 → 1.000 | **Accepted** as optional `product` on `ask_docs` and `/ask` |
+| 22 | One passage per page makes `search_docs` show more pages | Stored Cohere scores, search pool 20 rebuilt from Qdrant; page hit@k, before → after | retrieval-v3 (47, all scored): limit 5 hit 0.936 → 0.979, pages 3.1 → 5.0; limit 8 hit 0.979 → 0.979, pages 4.4 → 7.4. Query-transform and full-corpus only partly scored, no hit lost | **Kept** |
+| 23 | The best rerank score tells when the docs do not cover a question | Top score on the `ask_docs` path (pool 10) from stored scores: 131 answerable questions, 12 negatives | Lowest answerable 0.64; negatives below 0.55: 8 of 12 (the 0.35 floor already empties 5) | **Kept**, default 0.55 |
 
 ---
 
