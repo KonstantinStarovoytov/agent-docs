@@ -90,13 +90,15 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
         assert tool.output_schema is not None
     search_text = " ".join((search.description or "").split())
     read_text = " ".join((read.description or "").split())
-    assert "Not for" in search_text and "snapshot" in search_text
-    assert "Errors:" in search_text
-    assert "one passage per page" in search_text
-    assert "description" in search_text and "once per part" in search_text
-    assert "low scores" in search_text
+    # When to use comes first, then when not to; errors explain themselves in
+    # the error responses, so the description no longer carries an Errors block.
+    assert search_text.startswith("Search the official docs")
+    assert "Use it before answering" in search_text and "Not for" in search_text
+    assert "One topic per call" in search_text and "read_section(url)" in search_text
+    assert "Errors:" not in search_text
+    assert "description" in search_text and "split multi-part questions" in search_text
+    assert "relevance score" in search_text and "under ~0.5" in search_text
     assert "read_section(url)" in search_text
-    assert "read_section(url, heading)" in search_text
     assert "outline" in read_text and "next_offset" in read_text
     assert "subsection counts" in read_text and "outline_depth=3" in read_text
     depth = read.input_schema["properties"]["outline_depth"]
@@ -111,7 +113,10 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
     limit = search.input_schema["properties"]["limit"]
     assert limit["minimum"] == 1
     assert limit["maximum"] == 20
-    assert "tokens" in limit["description"]
+    assert "default 8" in limit["description"]
+    fmt = search.input_schema["properties"]["response_format"]["description"]
+    assert "tokens" in fmt and "Start concise" in fmt
+    assert "Example:" in query["description"]
     product = search.input_schema["properties"]["product"]
     assert {"claude-code", "cursor", "codex", "mcp"} <= set(product["anyOf"][0]["enum"])
     assert "concise" in str(search.input_schema["properties"]["response_format"])
@@ -123,7 +128,7 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
 def test_server_instructions_describe_the_two_step_flow() -> None:
     flat = " ".join((build_mcp_server().instructions or "").split())
 
-    assert "search_docs" in flat and "read_section(url, heading)" in flat
+    assert "search_docs" in flat and "read_section" in flat
     assert "ask_docs" not in flat and "find_pages" not in flat
 
 
