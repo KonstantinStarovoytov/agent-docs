@@ -21,6 +21,7 @@ from qdrant_client.http.exceptions import ResponseHandlingException, UnexpectedR
 
 from src.config import settings
 from src.observability import flush
+from src.rag.reranker import CallerKeyRateLimited, CallerKeyRejected
 from src.service import core, pages
 
 INSTRUCTIONS = """
@@ -159,8 +160,10 @@ def _tool_error(error: Exception) -> ToolError:
     retry against a monthly quota or a suspended cluster only burns the
     OpenAI embedding call that was already paid before rerank.
     """
-    if isinstance(error, core.QuestionRejected):
+    if isinstance(error, (core.QuestionRejected, CallerKeyRejected)):
         return ToolError(str(error))
+    if isinstance(error, CallerKeyRateLimited):
+        return ToolError(f"{error} Do not retry right away; tell the user.")
     if isinstance(error, TooManyRequestsError):
         return ToolError(
             "The rerank service's quota is exhausted, so this tool cannot "

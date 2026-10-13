@@ -1,7 +1,10 @@
 import logging
+from collections.abc import Callable
+from contextvars import ContextVar
 from dataclasses import dataclass
 
 import cohere
+from cohere.core.api_error import ApiError
 from cohere.errors.too_many_requests_error import TooManyRequestsError
 from langchain_core.documents import Document
 
@@ -70,6 +73,31 @@ RERANK_TIMEOUT_SECONDS = 30.0
 _primary_exhausted = False
 
 
+# The caller's own Cohere key (header X-Cohere-Api-Key), set per request by
+# the HTTP auth layer. A ContextVar so concurrent requests cannot see each
+# other's key; it is never traced, logged or put into an error message.
+caller_cohere_key: ContextVar[str | None] = ContextVar(
+    "caller_cohere_key", default=None
+)
+
+# 498 is Cohere's "invalid token" status.
+_REJECTED_STATUSES = frozenset({401, 403, 498})
+
+
+class CallerKeyRejected(Exception):
+    def __init__(self) -> None:
+        super().__init__(
+            "Your Cohere API key was rejected. Check the X-Cohere-Api-Key header."
+        )
+
+
+class CallerKeyRateLimited(Exception):
+    def __init__(self) -> None:
+        super().__init__(
+            "Your Cohere key hit its rate limit or quota; wait or use another key."
+        )
+
+
 def reset_fallback_state() -> None:
     """Test-only: clear the sticky exhausted flag between cases."""
     global _primary_exhausted
@@ -77,13 +105,24 @@ def reset_fallback_state() -> None:
 
 
 class CohereReranker:
+    _caller_key = False
+
     def __init__(self) -> None:
+        self.model = settings.cohere_rerank_model
+        self._fallback_client: cohere.ClientV2 | None = None
+        caller_key = caller_cohere_key.get()
+        self._caller_key = caller_key is not None
+        if caller_key is not None:
+            # The caller pays: no fallback to, and no state on, the server keys.
+            self.client = cohere.ClientV2(
+                api_key=caller_key, timeout=RERANK_TIMEOUT_SECONDS, max_retries=1
+            )
+            return
         self.client = cohere.ClientV2(
             api_key=settings.cohere_api_key.get_secret_value(),
             timeout=RERANK_TIMEOUT_SECONDS,
             max_retries=1,
         )
-        self._fallback_client: cohere.ClientV2 | None = None
         fallback_key = settings.cohere_api_key_fallback
         if fallback_key:  # SecretStr('') is falsy: an empty CI secret must not count
             self._fallback_client = cohere.ClientV2(
@@ -91,8 +130,6 @@ class CohereReranker:
                 timeout=RERANK_TIMEOUT_SECONDS,
                 max_retries=1,
             )
-
-        self.model = settings.cohere_rerank_model
 
     @traced(
         "rerank-candidates",
@@ -150,6 +187,9 @@ class CohereReranker:
                 top_n=min(top_n, len(documents)),
             )
 
+        if self._caller_key:
+            return self._call_with_caller_key(call)
+
         if _primary_exhausted and self._fallback_client is not None:
             return call(self._fallback_client)
 
@@ -164,6 +204,23 @@ class CohereReranker:
             )
             _primary_exhausted = True
             return call(self._fallback_client)
+
+    def _call_with_caller_key(
+        self,
+        call: Callable[
+            [cohere.ClientV2], cohere.v2.types.v2rerank_response.V2RerankResponse
+        ],
+    ) -> cohere.v2.types.v2rerank_response.V2RerankResponse:
+        # `from None`: Cohere's error text is not ours to show and must not
+        # carry the request into a traceback.
+        try:
+            return call(self.client)
+        except TooManyRequestsError:
+            raise CallerKeyRateLimited() from None
+        except ApiError as error:
+            if error.status_code in _REJECTED_STATUSES:
+                raise CallerKeyRejected() from None
+            raise
 
     @staticmethod
     def _document_text(document: Document) -> str:
