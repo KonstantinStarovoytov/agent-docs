@@ -1,0 +1,35 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.KonstantinStarovoytov/agent-docs",
+  "title": "Agent Docs",
+  "description": "Search the official docs of Claude Code, Cursor, OpenAI Codex and MCP, refreshed daily.",
+  "version": "0.1.0",
+  "websiteUrl": "https://github.com/KonstantinStarovoytov/rag-context-assembly",
+  "repository": {
+    "url": "https://github.com/KonstantinStarovoytov/rag-context-assembly",
+    "source": "github",
+    "id": "1369858584"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://agent-docs-mcp.onrender.com/mcp/",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Bearer token. Ask the owner for a guest token (see the repository README).",
+          "isRequired": true,
+          "isSecret": true,
+          "value": "Bearer {token}",
+          "variables": {
+            "token": {
+              "description": "Your access token",
+              "isRequired": true,
+              "isSecret": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

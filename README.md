@@ -123,8 +123,13 @@ curl -X POST https://agent-docs-mcp.onrender.com/ask \
 | `POST /mcp/` | MCP (streamable HTTP) |
 | `GET /docs` | Interactive API docs (use **Authorize** with the token) |
 
-Want to try it? Ask the owner for a guest token. The first request after
-15 idle minutes takes about a minute (free hosting wakes up).
+**Try it.** Open an [issue](https://github.com/KonstantinStarovoytov/rag-context-assembly/issues/new?title=Guest%20token%20request)
+titled "Guest token request" and you'll get a guest token. It works exactly
+like `API_TOKEN` and is shared and rate-limited. The first request after
+15 idle minutes takes about a minute while the free host wakes up.
+
+Listed in the [official MCP Registry](https://registry.modelcontextprotocol.io)
+as `io.github.KonstantinStarovoytov/agent-docs` ([server.json](server.json)).
 
 **Locally, without a server** (stdio, no token):
 
