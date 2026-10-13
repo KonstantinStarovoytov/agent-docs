@@ -318,3 +318,34 @@ def test_section_returns_text(client: Any, monkeypatch: pytest.MonkeyPatch) -> N
     assert response.status_code == 200
     assert response.json()["text"] == "## H\nbody"
     assert response.json()["next_offset"] is None
+
+
+def test_search_returns_page_descriptions(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.ingestion.snapshots import PageSnapshot
+    from src.service import pages
+
+    monkeypatch.setattr(
+        core,
+        "search",
+        lambda *_a, **_k: [
+            core.Passage(1, "Hooks", "Intro", "https://x/h.md", 0.7, "text")
+        ],
+    )
+    monkeypatch.setattr(
+        pages,
+        "_snapshot_pages",
+        lambda urls: {
+            "https://x/h.md": PageSnapshot("https://x/h.md", "Hooks", "p", "# H", "D.")
+        },
+    )
+
+    response = client.post(
+        "/search",
+        json={"query": "hooks"},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["passages"][0]["description"] == "D."

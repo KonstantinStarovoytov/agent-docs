@@ -1,20 +1,25 @@
-"""Page cards and section reads, for an agent that reads whole sections.
+"""Page descriptions, page cards and section reads, for agents that read sections.
 
-`find_pages` ranks pages exactly as search_docs does (one hybrid search, one
-Cohere call, one result per page) and describes each page: the page gate's
-one-sentence summary and its heading outline. `read_section` returns a section
-of the stored page markdown (`<collection>_pages`, written by src/reindex.py),
-with no model call at all. MCP and REST both call these functions.
+`search` is `core.search` plus each page's one-sentence description, read from
+the page snapshots in one Qdrant call. `find_pages` ranks pages exactly as
+search does (one hybrid search, one Cohere call, one result per page) and
+describes each page: the page gate's one-sentence summary and its heading
+outline. `read_section` returns a section of the stored page markdown
+(`<collection>_pages`, written by src/reindex.py), with no model call at all.
+MCP and REST both call these functions.
 """
 
+import logging
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from src.config import settings
 from src.ingestion.clean import clean_markdown
 from src.ingestion.ingest import get_qdrant_client
 from src.ingestion.snapshots import PageSnapshot, SnapshotStore, snapshot_collection
 from src.service import core
+
+logger = logging.getLogger(__name__)
 
 OUTLINE_LEVELS = 3
 OUTLINE_CAP = 25
@@ -226,6 +231,31 @@ def _snapshot_pages(urls: list[str]) -> dict[str, PageSnapshot]:
         client.close()
 
 
+def search(
+    question: str, *, limit: int | None = None, vendor: str | None = None
+) -> list[core.Passage]:
+    """`core.search` with each passage's page description attached.
+
+    One snapshot read covers every result page. A snapshot store that cannot be
+    read costs the descriptions, not the search.
+    """
+    passages = core.search(question, limit=limit, vendor=vendor)
+    urls = list(dict.fromkeys(p.url for p in passages if p.url))
+    if not urls:
+        return passages
+    try:
+        stored = _snapshot_pages(urls)
+    except Exception:
+        logger.warning("page snapshots unavailable; no descriptions", exc_info=True)
+        return passages
+    return [
+        replace(p, description=description(page.summary, page.markdown))
+        if (page := stored.get(p.url))
+        else p
+        for p in passages
+    ]
+
+
 def find_pages(
     question: str, *, limit: int = 5, vendor: str | None = None
 ) -> list[PageCard]:
@@ -258,8 +288,7 @@ def _page(url: str) -> PageSnapshot:
         if candidate in stored:
             return stored[candidate]
     raise PageNotFound(
-        f"{url} is not a page of the index; use a url returned by find_pages "
-        "or search_docs."
+        f"{url} is not a page of the index; use a url returned by search_docs."
     )
 
 

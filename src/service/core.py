@@ -102,6 +102,8 @@ class Passage:
     url: str
     score: float
     content: str
+    # The page's one-sentence description; filled in by `pages.search`.
+    description: str = ""
 
 
 def _validated_question(question: str) -> str:
@@ -160,7 +162,7 @@ def rerank_pages(
 ) -> list[RerankResult]:
     """The best-scoring chunk of each of the top `limit` pages, best first.
 
-    Shared by search_docs and find_pages: one hybrid search, one Cohere call.
+    Shared by search_docs and /pages: one hybrid search, one Cohere call.
     """
     question = _validated_question(question)
     k = limit if limit is not None else settings.retrieval_top_k
@@ -174,7 +176,7 @@ def rerank_pages(
     # RRF already chose, and past the first few results RRF is mostly ties
     # (reports/mcp-audit-2026-09-15.md #4a). Same single Cohere call either way.
     # Never narrower than the answer pipeline's pool, so search_docs sees at
-    # least the candidates ask_docs would.
+    # least the candidates /ask would.
     pool = max(k, settings.per_query_top_k, rerank_pool_size())
     candidates = search_hybrid(query=question, k=pool, vendor=vendor)
     if not candidates:
