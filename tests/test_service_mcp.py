@@ -92,10 +92,11 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
     read_text = " ".join((read.description or "").split())
     # When to use comes first, then when not to; errors explain themselves in
     # the error responses, so the description no longer carries an Errors block.
-    assert search_text.startswith("Search the official docs")
+    assert search_text.startswith("Search the official documentation")
     assert "Use it before answering" in search_text and "Not for" in search_text
     assert "One topic per call" in search_text and "read_section(url)" in search_text
     assert "Errors:" not in search_text
+    assert "hasn't said which one, ask" in search_text
     assert "description" in search_text and "split multi-part questions" in search_text
     assert "relevance score" in search_text and "under ~0.5" in search_text
     assert "read_section(url)" in search_text
@@ -116,8 +117,9 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
     assert "default 8" in limit["description"]
     fmt = search.input_schema["properties"]["response_format"]["description"]
     assert "tokens" in fmt and "Start concise" in fmt
-    assert "Example:" in query["description"]
+    assert "e.g." in query["description"]
     product = search.input_schema["properties"]["product"]
+    assert "never infer it from the topic" in product["description"]
     assert {"claude-code", "cursor", "codex", "mcp"} <= set(product["anyOf"][0]["enum"])
     assert "concise" in str(search.input_schema["properties"]["response_format"])
     assert "passages" in search.output_schema["properties"]  # type: ignore[index]
