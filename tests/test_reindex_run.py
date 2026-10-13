@@ -339,6 +339,79 @@ def test_backfill_copies_manifest_summaries_into_stored_pages() -> None:
     assert pages["https://x/b.md"].summary == ""
 
 
+def _fake_review(seen: list[str]) -> Any:
+    def review(prompt: str) -> PageReview:
+        seen.append(prompt)
+        # A reviewer that would quarantine everything: only the summary may be used.
+        return PageReview(keep=False, category="changelog", summary="Fresh summary.")
+
+    return review
+
+
+def test_generate_missing_summaries_fills_manifest_and_snapshots() -> None:
+    from qdrant_client import QdrantClient
+
+    from src.ingestion.snapshots import SnapshotStore
+
+    store = SnapshotStore(QdrantClient(":memory:"), "c_pages")
+    store.put(_doc("https://x/a.md", "# A\nbody"), "sha")
+    store.put(_doc("https://x/b.md", "# B"), "sha", summary="B is.")
+    store.put(_doc("https://x/c.md", "# C"), "sha")
+    entries = {
+        "https://x/a.md": reindex.ManifestEntry("s", 1, "A"),
+        "https://x/b.md": reindex.ManifestEntry("s", 1, "B", summary="B is."),
+        "https://x/q.md": reindex.ManifestEntry("s", 0, "Q", status="quarantined"),
+        # indexed but with no stored page: skipped, not an error
+        "https://x/gone.md": reindex.ManifestEntry("s", 1, "Gone"),
+    }
+    manifest = reindex.Manifest(indexed_at="d", documents=entries)
+    prompts: list[str] = []
+
+    updated, count = reindex.generate_missing_summaries(
+        manifest, store, review=_fake_review(prompts)
+    )
+
+    assert count == 1 and len(prompts) == 1 and "# A" in prompts[0]
+    assert updated.indexed_at == "d"
+    a = updated.documents["https://x/a.md"]
+    assert a.summary == "Fresh summary." and a.status == "indexed" and a.reason == ""
+    assert updated.documents["https://x/b.md"].summary == "B is."
+    assert updated.documents["https://x/q.md"].status == "quarantined"
+    assert updated.documents["https://x/gone.md"].summary == ""
+    stored = store.pages(["https://x/a.md", "https://x/b.md", "https://x/c.md"])
+    assert stored["https://x/a.md"].summary == "Fresh summary."
+    assert stored["https://x/a.md"].markdown == "# A\nbody"
+    assert stored["https://x/b.md"].summary == "B is."
+    assert stored["https://x/c.md"].summary == ""  # not in the manifest: untouched
+
+
+def test_generate_missing_summaries_survives_a_failing_review() -> None:
+    from qdrant_client import QdrantClient
+
+    from src.ingestion.snapshots import SnapshotStore
+
+    store = SnapshotStore(QdrantClient(":memory:"), "c_pages")
+    for name in ("a", "b"):
+        store.put(_doc(f"https://x/{name}.md", f"# {name}"), "sha")
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            f"https://x/{n}.md": reindex.ManifestEntry("s", 1, n) for n in ("a", "b")
+        },
+    )
+
+    def review(prompt: str) -> PageReview:
+        if "# a" in prompt:
+            raise RuntimeError("model down")
+        return PageReview(keep=True, category="documentation", summary="B is.")
+
+    updated, count = reindex.generate_missing_summaries(manifest, store, review=review)
+
+    assert count == 1
+    assert updated.documents["https://x/a.md"].summary == ""
+    assert updated.documents["https://x/b.md"].summary == "B is."
+
+
 def test_unchanged_page_without_a_snapshot_gets_one() -> None:
     """Pages indexed before the snapshot store existed have no snapshot;
     find_pages and read_section need one. Filling it must not re-embed."""

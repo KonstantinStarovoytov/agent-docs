@@ -703,7 +703,7 @@
       "title": "Extend Claude Code",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "An overview explaining when and how to use Claude Code’s customization and integration features."
     },
     "https://code.claude.com/docs/en/fullscreen.md": {
       "sha256": "7cb9582307d068ea0d1ce1b021d60f5feb889ab0d05286249fd59134f5ffc474",
@@ -799,7 +799,7 @@
       "title": "Automate actions with hooks",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A practical guide to configuring Claude Code hooks to automate actions during its lifecycle."
     },
     "https://code.claude.com/docs/en/hooks.md": {
       "sha256": "ec6eb3be03457d0db8199806bc1bda5bafd56f1808825894a6e78e62150900bd",
@@ -807,7 +807,7 @@
       "title": "Hooks reference",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference for Claude Code hook events, configuration, input and output formats, and advanced hook behavior."
     },
     "https://code.claude.com/docs/en/how-claude-code-works.md": {
       "sha256": "793e12083fca6683278b22b817019367aca8aa5041dca7ea53c3f699d896deb4",
@@ -919,7 +919,7 @@
       "title": "Connect Claude Code to tools via MCP",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference guide for connecting and configuring MCP servers in Claude Code."
     },
     "https://code.claude.com/docs/en/memory.md": {
       "sha256": "cfad6fb64f3094506dd760b5a855e27714ce0c47b24279dcd362a5886ec7f8c5",
@@ -927,7 +927,7 @@
       "title": "How Claude remembers your project",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to configure persistent project instructions and automatic memory in Claude Code."
     },
     "https://code.claude.com/docs/en/microsoft-foundry.md": {
       "sha256": "8873ae64962cd07b21c54cee3c64c1daa2d00e6f8c16a5f6f3afe7ac648bf27a",
@@ -1071,7 +1071,7 @@
       "title": "Create a Claude Code plugin",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A step-by-step guide to creating, testing, and converting Claude Code plugins."
     },
     "https://code.claude.com/docs/en/plugins/dependencies.md": {
       "sha256": "f40c01d9a56aa8038027cef1f41cddb95be90bf195a0bf7d20c62540c2bd463c",
@@ -1447,7 +1447,7 @@
       "title": "Extend Claude with skills",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to create, manage, and invoke skills in Claude Code."
     },
     "https://code.claude.com/docs/en/slack.md": {
       "sha256": "4bd01dec9c6160c5578170b8e4e169b89360400435628a43dcef1f3b91447d87",
@@ -1471,7 +1471,7 @@
       "title": "Create custom subagents",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to create and use custom Claude Code subagents, including their workflows, context, tools, and permissions."
     },
     "https://code.claude.com/docs/en/terminal-config.md": {
       "sha256": "fce76f4e4fb3e009ec08e9988caad89ee24856232676c895af606bddb5082061",
@@ -1751,7 +1751,7 @@
       "title": "Prompting",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to prompt Cursor Agent using context mentions and Custom Modes."
     },
     "https://cursor.com/docs/agent/security.md": {
       "sha256": "a5d7ede1df83e01a9c01d2a82d0a2da1c1b636b4f7ad7b3679c66a338f618137",
@@ -2167,7 +2167,7 @@
       "title": "Customize Cursor",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to use Cursor’s Customize page to manage plugins and other extensions across user, team, and workspace scopes."
     },
     "https://cursor.com/docs/enterprise.md": {
       "sha256": "43c43e0448277df55c4509993c4b50dad938b06a0a73f2d10b53d59a7803ce14",
@@ -2423,7 +2423,7 @@
       "title": "Hooks",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to configure and use hooks to observe, control, and extend Cursor’s agent loop."
     },
     "https://cursor.com/docs/integrations/azure-devops.md": {
       "sha256": "2cdc407c3f76412316dbc753f6216e4d897c13a3d443e5f0f889b17aaa4ca802",
@@ -2527,7 +2527,7 @@
       "title": "Mcp",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how Cursor connects to MCP servers, including supported transports and configuration options."
     },
     "https://cursor.com/docs/models-and-pricing.md": {
       "sha256": "14e538a909c565ba8d70b5b9bea5d9724afd76ddf746af36d4de6ea7421c545c",
@@ -2767,7 +2767,7 @@
       "title": "Plugins",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains Cursor plugins, what they can contain, and how to install, manage, or create them."
     },
     "https://cursor.com/docs/reference/deeplinks.md": {
       "sha256": "e123c3800ffeb7143811d6fa9d2b534c6e0ce8ff0b0f12c86b5461311b0a188b",
@@ -2807,7 +2807,7 @@
       "title": "Rules",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains Cursor’s rule types and how project rules provide reusable instructions to Agent."
     },
     "https://cursor.com/docs/sdk/bridge.md": {
       "sha256": "68a717ca68e5697bd5acf639d6525f2ecf419ddd02e7b0c6f97b5db305673aeb",
@@ -2847,7 +2847,7 @@
       "title": "Skills",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how Agent Skills work in Cursor and how to use them."
     },
     "https://cursor.com/docs/subagents.md": {
       "sha256": "f55a8130be816e492214fcbf2fb915295ab79aea75a91e465c288131c39b41ed",
@@ -2855,7 +2855,7 @@
       "title": "Subagents",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how Cursor subagents work and how to use and configure them."
     },
     "https://learn.chatgpt.com/docs/administration.md": {
       "sha256": "bf0d8db937abf8df3a269e14f22faa7af3b90a980280eefd8ef67f02510e3122",
@@ -2879,7 +2879,7 @@
       "title": "Custom instructions with AGENTS.md",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how Codex discovers and applies global and project-level AGENTS.md instructions."
     },
     "https://learn.chatgpt.com/docs/agent-configuration/rules.md": {
       "sha256": "9e7574bc554328fce8d44ed2a253b04b961f7600ca07ed7debc73e458b6c2fae",
@@ -2887,7 +2887,7 @@
       "title": "Rules",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to create and configure command rules that control which commands Codex can run outside the sandbox."
     },
     "https://learn.chatgpt.com/docs/agent-configuration/speed.md": {
       "sha256": "9dc29413d35bbb5cebe76bd201c6dcf4936a1c5d7e2e16819458468cbdaee653",
@@ -2903,7 +2903,7 @@
       "title": "Subagents",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains subagent workflows in ChatGPT Work and Codex, including availability and custom agent configuration."
     },
     "https://learn.chatgpt.com/docs/amazon-bedrock.md": {
       "sha256": "bf153754bbace6ee97c1a6374fcfd97673f3e8e609bc489702119babed616ef0",
@@ -2991,7 +2991,7 @@
       "title": "Build skills",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to build reusable agent skills for ChatGPT and Codex and how skills are distributed through plugins."
     },
     "https://learn.chatgpt.com/docs/chrome-extension.md": {
       "sha256": "02119b09562b2b864a51dd651f9176e5b3904dcbea2179d777823e77bbbb878b",
@@ -3111,7 +3111,7 @@
       "title": "Configuration",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "An overview page that groups links to ChatGPT and Codex configuration topics rather than documenting a specific feature."
     },
     "https://learn.chatgpt.com/docs/custom-prompts.md": {
       "sha256": "b435cc194cb56d7c2b01a7c7600ac35089365ffb415d409a190efca1a942c315",
@@ -3143,7 +3143,7 @@
       "title": "Customization",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "An overview of Codex customization features and how project guidance, memories, skills, MCP, and subagents shape its behavior."
     },
     "https://learn.chatgpt.com/docs/cyber-safety.md": {
       "sha256": "e87d029b409e8b26d80de4194ea7c9d2e3489c0c664aa4661fe13c9a49451ff4",
@@ -3607,7 +3607,7 @@
       "title": "Model Context Protocol",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains MCP support and configuration for connecting ChatGPT and Codex to tools and context."
     },
     "https://learn.chatgpt.com/docs/extend/record-and-replay.md": {
       "sha256": "652bba8970cd86a4072e4b10c0edb7afac51eac0914144bd8478ce644affbeea",
@@ -3679,7 +3679,7 @@
       "title": "Hooks",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains Codex hooks, when they run, and how they support custom scripts and tools during agent workflows."
     },
     "https://learn.chatgpt.com/docs/image-generation.md": {
       "sha256": "ba1e2ba451f7feae2ba5461347ff2598ebbc60f77024fe7d68f0b1b5fa156290",
@@ -3831,7 +3831,7 @@
       "title": "Plugins",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains plugin availability and use across ChatGPT and Codex, including workspace administration considerations."
     },
     "https://learn.chatgpt.com/docs/pricing.md": {
       "sha256": "a1075c706bfe0f37d356a06ae4ce20d6950ea33fd30618ba4c9b26a6c0918e27",
@@ -4319,7 +4319,7 @@
       "title": "Build an MCP client",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A hands-on tutorial for building an LLM-powered MCP client that connects to MCP servers."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server.md": {
       "sha256": "2b60e015cb7e17d1adb8328b4e7235bc2931cfeb1dd602dfe48c7349ff5ede2b",
@@ -4327,7 +4327,7 @@
       "title": "Build an MCP server",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A hands-on tutorial for building an MCP weather server and connecting it to a client."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-with-agent-skills.md": {
       "sha256": "72b40b5711a38d24ced3a039a65b640ae8e2c5b32809667693c311986d122742",
@@ -4367,7 +4367,7 @@
       "title": "What is the Model Context Protocol (MCP)?",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "An introductory overview explaining what MCP is and what it enables."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture.md": {
       "sha256": "37dea7f4f8d5e42d059fce6c8fb94f5fc821b8f438d43389e41346ac6ec4fb27",
@@ -4375,7 +4375,7 @@
       "title": "Architecture overview",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "An overview of MCP’s architecture, scope, core concepts, and data-layer protocol."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/learn/client-concepts.md": {
       "sha256": "cfc04aea808074d29c209d301c4e40d0451141222ebf5240b6b8b746ac37f3e4",
@@ -4383,7 +4383,7 @@
       "title": "Understanding MCP clients",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains MCP clients, how they differ from host applications, and the features they can provide to servers."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts.md": {
       "sha256": "93747409e23cd404e7648ec0972b91d1c2b4cea978dab7fec3b97e46e9c6a632",
@@ -4391,7 +4391,7 @@
       "title": "Understanding MCP servers",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "An introductory guide to MCP servers and their core features: tools, resources, and prompts."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/learn/versioning.md": {
       "sha256": "6da6a08ee9e3f061de2daaff3cdd5ac0f5e2f7880d8a0ce585642dbb02f5b90a",
@@ -4399,7 +4399,7 @@
       "title": "Versioning",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains Model Context Protocol version identifiers, revision statuses, and feature deprecation states."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/sdk.md": {
       "sha256": "d147736270c9fb18ac5509d80b105878fdb7a4d401f8453c3ba562e3c97bb2a7",
@@ -4407,7 +4407,7 @@
       "title": "SDKs",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "This page is a directory of official MCP SDKs that links to their separate documentation sites."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging.md": {
       "sha256": "7ac0fab698efa460ee52f7ab874a1f897b4db10bfd26174aa24dd4cbefc61591",
@@ -4503,7 +4503,7 @@
       "title": "Understanding Authorization in MCP",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A tutorial explaining how to implement OAuth 2.1 authorization for MCP servers."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/local-server-security.md": {
       "sha256": "4d77d15893836ac6b0a3effff5e5678977c1848f5ddab265305244d04cc4c996",
@@ -4519,7 +4519,7 @@
       "title": "Security Best Practices",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A technical guide to MCP security risks, attack vectors, and mitigations for implementers and server operators."
     },
     "https://modelcontextprotocol.io/examples.md": {
       "sha256": "c3a90525007de4ea972ae8dcd6fe4e72fa36e4e52fb33e411503de2c06c3e63d",

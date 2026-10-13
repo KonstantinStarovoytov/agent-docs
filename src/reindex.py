@@ -13,7 +13,7 @@ import json
 import statistics
 import sys
 from collections.abc import Callable
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any, Literal, Protocol
@@ -29,7 +29,7 @@ from src.ingestion.ingest import (
     get_qdrant_client,
 )
 from src.ingestion import report as rep
-from src.ingestion.gate import PageReview, gate_page
+from src.ingestion.gate import PageReview, gate_page, review_page
 from src.ingestion.loader import LoadResult, load_all_sources
 from src.ingestion.snapshots import SnapshotStore, snapshot_collection
 from src.ingestion.sources import SOURCES
@@ -570,6 +570,52 @@ def backfill_summaries(manifest: Manifest, store: SnapshotStore) -> int:
     )
 
 
+def generate_missing_summaries(
+    manifest: Manifest,
+    store: SnapshotStore,
+    review: Callable[[str], PageReview] | None = None,
+) -> tuple[Manifest, int]:
+    """Write a one-sentence description for indexed pages that have none.
+
+    Pages indexed before the page gate existed carry no summary. Each gets one
+    short gate review of its stored markdown; only the review's `summary` is
+    kept, so status and quarantine are never touched. The summary goes into
+    the manifest entry and the snapshot payload; nothing is re-embedded. A page
+    whose review fails is left empty for the next run.
+    """
+    missing = [
+        url
+        for url, entry in sorted(manifest.documents.items())
+        if entry.status == "indexed" and not entry.summary.strip()
+    ]
+    stored = store.pages(missing) if missing else {}
+    summaries: dict[str, str] = {}
+    for url in missing:
+        page = stored.get(url)
+        if page is None:
+            continue
+        document = SourceDocument(
+            title=page.title or manifest.documents[url].title,
+            content=page.markdown,
+            url=url,
+            vendor="",
+            product=page.product,
+        )
+        try:
+            summary = review_page(document, review).summary.strip()
+        except Exception as error:  # one bad page must not lose the others
+            print(f"  summary failed for {url}: {type(error).__name__}")
+            continue
+        if summary:
+            summaries[url] = summary
+    store.set_summaries(summaries)
+    documents = {
+        url: replace(entry, summary=summaries[url]) if url in summaries else entry
+        for url, entry in manifest.documents.items()
+    }
+    return replace(manifest, documents=documents), len(summaries)
+
+
 def _product_of() -> dict[str, str]:
     """URL -> product for every page in the hybrid collection."""
     client = get_qdrant_client()
@@ -627,6 +673,15 @@ def main(argv: list[str] | None = None) -> int:
             "(no fetch, no embedding), then exit."
         ),
     )
+    parser.add_argument(
+        "--generate-missing-summaries",
+        action="store_true",
+        help=(
+            "Only write a one-sentence description for indexed pages that have "
+            "none (one short LLM call each, from the stored page; no fetch, no "
+            "embedding), then exit."
+        ),
+    )
     args = parser.parse_args(argv)
 
     collection = settings.qdrant_hybrid_collection
@@ -640,6 +695,16 @@ def main(argv: list[str] | None = None) -> int:
         finally:
             client.close()
         print(f"{snapshot_collection(collection)}: {updated} page summaries written")
+        return 0
+    if args.generate_missing_summaries:
+        try:
+            pages = SnapshotStore(client, snapshot_collection(collection), create=False)
+            manifest, updated = generate_missing_summaries(manifest, pages)
+        finally:
+            client.close()
+        if updated:
+            save_manifest(manifest, path)
+        print(f"{snapshot_collection(collection)}: {updated} page summaries generated")
         return 0
     try:
         if not args.dry_run and ensure_hybrid_collection(client, collection):
