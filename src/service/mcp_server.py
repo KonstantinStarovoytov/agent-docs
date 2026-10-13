@@ -52,8 +52,10 @@ QUERY_DESCRIPTION = (
 )
 LIMIT_DESCRIPTION = "Pages to return, 1-20 (default 8)."
 PRODUCT_DESCRIPTION = (
-    "Only this product. Set it only when the user has named the product, in "
-    "this question or earlier in the conversation; never infer it from the topic."
+    "Only this product. Set it when the user has named the product, now or "
+    "earlier in the conversation. Otherwise leave it empty: an unfiltered "
+    "search still finds product-specific pages, while a wrong product hides "
+    "the right ones."
 )
 RESPONSE_FORMAT_DESCRIPTION = (
     "`concise` (default): first 300 characters of each passage, enough to "
