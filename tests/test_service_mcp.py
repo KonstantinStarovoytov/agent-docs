@@ -119,7 +119,8 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
     assert "tokens" in fmt and "Start concise" in fmt
     assert "e.g." in query["description"]
     product = search.input_schema["properties"]["product"]
-    assert "never infer it from the topic" in product["description"]
+    assert "leave it empty" in product["description"]
+    assert "a wrong product hides the right ones" in product["description"]
     assert {"claude-code", "cursor", "codex", "mcp"} <= set(product["anyOf"][0]["enum"])
     assert "concise" in str(search.input_schema["properties"]["response_format"])
     assert "passages" in search.output_schema["properties"]  # type: ignore[index]
