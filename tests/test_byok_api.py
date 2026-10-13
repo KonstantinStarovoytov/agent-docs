@@ -29,7 +29,7 @@ def _post(client: Any, headers: dict[str, str], ip: str = "203.0.113.7") -> Any:
     return client.post(
         "/search",
         json={"query": "hooks"},
-        headers={"X-Forwarded-For": f"{ip}, 10.0.0.1", **headers},
+        headers={"X-Forwarded-For": f"10.0.0.1, {ip}", **headers},
     )
 
 
@@ -122,3 +122,24 @@ def test_caller_key_errors_are_actionable_and_keyless(
     assert phrase in response.json()["detail"]
     assert KEY not in response.text
     assert KEY not in caplog.text
+
+
+def test_a_spoofed_first_forwarded_hop_does_not_dodge_the_ip_limit(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Render appends the real client address; earlier entries are whatever
+    the client sent, so rotating them must not reset the per-IP counter."""
+    monkeypatch.setattr(app_module.settings, "api_byok_rate_limit_per_minute", 2)
+    monkeypatch.setattr(app_module.pages, "search", lambda *a, **k: [])
+    statuses = [
+        client.post(
+            "/search",
+            json={"query": "hooks"},
+            headers={
+                "X-Cohere-Api-Key": "k",
+                "X-Forwarded-For": f"198.51.100.{i}, 203.0.113.7",
+            },
+        ).status_code
+        for i in range(3)
+    ]
+    assert statuses[-1] == 429

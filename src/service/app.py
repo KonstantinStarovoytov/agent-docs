@@ -181,16 +181,17 @@ def reset_rate_limiter() -> None:
 
 
 def client_ip(request: Request) -> str:
-    """The caller's IP behind Render's proxy: the first X-Forwarded-For hop.
+    """The caller's IP behind Render's proxy: the last X-Forwarded-For hop.
 
-    uvicorn runs without --forwarded-allow-ips, so `request.client` is the
-    proxy. The first hop is client-supplied and can be spoofed; the global
-    limit still bounds the total.
+    Render's proxy appends the address it saw; earlier entries are supplied by
+    the client and could be rotated to dodge the per-IP limit. If another proxy
+    ever sits in front, the last hop becomes that proxy and the limit only gets
+    stricter (shared bucket), never bypassable.
     """
     forwarded = request.headers.get("x-forwarded-for", "")
-    first = forwarded.split(",")[0].strip()
-    if first:
-        return first
+    last = forwarded.split(",")[-1].strip()
+    if last:
+        return last
     return request.client.host if request.client else "unknown"
 
 
