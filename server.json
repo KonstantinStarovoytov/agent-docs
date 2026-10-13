@@ -16,14 +16,20 @@
       "url": "https://agent-docs-mcp.onrender.com/mcp/",
       "headers": [
         {
+          "name": "X-Cohere-Api-Key",
+          "description": "Your own Cohere API key (free trial at dashboard.cohere.com). Provide this or Authorization.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
           "name": "Authorization",
-          "description": "Bearer token. Ask the owner for a guest token (see the repository README).",
-          "isRequired": true,
+          "description": "Bearer token from the owner. Provide this or X-Cohere-Api-Key.",
+          "isRequired": false,
           "isSecret": true,
           "value": "Bearer {token}",
           "variables": {
             "token": {
-              "description": "Your access token",
+              "description": "Access token from the owner",
               "isRequired": true,
               "isSecret": true
             }
