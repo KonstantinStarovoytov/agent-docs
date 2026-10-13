@@ -449,3 +449,31 @@ async def test_read_section_passes_outline_depth_and_rejects_others(
 
     assert deep.is_error is False and stub_pages["outline_depth"] == 3
     assert bad.is_error is True
+
+
+@pytest.mark.anyio
+async def test_mounted_transport_accepts_a_cohere_key_instead_of_a_token(
+    served_app: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.rag.reranker import CallerKeyRejected, caller_cohere_key
+
+    seen: list[str | None] = []
+
+    def search(query: str, **_kwargs: Any) -> list[core.Passage]:
+        seen.append(caller_cohere_key.get())
+        raise CallerKeyRejected()
+
+    monkeypatch.setattr(core, "search", search)
+    key = "caller-secret-KEY-1234567890"
+    async with httpx2.AsyncClient(headers={"X-Cohere-Api-Key": key}) as http_client:
+        transport = streamable_http_client(
+            f"{served_app}/mcp/", http_client=http_client
+        )
+        async with Client(transport) as client:
+            result = await client.call_tool("search_docs", {"query": "hooks"})
+
+    assert seen == [key]
+    assert result.is_error
+    text = result.content[0].text  # type: ignore[union-attr]
+    assert "Your Cohere API key was rejected" in text
+    assert key not in text

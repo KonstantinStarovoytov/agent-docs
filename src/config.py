@@ -96,6 +96,9 @@ class Settings(BaseSettings):
     # Server-wide cap on paid requests, so a looping agent or a leaked token
     # cannot run up the OpenAI and Cohere bill. One machine, so in-memory is fine.
     api_rate_limit_per_minute: int = Field(default=60, ge=1)
+    # Per client IP, for requests that bring their own Cohere key instead of
+    # a token: they still spend our OpenAI embedding and Qdrant capacity.
+    api_byok_rate_limit_per_minute: int = Field(default=30, ge=1)
     # Date the corpus was indexed, shown to callers so they know the docs are a
     # snapshot rather than live pages. Set it when re-indexing.
     index_snapshot: str | None = None

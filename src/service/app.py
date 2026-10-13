@@ -22,8 +22,11 @@ from starlette.responses import Response
 from src.config import settings
 from src.observability import flush, get_langfuse, trace_url
 from src.rag.pipeline import RetrievalStrategy
+from src.rag.reranker import CallerKeyRateLimited, CallerKeyRejected, caller_cohere_key
 from src.service import auth, core, pages
 from src.service.mcp_server import PRODUCT_VENDOR, Product, build_mcp_server
+
+COHERE_KEY_HEADER = "x-cohere-api-key"
 
 PUBLIC_PATHS = frozenset({"/health", "/docs", "/openapi.json", "/redoc"})
 
@@ -136,12 +139,59 @@ class _RateLimiter:
             return True
 
 
+class _PerKeyRateLimiter:
+    """Fixed one-minute windows, one per key (a client IP)."""
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._windows: dict[str, tuple[float, int]] = {}
+
+    def allow(self, key: str, limit: int, now: float | None = None) -> bool:
+        now = time.monotonic() if now is None else now
+        with self._lock:
+            if len(self._windows) > 10_000:
+                # Drop expired windows so many one-off IPs cannot grow memory.
+                self._windows = {
+                    k: w for k, w in self._windows.items() if now - w[0] < 60
+                }
+            start, count = self._windows.get(key, (now, 0))
+            if now - start >= 60:
+                start, count = now, 0
+            if count >= limit:
+                self._windows[key] = (start, count)
+                return False
+            self._windows[key] = (start, count + 1)
+            return True
+
+    def retry_after(self, key: str, now: float | None = None) -> int:
+        now = time.monotonic() if now is None else now
+        with self._lock:
+            start, _ = self._windows.get(key, (now, 0))
+        return max(1, int(60 - (now - start) + 0.999))
+
+
 _rate_limiter = _RateLimiter()
+_byok_rate_limiter = _PerKeyRateLimiter()
 
 
 def reset_rate_limiter() -> None:
-    global _rate_limiter
+    global _rate_limiter, _byok_rate_limiter
     _rate_limiter = _RateLimiter()
+    _byok_rate_limiter = _PerKeyRateLimiter()
+
+
+def client_ip(request: Request) -> str:
+    """The caller's IP behind Render's proxy: the first X-Forwarded-For hop.
+
+    uvicorn runs without --forwarded-allow-ips, so `request.client` is the
+    proxy. The first hop is client-supplied and can be spoofed; the global
+    limit still bounds the total.
+    """
+    forwarded = request.headers.get("x-forwarded-for", "")
+    first = forwarded.split(",")[0].strip()
+    if first:
+        return first
+    return request.client.host if request.client else "unknown"
 
 
 def _transport_security() -> TransportSecuritySettings | None:
@@ -214,19 +264,47 @@ def create_app() -> FastAPI:
     ) -> Response:
         if request.url.path in PUBLIC_PATHS or request.method == "OPTIONS":
             return await call_next(request)
-        if not auth.token_accepted(request.headers.get("authorization")):
+        cohere_key = request.headers.get(COHERE_KEY_HEADER, "").strip() or None
+        has_token = auth.token_accepted(request.headers.get("authorization"))
+        if not has_token and cohere_key is None:
             return JSONResponse(
                 {"detail": "Missing or invalid bearer token"},
                 status_code=401,
                 headers={"WWW-Authenticate": "Bearer"},
             )
+        if not has_token:
+            ip = client_ip(request)
+            if not _byok_rate_limiter.allow(
+                ip, settings.api_byok_rate_limit_per_minute
+            ):
+                return JSONResponse(
+                    {"detail": "Rate limit exceeded for this IP; retry later"},
+                    status_code=429,
+                    headers={"Retry-After": str(_byok_rate_limiter.retry_after(ip))},
+                )
         if not _rate_limiter.allow(settings.api_rate_limit_per_minute):
             return JSONResponse(
                 {"detail": "Rate limit exceeded; retry in a minute"},
                 status_code=429,
                 headers={"Retry-After": "60"},
             )
-        return await call_next(request)
+        # Read by CohereReranker; the endpoint (and the MCP tool) run in a copy
+        # of this context, so concurrent requests never see each other's key.
+        context_token = caller_cohere_key.set(cohere_key)
+        try:
+            return await call_next(request)
+        finally:
+            caller_cohere_key.reset(context_token)
+
+    @app.exception_handler(CallerKeyRejected)
+    async def caller_key_rejected(_request: Request, error: Exception) -> Response:
+        return JSONResponse({"detail": str(error)}, status_code=401)
+
+    @app.exception_handler(CallerKeyRateLimited)
+    async def caller_key_limited(_request: Request, error: Exception) -> Response:
+        return JSONResponse(
+            {"detail": str(error)}, status_code=429, headers={"Retry-After": "60"}
+        )
 
     @app.get("/health")
     async def health() -> dict[str, Any]:
