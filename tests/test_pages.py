@@ -439,3 +439,45 @@ def test_search_without_results_reads_no_snapshots(
     )
 
     assert pages.search("hooks") == []
+
+
+SAME_TITLE = """# Create a marketplace
+
+Intro.
+
+## Create a marketplace
+
+Make the catalog file.
+
+## Add plugin entries
+
+List each plugin.
+"""
+
+
+def test_a_section_named_like_the_page_title_wins_over_the_page() -> None:
+    section = pages.find_section(SAME_TITLE, "Create a marketplace")
+
+    assert section.text.startswith("## Create a marketplace")
+    assert "Add plugin entries" not in section.text
+
+
+def test_leading_hashes_select_the_heading_level() -> None:
+    assert pages.find_section(SAME_TITLE, "## Create a marketplace").text.startswith(
+        "## Create a marketplace"
+    )
+    assert (
+        "Add plugin entries"
+        in pages.find_section(SAME_TITLE, "# Create a marketplace").text
+    )
+
+
+def test_a_wrong_parent_falls_back_to_a_unique_leaf() -> None:
+    section = pages.find_section(SAME_TITLE, "Create marketplace > Add plugin entries")
+
+    assert section.text.startswith("## Add plugin entries")
+
+
+def test_a_wrong_parent_with_an_ambiguous_leaf_still_asks_for_a_path() -> None:
+    with pytest.raises(pages.SectionNotFound, match="pass one as a path"):
+        pages.find_section(PAGE, "Wrong parent > Matchers")

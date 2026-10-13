@@ -170,6 +170,9 @@ def description(summary: str, markdown: str) -> str:
     return text
 
 
+_LEVEL_RE = re.compile(r"\s*(#{1,6})\s")
+
+
 def _norm(text: str) -> str:
     """Comparable heading text; an outline line's `(N subsections)` is dropped."""
     return " ".join(_COUNT_RE.sub("", text).lstrip("#").split()).casefold()
@@ -182,18 +185,29 @@ def _listing(items: list[str]) -> str:
 
 
 def _match(all_headings: list[Heading], query: str) -> Heading:
+    # Leading #s pick the heading level: "## Setup" means the h2 named Setup.
+    hashes = _LEVEL_RE.match(query)
+    level = len(hashes.group(1)) if hashes else None
+    candidates = [h for h in all_headings if level is None or h.level == level]
     wanted = _norm(query)
     if " > " in query:
         parts = [_norm(part) for part in query.split(" > ")]
         found = [
             h
-            for h in all_headings
+            for h in candidates
             if [_norm(p) for p in h.path.split(" > ")][-len(parts) :] == parts
         ]
-    else:
-        found = [h for h in all_headings if _norm(h.text) == wanted]
         if not found:
-            found = [h for h in all_headings if wanted in _norm(h.text)]
+            # Agents often shorten the parent; a unique leaf is still clear.
+            found = [h for h in candidates if _norm(h.text) == parts[-1]]
+    else:
+        found = [h for h in candidates if _norm(h.text) == wanted]
+        if not found:
+            found = [h for h in candidates if wanted in _norm(h.text)]
+    if len(found) > 1 and level is None:
+        # A section named like the page title is what the caller means; the
+        # h1 is the whole page, which the outline already covers.
+        found = [h for h in found if h.level > 1] or found
     if len(found) == 1:
         return found[0]
     if found:
