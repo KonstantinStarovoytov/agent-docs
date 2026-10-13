@@ -15,6 +15,7 @@ from pydantic import SecretStr
 
 from src.config import settings
 from src.service import app as app_module
+from src.ingestion.snapshots import PageSnapshot
 from src.service import core, pages
 from src.service.mcp_server import build_mcp_server
 
@@ -27,23 +28,7 @@ def anyio_backend() -> str:
 
 
 @pytest.fixture
-def stub_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
-    def answer(question: str, **_kwargs: Any) -> core.Answer:
-        return core.Answer(
-            answer=f"Answer to {question} [1].",
-            sources=[
-                core.Source(
-                    citation=1,
-                    title="Skills",
-                    heading="Overview",
-                    url="https://docs.test/skills.md",
-                    rerank_score=0.91,
-                )
-            ],
-            strategy="hybrid",
-            iterative=False,
-        )
-
+def stub_pipeline(monkeypatch: pytest.MonkeyPatch) -> list[list[str]]:
     def search(
         query: str, *, limit: int | None = None, vendor: str | None = None
     ) -> list[core.Passage]:
@@ -59,58 +44,67 @@ def stub_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
             )
         ]
 
-    monkeypatch.setattr(core, "answer", answer)
+    reads: list[list[str]] = []
+
+    def snapshot_pages(urls: list[str]) -> dict[str, PageSnapshot]:
+        reads.append(urls)
+        return {
+            "https://docs.test/skills.md": PageSnapshot(
+                url="https://docs.test/skills.md",
+                title="Skills",
+                product="claude-code",
+                markdown="# Skills\n\nSkills are folders.",
+                summary="How skills package instructions.",
+            )
+        }
+
     monkeypatch.setattr(core, "search", search)
+    monkeypatch.setattr(pages, "_snapshot_pages", snapshot_pages)
+    return reads
 
 
 @pytest.mark.anyio
-async def test_client_sees_all_tools(stub_pipeline: None) -> None:
+async def test_client_sees_exactly_two_tools(stub_pipeline: Any) -> None:
     async with Client(build_mcp_server()) as client:
         tools = await client.list_tools()
 
-    assert {tool.name for tool in tools.tools} == {
-        "ask_docs",
-        "search_docs",
-        "find_pages",
-        "read_section",
-    }
+    assert sorted(tool.name for tool in tools.tools) == ["read_section", "search_docs"]
 
 
 @pytest.mark.anyio
-async def test_tools_advertise_runlayer_metadata(stub_pipeline: None) -> None:
+async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
     """Title, annotations, field docs and output schema must be on the wire."""
     async with Client(build_mcp_server()) as client:
         tools = {tool.name: tool for tool in (await client.list_tools()).tools}
 
-    ask = tools["ask_docs"]
-    search = tools["search_docs"]
+    search, read = tools["search_docs"], tools["read_section"]
 
-    assert ask.title == "Ask official agent docs"
     assert search.title == "Search official agent docs"
-    assert ask.annotations is not None
-    assert ask.annotations.read_only_hint is True
-    assert ask.annotations.destructive_hint is False
-    assert ask.annotations.idempotent_hint is True
-    # The index is a closed snapshot, not the open web.
-    assert ask.annotations.open_world_hint is False
-    assert "Not for" in (ask.description or "")
-    assert "snapshot" in (ask.description or "")
-    assert "Errors:" in (search.description or "")
-    # Results are one passage per page, so multi-part questions need one
-    # search per part; both tools say so.
+    for tool in (search, read):
+        assert tool.annotations is not None
+        assert tool.annotations.read_only_hint is True
+        assert tool.annotations.destructive_hint is False
+        assert tool.annotations.idempotent_hint is True
+        # The index is a closed snapshot, not the open web.
+        assert tool.annotations.open_world_hint is False
+        assert tool.output_schema is not None
     search_text = " ".join((search.description or "").split())
-    ask_text = " ".join((ask.description or "").split())
+    read_text = " ".join((read.description or "").split())
+    assert "Not for" in search_text and "snapshot" in search_text
+    assert "Errors:" in search_text
     assert "one passage per page" in search_text
-    assert "once per part" in search_text
-    assert "one per part" in ask_text
+    assert "description" in search_text and "once per part" in search_text
+    assert "low scores" in search_text
+    assert "read_section(url)" in search_text
+    assert "read_section(url, heading)" in search_text
+    assert "outline" in read_text and "next_offset" in read_text
+    for text in (search_text, read_text):
+        assert "ask_docs" not in text and "find_pages" not in text
 
-    question = ask.input_schema["properties"]["question"]
-    assert question["minLength"] == 1
-    assert question["maxLength"] == 500
-    assert "description" in question
-    # Measured as useless for the caller; the agent is its own retry loop.
-    assert "iterative" not in ask.input_schema["properties"]
-
+    query = search.input_schema["properties"]["query"]
+    assert query["minLength"] == 1
+    assert query["maxLength"] == 500
+    assert "description" in query
     limit = search.input_schema["properties"]["limit"]
     assert limit["minimum"] == 1
     assert limit["maximum"] == 20
@@ -118,17 +112,20 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: None) -> None:
     product = search.input_schema["properties"]["product"]
     assert {"claude-code", "cursor", "codex", "mcp"} <= set(product["anyOf"][0]["enum"])
     assert "concise" in str(search.input_schema["properties"]["response_format"])
-    assert ask.output_schema is not None
-    assert "answer" in ask.output_schema["properties"]
-    assert "iterative" not in ask.output_schema["properties"]
-    assert "index_snapshot" in ask.output_schema["properties"]
-    assert search.output_schema is not None
-    assert "passages" in search.output_schema["properties"]
-    assert "index_snapshot" in search.output_schema["properties"]
+    assert "passages" in search.output_schema["properties"]  # type: ignore[index]
+    assert "index_snapshot" in search.output_schema["properties"]  # type: ignore[index]
+    assert "next_offset" in read.output_schema["properties"]  # type: ignore[index]
+
+
+def test_server_instructions_describe_the_two_step_flow() -> None:
+    flat = " ".join((build_mcp_server().instructions or "").split())
+
+    assert "search_docs" in flat and "read_section(url, heading)" in flat
+    assert "ask_docs" not in flat and "find_pages" not in flat
 
 
 @pytest.mark.anyio
-async def test_server_reports_a_version(stub_pipeline: None) -> None:
+async def test_server_reports_a_version(stub_pipeline: Any) -> None:
     async with Client(build_mcp_server()) as client:
         info = client.server_info
 
@@ -138,18 +135,7 @@ async def test_server_reports_a_version(stub_pipeline: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_ask_docs_returns_answer_with_sources(stub_pipeline: None) -> None:
-    async with Client(build_mcp_server()) as client:
-        result = await client.call_tool("ask_docs", {"question": "How do skills work?"})
-
-    payload = result.structured_content
-    assert payload is not None
-    assert payload["answer"] == "Answer to How do skills work? [1]."
-    assert payload["sources"][0]["url"] == "https://docs.test/skills.md"
-
-
-@pytest.mark.anyio
-async def test_search_docs_passes_limit_through(stub_pipeline: None) -> None:
+async def test_search_docs_passes_limit_through(stub_pipeline: Any) -> None:
     async with Client(build_mcp_server()) as client:
         result = await client.call_tool("search_docs", {"query": "hooks", "limit": 3})
 
@@ -159,7 +145,7 @@ async def test_search_docs_passes_limit_through(stub_pipeline: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_search_docs_is_concise_by_default(stub_pipeline: None) -> None:
+async def test_search_docs_is_concise_by_default(stub_pipeline: Any) -> None:
     """A 20-passage detailed answer is ~15k tokens; concise trims each chunk."""
     async with Client(build_mcp_server()) as client:
         concise = await client.call_tool("search_docs", {"query": "hooks"})
@@ -176,7 +162,7 @@ async def test_search_docs_is_concise_by_default(stub_pipeline: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_search_docs_maps_product_to_vendor(stub_pipeline: None) -> None:
+async def test_search_docs_maps_product_to_vendor(stub_pipeline: Any) -> None:
     async with Client(build_mcp_server()) as client:
         result = await client.call_tool(
             "search_docs", {"query": "rules", "product": "codex"}
@@ -187,51 +173,87 @@ async def test_search_docs_maps_product_to_vendor(stub_pipeline: None) -> None:
 
 
 @pytest.mark.anyio
-async def test_results_carry_index_snapshot(
-    stub_pipeline: None, monkeypatch: pytest.MonkeyPatch
+async def test_search_docs_passages_carry_the_page_description(
+    stub_pipeline: list[list[str]],
 ) -> None:
-    monkeypatch.setattr(core, "index_snapshot", lambda: "2026-09-01")
     async with Client(build_mcp_server()) as client:
-        asked = await client.call_tool("ask_docs", {"question": "q"})
-        searched = await client.call_tool("search_docs", {"query": "q"})
+        result = await client.call_tool("search_docs", {"query": "skills"})
 
-    assert asked.structured_content["index_snapshot"] == "2026-09-01"  # type: ignore[index]
-    assert searched.structured_content["index_snapshot"] == "2026-09-01"  # type: ignore[index]
+    passage = result.structured_content["passages"][0]  # type: ignore[index]
+    assert passage["description"] == "How skills package instructions."
+    assert stub_pipeline == [["https://docs.test/skills.md"]]
 
 
 @pytest.mark.anyio
-async def test_rejected_question_surfaces_as_tool_error(
+async def test_search_docs_reads_snapshots_once_for_all_passages(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    def reject(*_args: Any, **_kwargs: Any) -> core.Answer:
-        raise core.QuestionRejected("Question must not be empty")
+    reads: list[list[str]] = []
 
-    monkeypatch.setattr(core, "answer", reject)
+    def search(
+        query: str, *, limit: int | None = None, vendor: str | None = None
+    ) -> list[core.Passage]:
+        return [
+            core.Passage(i, "T", "H", f"https://docs.test/{i}.md", 0.5, "c")
+            for i in range(1, 4)
+        ]
 
+    def snapshot_pages(urls: list[str]) -> dict[str, PageSnapshot]:
+        reads.append(urls)
+        return {}
+
+    monkeypatch.setattr(core, "search", search)
+    monkeypatch.setattr(pages, "_snapshot_pages", snapshot_pages)
     async with Client(build_mcp_server()) as client:
-        result = await client.call_tool("ask_docs", {"question": " "})
+        result = await client.call_tool("search_docs", {"query": "q"})
 
-    assert result.is_error is True
-    # The model must see the reason, not a bare "Error executing tool".
-    assert "Question must not be empty" in result.content[0].text  # type: ignore[union-attr]
+    assert len(reads) == 1 and len(reads[0]) == 3
+    passages = result.structured_content["passages"]  # type: ignore[index]
+    assert [p["description"] for p in passages] == ["", "", ""]
 
 
 @pytest.mark.anyio
-async def test_backend_failure_tells_the_model_to_retry(
+async def test_search_docs_survives_an_unavailable_snapshot_store(
+    stub_pipeline: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def broken(urls: list[str]) -> dict[str, PageSnapshot]:
+        raise RuntimeError("qdrant down")
+
+    monkeypatch.setattr(pages, "_snapshot_pages", broken)
+    async with Client(build_mcp_server()) as client:
+        result = await client.call_tool("search_docs", {"query": "skills"})
+
+    assert result.is_error is False
+    passage = result.structured_content["passages"][0]  # type: ignore[index]
+    assert passage["description"] == "" and passage["url"].endswith("skills.md")
+
+
+@pytest.mark.anyio
+async def test_search_docs_backend_failure_tells_the_model_to_retry(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    def explode(*_args: Any, **_kwargs: Any) -> core.Answer:
+    def explode(*_args: Any, **_kwargs: Any) -> list[core.Passage]:
         raise RuntimeError("openai down")
 
-    monkeypatch.setattr(core, "answer", explode)
-
+    monkeypatch.setattr(core, "search", explode)
     async with Client(build_mcp_server()) as client:
-        result = await client.call_tool("ask_docs", {"question": "q"})
+        result = await client.call_tool("search_docs", {"query": "q"})
 
     assert result.is_error is True
     text = result.content[0].text  # type: ignore[union-attr]
     assert "unavailable" in text and "retry" in text
     assert "openai down" not in text
+
+
+@pytest.mark.anyio
+async def test_results_carry_index_snapshot(
+    stub_pipeline: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(core, "index_snapshot", lambda: "2026-09-01")
+    async with Client(build_mcp_server()) as client:
+        searched = await client.call_tool("search_docs", {"query": "q"})
+
+    assert searched.structured_content["index_snapshot"] == "2026-09-01"  # type: ignore[index]
 
 
 def _free_port() -> int:
@@ -270,7 +292,7 @@ def served_app(monkeypatch: pytest.MonkeyPatch) -> Iterator[str]:
 
 @pytest.mark.anyio
 async def test_mounted_http_transport_serves_tools(
-    stub_pipeline: None, served_app: str
+    stub_pipeline: Any, served_app: str
 ) -> None:
     """The deployed path: an MCP client over HTTP at /mcp, carrying the token."""
     async with httpx2.AsyncClient(
@@ -281,16 +303,12 @@ async def test_mounted_http_transport_serves_tools(
         )
         async with Client(transport) as client:
             tools = await client.list_tools()
-            result = await client.call_tool(
-                "ask_docs", {"question": "How do hooks work?"}
-            )
+            result = await client.call_tool("search_docs", {"query": "hooks"})
 
-    assert {"ask_docs", "search_docs", "find_pages", "read_section"} == {
-        tool.name for tool in tools.tools
-    }
+    assert sorted(tool.name for tool in tools.tools) == ["read_section", "search_docs"]
     payload = result.structured_content
     assert payload is not None
-    assert payload["answer"] == "Answer to How do hooks work? [1]."
+    assert payload["passages"][0]["url"] == "https://docs.test/skills.md"
 
 
 async def _mcp_post(host: str, body: dict[str, Any]) -> int:
@@ -325,7 +343,7 @@ INITIALIZE = {
 
 @pytest.mark.anyio
 async def test_declared_public_host_is_accepted(
-    stub_pipeline: None, monkeypatch: pytest.MonkeyPatch
+    stub_pipeline: Any, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """A deployment behind a domain must not answer 421 to its own hostname.
 
@@ -358,43 +376,9 @@ async def test_mounted_http_transport_rejects_missing_token(served_app: str) -> 
     assert response.status_code == 401
 
 
-@pytest.mark.anyio
-async def test_ask_docs_maps_product_to_vendor(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    seen: dict[str, Any] = {}
-
-    def answer(question: str, **kwargs: Any) -> core.Answer:
-        seen.update(kwargs)
-        return core.Answer(answer="a", sources=[], strategy="hybrid", iterative=False)
-
-    monkeypatch.setattr(core, "answer", answer)
-    async with Client(build_mcp_server()) as client:
-        await client.call_tool("ask_docs", {"question": "q", "product": "codex"})
-        assert seen["vendor"] == "openai"
-        await client.call_tool("ask_docs", {"question": "q"})
-        assert seen["vendor"] is None
-
-
 @pytest.fixture
 def stub_pages(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     seen: dict[str, Any] = {}
-
-    def find_pages(
-        question: str, *, limit: int = 5, vendor: str | None = None
-    ) -> list[pages.PageCard]:
-        seen.update(question=question, limit=limit, vendor=vendor)
-        return [
-            pages.PageCard(
-                rank=1,
-                title="Hooks",
-                url="https://docs.test/hooks.md",
-                product="claude-code",
-                score=0.8,
-                description="Explains hooks.",
-                outline=["# Hooks", "## Configure hooks"],
-            )
-        ]
 
     def read_section(
         url: str, heading: str | None = None, offset: int = 0
@@ -414,51 +398,13 @@ def stub_pages(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
             total_chars=24,
         )
 
-    monkeypatch.setattr(pages, "find_pages", find_pages)
     monkeypatch.setattr(pages, "read_section", read_section)
     return seen
 
 
 @pytest.mark.anyio
-async def test_page_tools_advertise_the_reading_flow(stub_pipeline: None) -> None:
-    async with Client(build_mcp_server()) as client:
-        tools = {tool.name: tool for tool in (await client.list_tools()).tools}
-
-    find, read = tools["find_pages"], tools["read_section"]
-    for tool in (find, read):
-        assert tool.annotations is not None
-        assert tool.annotations.read_only_hint is True
-        assert tool.annotations.destructive_hint is False
-        assert tool.annotations.open_world_hint is False
-        assert tool.output_schema is not None
-    find_text = " ".join((find.description or "").split())
-    assert "read_section" in find_text and "one find_pages per part" in find_text
-    assert "read_section" in " ".join((tools["search_docs"].description or "").split())
-    assert "find_pages" in " ".join((read.description or "").split())
-    assert find.input_schema["properties"]["limit"]["maximum"] == 10
-    assert "pages" in find.output_schema["properties"]  # type: ignore[index]
-    assert "next_offset" in read.output_schema["properties"]  # type: ignore[index]
-
-
-@pytest.mark.anyio
-async def test_find_pages_returns_cards_and_maps_product(
-    stub_pipeline: None, stub_pages: dict[str, Any]
-) -> None:
-    async with Client(build_mcp_server()) as client:
-        result = await client.call_tool(
-            "find_pages", {"query": "hooks", "product": "claude-code"}
-        )
-
-    assert stub_pages == {"question": "hooks", "limit": 5, "vendor": "anthropic"}
-    card = result.structured_content["pages"][0]  # type: ignore[index]
-    assert card["description"] == "Explains hooks."
-    assert card["outline"] == ["# Hooks", "## Configure hooks"]
-    assert "index_snapshot" in result.structured_content  # type: ignore[operator]
-
-
-@pytest.mark.anyio
 async def test_read_section_returns_text_and_reports_unknown_pages(
-    stub_pipeline: None, stub_pages: dict[str, Any]
+    stub_pipeline: Any, stub_pages: dict[str, Any]
 ) -> None:
     async with Client(build_mcp_server()) as client:
         found = await client.call_tool(

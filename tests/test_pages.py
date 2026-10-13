@@ -289,3 +289,73 @@ def test_snapshot_pages_reads_the_pages_collection_of_the_configured_index(
 
     assert found["https://x/a.md"].summary == "A is."
     wrapper.close.assert_called_once()
+
+
+def _passages(monkeypatch: pytest.MonkeyPatch, *urls: str) -> None:
+    def search(
+        question: str, *, limit: int | None = None, vendor: str | None = None
+    ) -> list[core.Passage]:
+        return [
+            core.Passage(i, "T", "H", url, 0.5, "text")
+            for i, url in enumerate(urls, start=1)
+        ]
+
+    monkeypatch.setattr(core, "search", search)
+
+
+def test_search_adds_each_pages_description_with_one_snapshot_read(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _passages(monkeypatch, "https://x/hooks.md", "https://x/b.md", "https://x/c.md")
+    reads: list[list[str]] = []
+    by_url = {
+        "https://x/hooks.md": _snapshot(summary="Explains hooks."),
+        # No gate summary: falls back to the page's first prose sentence.
+        "https://x/b.md": _snapshot(url="https://x/b.md"),
+    }
+
+    def snapshot_pages(urls: list[str]) -> dict[str, PageSnapshot]:
+        reads.append(urls)
+        return {u: by_url[u] for u in urls if u in by_url}
+
+    monkeypatch.setattr(pages, "_snapshot_pages", snapshot_pages)
+
+    found = pages.search("hooks", limit=3, vendor="cursor")
+
+    assert reads == [["https://x/hooks.md", "https://x/b.md", "https://x/c.md"]]
+    assert [p.description for p in found] == [
+        "Explains hooks.",
+        "Hooks run shell commands at fixed points.",
+        "",
+    ]
+    assert [(p.rank, p.url, p.score) for p in found] == [
+        (1, "https://x/hooks.md", 0.5),
+        (2, "https://x/b.md", 0.5),
+        (3, "https://x/c.md", 0.5),
+    ]
+
+
+def test_search_survives_an_unavailable_snapshot_store(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _passages(monkeypatch, "https://x/hooks.md")
+
+    def broken(urls: list[str]) -> dict[str, PageSnapshot]:
+        raise RuntimeError("qdrant down")
+
+    monkeypatch.setattr(pages, "_snapshot_pages", broken)
+
+    found = pages.search("hooks")
+
+    assert [p.description for p in found] == [""]
+
+
+def test_search_without_results_reads_no_snapshots(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _passages(monkeypatch)
+    monkeypatch.setattr(
+        pages, "_snapshot_pages", lambda urls: pytest.fail("no read expected")
+    )
+
+    assert pages.search("hooks") == []

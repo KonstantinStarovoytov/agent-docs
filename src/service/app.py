@@ -32,7 +32,7 @@ class AskRequest(BaseModel):
     question: str = Field(min_length=1, max_length=settings.api_max_question_chars)
     strategy: RetrievalStrategy | None = None
     iterative: bool = False
-    # Restricts retrieval to one product's docs, as search_docs/ask_docs do.
+    # Restricts retrieval to one product's docs, as search_docs does.
     product: Product | None = None
 
 
@@ -64,6 +64,7 @@ class PassageResponse(BaseModel):
     url: str
     score: float
     content: str
+    description: str
 
 
 class SearchResponse(BaseModel):
@@ -265,7 +266,7 @@ def create_app() -> FastAPI:
     def search(request: SearchRequest) -> SearchResponse:
         """Retrieval without generation, so a caller can inspect the evidence."""
         try:
-            passages = core.search(request.query, limit=request.limit)
+            passages = pages.search(request.query, limit=request.limit)
         except core.QuestionRejected as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
         finally:
