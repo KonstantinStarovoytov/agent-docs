@@ -48,7 +48,7 @@ Short definitions of every term used below.
 | **MMR** (Maximal Marginal Relevance) | A selection method that prefers results unlike those already chosen. Tested here, not used. |
 | **Qdrant** | The vector database that stores chunks, embeddings and BM25 data. |
 | **Langfuse** | Observability tool: stores a trace of every request, the eval datasets and their results, and versioned prompts. |
-| **Page snapshot** | The last fetched Markdown of a page, with its one-sentence description, kept in Qdrant (`<collection>_pages`). `read_section` reads sections from it. |
+| **Page snapshot** | The last fetched Markdown of a page, with its one-sentence description, kept in Qdrant (`<collection>_pages`). `read_section` reads sections from it. Pages indexed before the page gate existed had no description; `python -m src.reindex --generate-missing-summaries` writes one per page (one short LLM call each, no re-embedding). |
 | **Quarantine** | A newly found page that looks like junk is not indexed until the owner decides. |
 
 ---
@@ -163,6 +163,7 @@ flowchart TD
 | Abstain when the best score is below 0.55 (`MIN_TOP_RERANK_SCORE`) | Saves the LLM call when nothing in the docs fits. | Raise the 0.35 per-chunk floor | Lowest top score of 131 answerable questions 0.64 (margin 0.09); catches 8 of 12 negatives (experiment 23). |
 | `find_pages` + `read_section`: pick pages from cards, then read whole sections from the page snapshot | A 3,000-char chunk can cut a section; the agent should read the section itself. Same ranking as `search_docs`, no extra Cohere call, no model call to read. | More or longer passages from `search_docs` | find_pages page hit@5 0.979 on retrieval-v3; read_section returns the labelled section for 25 of 25 labels once every page has a snapshot (experiment 24). The `find_pages` card is now REST `/pages`; on MCP `search_docs` carries the description. |
 | Two MCP tools, no LLM on the agent path | Agents generate the answer themselves; a second generation costs money and hides the sources. `search_docs` gives passages with page descriptions, `read_section` gives whole sections. | `ask_docs` and `find_pages` as extra MCP tools | Production traces, 30 days: agents chose `search_docs` 103 times and `ask_docs` 11. `/ask` and `/pages` stay on REST. |
+| `read_section(url)` returns a compact outline: h1–h2 with subsection counts, 40 lines at most; `outline_depth=3` adds h3 | The full outline of `hooks.md` was 166 headings, about 1,000 tokens per call; an h2's text already includes its subsections, so the agent rarely needs the deep headings. | Every heading (the old outline) | Over 617 pages (chars/4): median 86 → 52 tokens, p90 268 → 93, max 1,987 → 374; `hooks.md` 1,038 → 91. |
 
 ---
 

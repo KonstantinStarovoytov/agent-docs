@@ -21,8 +21,9 @@ from src.service import core
 
 logger = logging.getLogger(__name__)
 
-OUTLINE_LEVELS = 3
-OUTLINE_CAP = 25
+OUTLINE_DEPTH = 2
+OUTLINE_CAP = 40
+ERROR_LEVELS = 3
 DESCRIPTION_CHARS = 200
 SECTION_CHARS = 8000
 ERROR_HEADINGS = 40
@@ -31,6 +32,7 @@ _HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*#*\s*$")
 _FENCE_RE = re.compile(r"^\s*(```|~~~)")
 _LINK_RE = re.compile(r"!?\[([^\]]*)\]\([^)]*\)")
 _SENTENCE_END_RE = re.compile(r"(?<=[.!?])\s")
+_COUNT_RE = re.compile(r"\s*\(\d+ subsections?\)\s*$")
 
 
 class PageNotFound(core.QuestionRejected):
@@ -113,13 +115,31 @@ def _marked(heading: Heading) -> str:
     return f"{'#' * heading.level} {heading.text}"
 
 
-def outline(
-    markdown: str, *, levels: int = OUTLINE_LEVELS, cap: int | None = None
-) -> list[str]:
-    """Headings up to `levels` as `## Text`; past `cap`, a `+N more` marker."""
-    items = [_marked(h) for h in headings(markdown) if h.level <= levels]
-    if cap is not None and len(items) > cap:
-        return [*items[:cap], f"+{len(items) - cap} more"]
+def outline(markdown: str, *, depth: int = OUTLINE_DEPTH) -> list[str]:
+    """The page's top-level sections as `## Text`, at most OUTLINE_CAP lines.
+
+    Depth 2 lists h1 and h2, each h2 followed by its subsection count (the h2's
+    text includes its subsections, so reading it covers them); depth 3 also
+    lists the h3s. Past the cap, a final `+N more sections` line.
+    """
+    found = headings(markdown)
+    items: list[str] = []
+    for index, heading in enumerate(found):
+        if heading.level > depth:
+            continue
+        line = _marked(heading)
+        if heading.level == 2 and depth < 3:
+            below = []
+            for later in found[index + 1 :]:
+                if later.level <= heading.level:
+                    break
+                below.append(later.level)
+            count = below.count(min(below)) if below else 0
+            if count:
+                line += f" ({count} subsection{'s' if count != 1 else ''})"
+        items.append(line)
+    if len(items) > OUTLINE_CAP:
+        return [*items[:OUTLINE_CAP], f"+{len(items) - OUTLINE_CAP} more sections"]
     return items
 
 
@@ -151,7 +171,8 @@ def description(summary: str, markdown: str) -> str:
 
 
 def _norm(text: str) -> str:
-    return " ".join(text.lstrip("#").split()).casefold()
+    """Comparable heading text; an outline line's `(N subsections)` is dropped."""
+    return " ".join(_COUNT_RE.sub("", text).lstrip("#").split()).casefold()
 
 
 def _listing(items: list[str]) -> str:
@@ -180,7 +201,7 @@ def _match(all_headings: list[Heading], query: str) -> Heading:
             f"Heading {query!r} matches {len(found)} sections; pass one as a "
             f"path ('Parent > Heading'): {_listing([h.path for h in found])}"
         )
-    available = [_marked(h) for h in all_headings if h.level <= OUTLINE_LEVELS]
+    available = [_marked(h) for h in all_headings if h.level <= ERROR_LEVELS]
     raise SectionNotFound(
         f"No heading matches {query!r}. Headings on this page: {_listing(available)}"
     )
@@ -274,7 +295,7 @@ def find_pages(
                 product=str(metadata.get("product") or (page.product if page else "")),
                 score=result.rerank_score,
                 description=description(page.summary, page.markdown) if page else "",
-                outline=outline(page.markdown, cap=OUTLINE_CAP) if page else [],
+                outline=outline(page.markdown) if page else [],
             )
         )
     return cards
@@ -292,9 +313,16 @@ def _page(url: str) -> PageSnapshot:
     )
 
 
-def read_section(url: str, heading: str | None = None, offset: int = 0) -> SectionRead:
+def read_section(
+    url: str,
+    heading: str | None = None,
+    offset: int = 0,
+    outline_depth: int = OUTLINE_DEPTH,
+) -> SectionRead:
     if offset < 0:
         raise core.QuestionRejected("offset must not be negative")
+    if outline_depth not in (2, 3):
+        raise core.QuestionRejected("outline_depth must be 2 or 3")
     page = _page(url)
     about = description(page.summary, page.markdown)
     if heading is None or not heading.strip():
@@ -302,7 +330,7 @@ def read_section(url: str, heading: str | None = None, offset: int = 0) -> Secti
             url=page.url,
             title=page.title,
             description=about,
-            outline=outline(page.markdown, levels=6),
+            outline=outline(page.markdown, depth=outline_depth),
             heading=None,
             text="",
             offset=0,

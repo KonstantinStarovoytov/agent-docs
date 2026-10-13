@@ -100,7 +100,7 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
 | Tool | Returns |
 |---|---|
 | `search_docs(query, limit=8, product=None, response_format="concise")` | Ranked passages, one per page, each with the page's one-line description and a Cohere relevance score. One call per part of a multi-part question. `product`: `claude-code`, `cursor`, `codex`, `mcp` |
-| `read_section(url, heading=None, offset=0)` | No heading: page description and section outline. With a heading: the full section text, up to 8,000 characters (`next_offset` for the rest). No model call |
+| `read_section(url, heading=None, offset=0, outline_depth=2)` | No heading: page description and a compact outline (top-level sections with subsection counts; `outline_depth=3` adds subsections). With a heading: the full section text, up to 8,000 characters (`next_offset` for the rest). No model call |
 
 REST also offers `/ask` (a written answer with citations) and `/pages` (page
 cards) for clients that are not agents.

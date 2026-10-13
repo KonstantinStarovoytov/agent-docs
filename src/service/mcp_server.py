@@ -92,7 +92,11 @@ HEADING_DESCRIPTION = (
     "Heading to read, as listed in the outline (leading #s optional). Exact "
     "text first, case-insensitive, then a unique partial match; use "
     "'Parent > Heading' when two headings share a name. Leave unset to get the "
-    "page's full outline."
+    "page's outline."
+)
+OUTLINE_DEPTH_DESCRIPTION = (
+    "Outline depth when no heading is given: 2 lists top-level sections with "
+    "subsection counts, 3 also lists the subsections."
 )
 OFFSET_DESCRIPTION = (
     "Character offset into the section; pass the previous next_offset to "
@@ -138,8 +142,9 @@ class ReadSectionResult(BaseModel):
     title: str = Field(description="Page title.")
     description: str = Field(description="One sentence on what the page is.")
     outline: list[str] = Field(
-        description="Every heading of the page as '## Text' when no heading "
-        "was asked for; empty otherwise."
+        description="Top-level sections as '## Text (N subsections)' when no "
+        "heading was asked for (at most 40 lines, then '+N more sections'); "
+        "empty otherwise."
     )
     heading: str | None = Field(
         description="Path of the section returned, e.g. 'Hooks > PreToolUse'; "
@@ -255,11 +260,17 @@ def read_section(
         str | None, Field(max_length=300, description=HEADING_DESCRIPTION)
     ] = None,
     offset: Annotated[int, Field(ge=0, description=OFFSET_DESCRIPTION)] = 0,
+    outline_depth: Annotated[
+        Literal[2, 3], Field(description=OUTLINE_DEPTH_DESCRIPTION)
+    ] = 2,
 ) -> ReadSectionResult:
     """Read a documentation page by section, verbatim.
 
     Use with a page URL from search_docs. Without a heading: the page
-    description and its section outline. With a heading: the full section
+    description and its outline, which lists top-level sections with
+    subsection counts. To go deeper, read a top-level section (its text
+    includes its subsections), or call again with outline_depth=3 to pick one
+    specific subsection on a long page. With a heading: the full section
     text, up to 8,000 characters per call; pass next_offset as offset for the
     rest. No model call; the text is the indexed snapshot of the page.
 
@@ -267,7 +278,7 @@ def read_section(
     is rejected with the available headings.
     """
     try:
-        result = pages.read_section(url, heading, offset)
+        result = pages.read_section(url, heading, offset, outline_depth)
     except Exception as error:
         raise _tool_error(error) from error
     return ReadSectionResult(
