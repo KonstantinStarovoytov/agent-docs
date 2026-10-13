@@ -21,7 +21,7 @@ Short definitions of every term used below.
 |---|---|
 | **RAG** (Retrieval-Augmented Generation) | First find relevant text, then let the language model answer only from that text. |
 | **LLM** (Large Language Model) | A model such as GPT that writes text. Here: `gpt-6-luna`. |
-| **MCP** (Model Context Protocol) | A standard way for AI agents to call external tools. This project is an MCP server with four tools. |
+| **MCP** (Model Context Protocol) | A standard way for AI agents to call external tools. This project is an MCP server with two tools: `search_docs` and `read_section`. |
 | **Chunk** | A piece of a documentation page (up to 3,000 characters) that is stored and searched on its own. |
 | **Chunk overlap** | Neighbouring chunks share 300 characters, so a sentence cut at a border is still whole in one of them. |
 | **Embedding** | A list of numbers that represents the meaning of a text. Texts with similar meaning get similar numbers. |
@@ -55,7 +55,7 @@ Short definitions of every term used below.
 
 ## How a question is answered
 
-This is the `ask_docs` path. Every step runs in order.
+This is the `/ask` path (REST; agents use `search_docs` and `read_section` instead). Every step runs in order.
 
 ```mermaid
 flowchart TD
@@ -86,17 +86,16 @@ flowchart TD
 
 `search_docs` is shorter: one query (no translation), an optional product
 filter, a pool of 20 candidates, Cohere rerank, and the best passage of each
-page; the first `limit` are returned with their scores. There is no 0.35 threshold and no generation.
+page; the first `limit` are returned with their scores and the page's one-line description (one Qdrant read of the page snapshots for all results). There is no 0.35 threshold and no generation.
 
 Every chunk is stored with a short header (vendor, product, page, section)
 added before embedding. Without it, a chunk saying "set `model` in settings"
 looks the same for Cursor and Claude Code.
 
 The same pipeline is served two ways from one process: an **MCP server**
-(`ask_docs`, `search_docs`, `find_pages`, `read_section`) for agents and a
-**REST API** (`/ask`, `/search`, `/pages`, `/section`)
-for everything else. Both go through `src/service/core.py`, so they cannot
-drift apart.
+(`search_docs`, `read_section`) for agents and a **REST API** (`/ask`,
+`/search`, `/pages`, `/section`) for everything else. Both go through
+`src/service/`, so they cannot drift apart.
 
 ---
 
@@ -162,7 +161,8 @@ flowchart TD
 | Free hosting (Render, Qdrant Cloud, Langfuse Hobby) | Zero fixed cost, no bank card. | Paid hosting | See README → Cost. |
 | `search_docs` returns one passage per page | Several chunks of one page filled the list; the agent can search again per part. | All chunks in score order | retrieval-v3, limit 5: distinct pages 3.1 → 5.0, page hit@5 0.936 → 0.979 (experiment 22). |
 | Abstain when the best score is below 0.55 (`MIN_TOP_RERANK_SCORE`) | Saves the LLM call when nothing in the docs fits. | Raise the 0.35 per-chunk floor | Lowest top score of 131 answerable questions 0.64 (margin 0.09); catches 8 of 12 negatives (experiment 23). |
-| `find_pages` + `read_section`: pick pages from cards, then read whole sections from the page snapshot | A 3,000-char chunk can cut a section; the agent should read the section itself. Same ranking as `search_docs`, no extra Cohere call, no model call to read. | More or longer passages from `search_docs` | find_pages page hit@5 0.979 on retrieval-v3; read_section returns the labelled section for 25 of 25 labels once every page has a snapshot (experiment 24). |
+| `find_pages` + `read_section`: pick pages from cards, then read whole sections from the page snapshot | A 3,000-char chunk can cut a section; the agent should read the section itself. Same ranking as `search_docs`, no extra Cohere call, no model call to read. | More or longer passages from `search_docs` | find_pages page hit@5 0.979 on retrieval-v3; read_section returns the labelled section for 25 of 25 labels once every page has a snapshot (experiment 24). The `find_pages` card is now REST `/pages`; on MCP `search_docs` carries the description. |
+| Two MCP tools, no LLM on the agent path | Agents generate the answer themselves; a second generation costs money and hides the sources. `search_docs` gives passages with page descriptions, `read_section` gives whole sections. | `ask_docs` and `find_pages` as extra MCP tools | Production traces, 30 days: agents chose `search_docs` 103 times and `ask_docs` 11. `/ask` and `/pages` stay on REST. |
 
 ---
 
@@ -192,9 +192,9 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 18 | BM25 needs IDF (v1 sparse vector has no `modifier=IDF`) | Index v2 built with IDF; recall-in-pool at pools 10/20/40, no reranker | Recall unchanged on all four datasets; first-correct rank before rerank slightly lower | **Pending** reranked gate on v2 (November) |
 | 19 | Excluding changelogs, legal, marketing and link-hub pages cleans the pool | 40 quarantined pages excluded, 20 large references allowed; same recall run | Same groups lost as in v1 | Kept in v2 (corpus hygiene); no recall effect |
 | 20 | One reference entry per chunk (`####` split, 12-row tables with header) | Chunk counts per big page; same recall run | e.g. hooks 125 → 184 chunks, median 2,571 → 1,188 chars; recall unchanged | **Pending** reranked gate |
-| 21 | A product filter on answers recovers evidence | v2 with the vendor the labels name (56 of 91 cases) | Coverage recall pool 10 0.765 → 0.794, pool 40 0.912 → 0.941; retrieval-v3 pool 40 → 1.000 | **Accepted** as optional `product` on `ask_docs` and `/ask` |
+| 21 | A product filter on answers recovers evidence | v2 with the vendor the labels name (56 of 91 cases) | Coverage recall pool 10 0.765 → 0.794, pool 40 0.912 → 0.941; retrieval-v3 pool 40 → 1.000 | **Accepted** as optional `product` on `/ask` and `search_docs` |
 | 22 | One passage per page makes `search_docs` show more pages | Stored Cohere scores, search pool 20 rebuilt from Qdrant; page hit@k, before → after | retrieval-v3 (47, all scored): limit 5 hit 0.936 → 0.979, pages 3.1 → 5.0; limit 8 hit 0.979 → 0.979, pages 4.4 → 7.4. Query-transform and full-corpus only partly scored, no hit lost | **Kept** |
-| 23 | The best rerank score tells when the docs do not cover a question | Top score on the `ask_docs` path (pool 10) from stored scores: 131 answerable questions, 12 negatives | Lowest answerable 0.64; negatives below 0.55: 8 of 12 (the 0.35 floor already empties 5) | **Kept**, default 0.55 |
+| 23 | The best rerank score tells when the docs do not cover a question | Top score on the `/ask` path (pool 10) from stored scores: 131 answerable questions, 12 negatives | Lowest answerable 0.64; negatives below 0.55: 8 of 12 (the 0.35 floor already empties 5) | **Kept**, default 0.55 |
 | 24 | Page cards plus section reads find and return the right section | Stored Cohere scores, search pool 20 (0 Cohere calls); `read_section` on the 25 labels that name a heading | Page hit@3 / @5: retrieval-v3 0.936 / 0.979; evidence groups (one call per question) 0.500 / 0.647. read_section: 11 of 25 on v1 today (14 fail: 28 v1 pages have no snapshot), 25 of 25 with them filled; median 1,415 chars, p95 7,941 | **Kept**; fill the 28 v1 snapshots ([report](reports/find-pages-2026-10.md)) |
 
 ---

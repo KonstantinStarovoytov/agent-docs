@@ -2,7 +2,7 @@
 
 **Ask questions about Claude Code, Cursor, Codex and MCP — get answers grounded in their official docs, with citations.**
 
-A hybrid RAG service that AI agents call as an MCP tool (or over REST). It
+A hybrid RAG service that AI agents call through two MCP tools (or over REST). It
 indexes ~600 pages of official documentation, refreshes itself daily, and every
 design choice is backed by an experiment.
 
@@ -13,48 +13,42 @@ design choice is backed by an experiment.
 
 ## How it works
 
-Your agent calls a **remote MCP server** with one of its tools. Every step
-below runs in order, one after another.
+Your agent calls a **remote MCP server** with two tools: `search_docs`, then
+`read_section` when a passage is not enough. No model runs on this path; the
+agent writes the answer itself.
 
 ```mermaid
 flowchart TD
-    A["Your agent<br/>Claude Code · Cursor · OpenWebUI"] -->|"remote MCP + Bearer token"| T{"Which tool?"}
-
-    T -->|ask_docs| L{"Question in<br/>Russian or Polish?"}
-    L -->|yes| TR["Add an English translation<br/>(2 queries)"]
-    L -->|no| Q1["1 query"]
-    TR --> S
-    Q1 --> S
-
-    T -->|search_docs| S
-
-    S["Hybrid search in Qdrant<br/>dense (meaning) + BM25 (keywords)<br/>3x overfetch"] --> F["RRF fusion<br/>ties broken by chunk id"]
-    F -->|"ask_docs: 10 candidates<br/>search_docs: 20 candidates"| R["Cohere rerank<br/>against the original question"]
-
-    R -->|search_docs| P["Best passage of each page,<br/>ranked with scores"]
-    R -->|ask_docs| TH{"Best candidate<br/>scores 0.55 or more?"}
-    TH -->|no| NO["Answer: not covered<br/>by the documentation"]
-    TH -->|yes| SEL["Pick 8 chunks<br/>at most 2 per section"]
-    SEL --> G["gpt-6-luna writes the answer<br/>with citations 1, 2, 3"]
+    A["Your agent<br/>Claude Code · Cursor · OpenWebUI"] -->|"remote MCP + Bearer token"| S0["search_docs(query)"]
+    S0 --> S["Hybrid search in Qdrant<br/>dense (meaning) + BM25 (keywords)<br/>3x overfetch"]
+    S --> F["RRF fusion<br/>ties broken by chunk id"]
+    F -->|"20 candidates"| R["Cohere rerank<br/>against the question"]
+    R --> P["Best passage of each page,<br/>with score and page description"]
+    P --> A2{"Passage<br/>enough?"}
+    A2 -->|yes| DONE["Agent answers"]
+    A2 -->|no| RS["read_section(url)<br/>page description + section outline"]
+    RS --> RT["read_section(url, heading)<br/>full section text, no model call"]
+    RT --> DONE
 ```
+
+The `/ask` REST endpoint, for clients that are not agents, adds a few steps
+after the rerank:
 
 | Step | What happens | Why |
 |---|---|---|
-| **Translation** (`ask_docs` only) | Non-English questions get an English copy; both are searched. | The docs are in English. |
+| **Translation** (`/ask` only) | Non-English questions get an English copy; both are searched. | The docs are in English. |
 | **Hybrid search** | Each query is searched by meaning (embedding) and by exact words (BM25) in Qdrant. It asks for 3x more results than needed. | Meaning finds concepts; BM25 finds exact names like `.cursorrules`. |
 | **RRF fusion** | The result lists are merged by rank; equal scores are ordered by chunk id. | Scores of the two searches are not comparable; ranks are. The tie-break makes the same question return the same results. |
 | **Rerank** | Cohere reads the question with each candidate and scores the match. | Search is fast but rough; the reranker is precise. |
-| **Threshold** (`ask_docs`) | If even the best candidate scores below 0.55, the bot says the docs do not cover it, without calling the model. Otherwise candidates below 0.35 are dropped. | This is how it refuses to guess. |
-| **Context selection** | The 8 best chunks go to the model, at most 2 from one section. | One section must not fill the whole context. |
-| **Answer** | gpt-6-luna answers only from those 8 chunks and cites them. | Every claim can be checked. |
+| **Threshold** (`/ask` only) | If even the best candidate scores below 0.55, the bot says the docs do not cover it, without calling the model. Otherwise candidates below 0.35 are dropped. | This is how it refuses to guess. |
+| **Context selection** (`/ask` only) | The 8 best chunks go to the model, at most 2 from one section. | One section must not fill the whole context. |
+| **Answer** (`/ask` only) | gpt-6-luna answers only from those 8 chunks and cites them. | Every claim can be checked. |
 
 `search_docs` stops after the rerank and returns the best passage of each
-page, so one long page cannot fill the list. The calling
-agent reads them itself, which is cheaper. Every request is traced in Langfuse.
-
-To read whole sections, an agent calls `find_pages` (same ranking, one card per
-page: description and outline), picks 1–3 pages, then `read_section` (the
-section's text from the stored page, no model call).
+page, so one long page cannot fill the list. Each passage carries the page's
+one-line description. The agent reads the passages itself, which is cheaper;
+for a longer read, `read_section` returns a page's outline, then one section's
+text from the stored page (no model call). Every request is traced in Langfuse.
 
 ## Fresh every day
 
@@ -105,10 +99,11 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
 
 | Tool | Returns |
 |---|---|
-| `ask_docs(question)` | A grounded answer with sources |
-| `search_docs(query, limit=8, product=None, response_format="concise")` | Ranked passages only, one per page (cheaper; the agent reasons itself; one call per part of a multi-part question). `product`: `claude-code`, `cursor`, `codex`, `mcp` |
-| `find_pages(query, product=None, limit=5)` | Ranked page cards: title, URL, one-sentence description, outline (h1–h3). One call per part of a question |
-| `read_section(url, heading=None, offset=0)` | One section of a page, verbatim, up to 8,000 characters (`next_offset` for the rest); no heading gives the full outline |
+| `search_docs(query, limit=8, product=None, response_format="concise")` | Ranked passages, one per page, each with the page's one-line description and a Cohere relevance score. One call per part of a multi-part question. `product`: `claude-code`, `cursor`, `codex`, `mcp` |
+| `read_section(url, heading=None, offset=0)` | No heading: page description and section outline. With a heading: the full section text, up to 8,000 characters (`next_offset` for the rest). No model call |
+
+REST also offers `/ask` (a written answer with citations) and `/pages` (page
+cards) for clients that are not agents.
 
 **Over REST:**
 
@@ -122,8 +117,8 @@ curl -X POST https://agent-docs-mcp.onrender.com/ask \
 |---|---|
 | `GET /health` | Liveness, no token |
 | `POST /ask` | Answer with citations |
-| `POST /search` | Passages only |
-| `POST /pages` | Page cards (`find_pages`) |
+| `POST /search` | Passages with page descriptions |
+| `POST /pages` | Page cards: description and outline |
 | `POST /section` | One section of a page (`read_section`) |
 | `POST /mcp/` | MCP (streamable HTTP) |
 | `GET /docs` | Interactive API docs (use **Authorize** with the token) |
@@ -166,7 +161,7 @@ by clearing `API_GUEST_TOKEN`.
 | What | Cost |
 |---|---|
 | Hosting, database, tracing, CI | **$0 / month** (free tiers) |
-| One answer (`ask_docs`) | **≈ $0.0007** (OpenAI; rerank on the free trial) |
+| One answer (`/ask`) | **≈ $0.0007** (OpenAI; rerank on the free trial) |
 | One search (`search_docs`) | ≈ $0 (one embedding + one rerank) |
 | Daily re-index, nothing changed | $0 |
 | Daily re-index, a few pages changed | < $0.01 (embeddings + one short LLM check per new page) |
