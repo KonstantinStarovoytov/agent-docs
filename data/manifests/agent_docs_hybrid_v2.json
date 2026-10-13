@@ -151,7 +151,7 @@
       "title": "Agent SDK reference - Python",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A Python Agent SDK API reference covering installation, interaction patterns, and the SDK’s functions, types, and classes."
     },
     "https://code.claude.com/docs/en/agent-sdk/quickstart.md": {
       "sha256": "5c0d356d3368ee8826bab488a2ddfbec979f943a88783d7956a51d8ceefe94ee",
@@ -263,7 +263,7 @@
       "title": "Agent SDK reference - TypeScript",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A TypeScript Agent SDK API reference covering installation, functions, types, interfaces, and configuration options."
     },
     "https://code.claude.com/docs/en/agent-sdk/user-input.md": {
       "sha256": "f545c43b921597b412249f6520cb222fc714f2c48ed0cf93052b4f0eb2dc5b4d",
@@ -295,7 +295,7 @@
       "title": "Run agents in parallel",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "An overview comparing Claude Code’s options for running multiple tasks in parallel and when to use each."
     },
     "https://code.claude.com/docs/en/amazon-bedrock.md": {
       "sha256": "4c636584b82df4738f83c34f16e816bff56076a4fb827b4b197d98263c87e78c",
@@ -479,7 +479,7 @@
       "title": "Claude Tag",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A branded page introducing Claude Tag rather than a how-to, configuration, or reference guide."
     },
     "https://code.claude.com/docs/en/cli-reference.md": {
       "sha256": "46a9b079e8b60fdf7fec3f6cf9c60910349c9b7f00cc8c28d25bdede6d10b93a",
@@ -639,7 +639,7 @@
       "title": "Environment variables",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference listing Claude Code environment variables and explaining how to set them and how their values take precedence."
     },
     "https://code.claude.com/docs/en/errors.md": {
       "sha256": "3f7594a168a3fad38a4faf78f321fe4082d9001fb415df24afa434e1faaa5db6",
@@ -647,7 +647,7 @@
       "title": "Error reference",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference for Claude Code runtime errors, their meanings, and recovery steps."
     },
     "https://code.claude.com/docs/en/fast-mode.md": {
       "sha256": "5c48c5777c0dd62343b3dc384466bc3a26f2f9c2f1ee837708c60e185e4b9904",
@@ -775,7 +775,7 @@
       "title": "Hooks reference",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference for configuring Claude Code hooks, including event schemas, inputs and outputs, and advanced hook types."
     },
     "https://code.claude.com/docs/en/how-claude-code-works.md": {
       "sha256": "c3e76c31064699629183e7e95600d5d8fa0504dbedc3acf8fc275dce0b5e83eb",
@@ -1375,7 +1375,7 @@
       "title": "All settings",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A complete reference for Claude Code settings.json keys, including their scopes, types, defaults, and examples."
     },
     "https://code.claude.com/docs/en/settings.md": {
       "sha256": "cda5d0910627308b7367bdd1c8f0da0dde3fdc3bccca7a9f889b2529aeb34ddd",
@@ -1551,7 +1551,7 @@
       "title": "Admin Api",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference documentation for the Cursor Admin API, including authentication and team-management endpoint details."
     },
     "https://cursor.com/docs/account/teams/ai-code-tracking-api.md": {
       "sha256": "a5c622176bd75302501a047a8fb28224000a4f94d415595d52bcf1838b972f29",
@@ -1759,7 +1759,7 @@
       "title": "Tools",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference for Origin MCP tools, their access levels, purposes, and JSON Schema parameters."
     },
     "https://cursor.com/docs/api/origin/migrations.md": {
       "sha256": "d0db663c2e6eb9b625a71218443c29fffc2762a13ba41671d3d38bdcd49a220d",
@@ -1911,7 +1911,7 @@
       "title": "Endpoints",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Reference for the Cloud Agents API endpoints used to launch and manage agents and their environments."
     },
     "https://cursor.com/docs/cloud-agent/api/webhooks.md": {
       "sha256": "073b442fc8a9d880fd4e00bd2f85a56451a537e34acbd8708afc20faf0c5e8f4",
@@ -2183,7 +2183,7 @@
       "title": "Privacy And Data Governance",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains Cursor’s data flows, privacy guarantees, and Cloud Agent storage practices for security and compliance reviews."
     },
     "https://cursor.com/docs/get-started/quickstart.md": {
       "sha256": "55cbb760429f9dd7cbcb9430f9e15dac5ec02d99b99ddde67291a827c25357cd",
@@ -2671,7 +2671,7 @@
       "title": "Python",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Documentation for using Cursor’s Python SDK to run local or cloud agents from Python code."
     },
     "https://cursor.com/docs/sdk/typescript.md": {
       "sha256": "eeb0ac44198ab8bb694ad31158c11d3028b594ca5dbba210b1cf5d241ca2c6fc",
@@ -2679,7 +2679,7 @@
       "title": "Typescript",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Documentation for using Cursor’s TypeScript SDK to run agents in local and cloud runtimes."
     },
     "https://cursor.com/docs/skills.md": {
       "sha256": "362b23148c2ad07f6cd322e7c8bc1026ffd236b114e11598f86295c4bb20b2f0",
@@ -2759,7 +2759,7 @@
       "title": "Codex App Server",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "Explains how to connect Codex clients to the app server and integrate its capabilities."
     },
     "https://learn.chatgpt.com/docs/app.md": {
       "sha256": "1decf3bb70ccffcf158010c677218332ea2985424a6785a351426675436fd58d",
@@ -2943,7 +2943,7 @@
       "title": "Configuration",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "This is a configuration index that groups links to customization and setup documentation rather than providing configuration guidance itself."
     },
     "https://learn.chatgpt.com/docs/custom-prompts.md": {
       "sha256": "4344bfc92901c1b7d3eeca25d71dc025030915da0ca24615bd23cab7d80d00c3",
@@ -2999,7 +2999,7 @@
       "title": "Slash commands in Codex CLI",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A reference catalog of Codex CLI commands, flags, and their maturity."
     },
     "https://learn.chatgpt.com/docs/developer-commands.md?surface=ide": {
       "sha256": "50a6368d51607262febd651d1cdf05e86b1e8e2ce5dfa0c3fcb8ef38af34b2ff",
@@ -4127,7 +4127,7 @@
       "title": "SDKs",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "This page is an index of official MCP SDKs linking to their separate documentation and repositories."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging.md": {
       "sha256": "7b508614908143f889bc29a591f750d98548881a316e7c7eb88ea7723fe6e34c",
@@ -4279,7 +4279,7 @@
       "title": "Extension Support Matrix",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A community-maintained matrix aggregating which MCP clients support official extensions."
     },
     "https://modelcontextprotocol.io/extensions/overview.md": {
       "sha256": "f4d1726cd3ab3cb2ff4e75a78123c5cd3d928a8786a890df03c1b0394c8b83f9",
@@ -4527,7 +4527,7 @@
       "title": "Deprecated Features",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "This page is a derived registry of deprecated specification features and their migration paths, aggregating information documented elsewhere."
     },
     "https://modelcontextprotocol.io/specification/2026-07-28/index.md": {
       "sha256": "a155d43b586f2d6afd9c8d41a141d9f6d863e80f6764bfc7ac2790cd4aca3bf1",
@@ -4543,7 +4543,7 @@
       "title": "Schema Reference",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "A reference of the MCP specification’s JSON-RPC and protocol data types, useful for answering implementation and schema questions."
     },
     "https://modelcontextprotocol.io/specification/2026-07-28/server/discover.md": {
       "sha256": "d98102a928fad5ab0a3915ac9e508fb4304f072a8cd0af322c0103088dbe25d0",
@@ -4559,7 +4559,7 @@
       "title": "Overview",
       "status": "indexed",
       "reason": "",
-      "summary": ""
+      "summary": "This overview briefly summarizes MCP server primitives and links to their detailed specification pages."
     },
     "https://modelcontextprotocol.io/specification/2026-07-28/server/prompts.md": {
       "sha256": "cd76602ec1d40c707c0373c19e9018f6f989f19ab025aebdcaf189383db45b25",
