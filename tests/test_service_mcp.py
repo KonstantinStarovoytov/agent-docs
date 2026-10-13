@@ -98,6 +98,9 @@ async def test_tools_advertise_runlayer_metadata(stub_pipeline: Any) -> None:
     assert "read_section(url)" in search_text
     assert "read_section(url, heading)" in search_text
     assert "outline" in read_text and "next_offset" in read_text
+    assert "subsection counts" in read_text and "outline_depth=3" in read_text
+    depth = read.input_schema["properties"]["outline_depth"]
+    assert depth["enum"] == [2, 3] and depth["default"] == 2
     for text in (search_text, read_text):
         assert "ask_docs" not in text and "find_pages" not in text
 
@@ -381,11 +384,13 @@ def stub_pages(monkeypatch: pytest.MonkeyPatch) -> dict[str, Any]:
     seen: dict[str, Any] = {}
 
     def read_section(
-        url: str, heading: str | None = None, offset: int = 0
+        url: str, heading: str | None = None, offset: int = 0, outline_depth: int = 2
     ) -> pages.SectionRead:
         if url == "https://docs.test/missing.md":
             raise pages.PageNotFound(f"{url} is not a page of the index")
-        seen.update(url=url, heading=heading, offset=offset)
+        seen.update(
+            url=url, heading=heading, offset=offset, outline_depth=outline_depth
+        )
         return pages.SectionRead(
             url=url,
             title="Hooks",
@@ -417,5 +422,22 @@ async def test_read_section_returns_text_and_reports_unknown_pages(
 
     assert found.structured_content["text"].startswith("## Configure hooks")  # type: ignore[index]
     assert stub_pages["heading"] == "configure"
+    assert stub_pages["outline_depth"] == 2
     assert missing.is_error is True
     assert "not a page of the index" in missing.content[0].text  # type: ignore[union-attr]
+
+
+@pytest.mark.anyio
+async def test_read_section_passes_outline_depth_and_rejects_others(
+    stub_pipeline: Any, stub_pages: dict[str, Any]
+) -> None:
+    async with Client(build_mcp_server()) as client:
+        deep = await client.call_tool(
+            "read_section", {"url": "https://docs.test/hooks.md", "outline_depth": 3}
+        )
+        bad = await client.call_tool(
+            "read_section", {"url": "https://docs.test/hooks.md", "outline_depth": 4}
+        )
+
+    assert deep.is_error is False and stub_pages["outline_depth"] == 3
+    assert bad.is_error is True

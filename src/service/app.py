@@ -9,7 +9,7 @@ import time
 from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
 from dataclasses import asdict
-from typing import Any
+from typing import Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException
 from fastapi.security import HTTPBearer
@@ -95,6 +95,7 @@ class SectionRequest(BaseModel):
     url: str = Field(min_length=1, max_length=500)
     heading: str | None = Field(default=None, max_length=300)
     offset: int = Field(default=0, ge=0)
+    outline_depth: Literal[2, 3] = 2
 
 
 class SectionResponse(BaseModel):
@@ -295,7 +296,9 @@ def create_app() -> FastAPI:
     def read_section(request: SectionRequest) -> SectionResponse:
         """One section of a stored page; no heading gives the outline."""
         try:
-            result = pages.read_section(request.url, request.heading, request.offset)
+            result = pages.read_section(
+                request.url, request.heading, request.offset, request.outline_depth
+            )
         except pages.PageNotFound as error:
             raise HTTPException(status_code=404, detail=str(error)) from error
         except core.QuestionRejected as error:

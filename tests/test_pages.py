@@ -51,8 +51,25 @@ Example matchers.
 """
 
 
-def test_outline_lists_h1_to_h3_in_document_order_skipping_code() -> None:
+def test_outline_shows_h1_and_h2_with_subsection_counts_skipping_code() -> None:
     assert pages.outline(PAGE) == [
+        "# Hooks",
+        "## Configure hooks (1 subsection)",
+        "## Hook events (2 subsections)",
+        "## Examples (1 subsection)",
+    ]
+
+
+def test_outline_does_not_annotate_an_h2_without_subsections() -> None:
+    assert pages.outline("# T\n\n## A\ntext\n\n## B\n### C\n") == [
+        "# T",
+        "## A",
+        "## B (1 subsection)",
+    ]
+
+
+def test_outline_depth_3_adds_h3_and_drops_the_counts() -> None:
+    assert pages.outline(PAGE, depth=3) == [
         "# Hooks",
         "## Configure hooks",
         "### Matchers",
@@ -64,14 +81,27 @@ def test_outline_lists_h1_to_h3_in_document_order_skipping_code() -> None:
     ]
 
 
-def test_outline_is_capped_with_a_more_marker() -> None:
-    markdown = "\n\n".join(f"## H{i}\ntext" for i in range(30))
+def test_outline_is_capped_with_a_more_sections_marker() -> None:
+    markdown = "\n\n".join(f"## H{i}\ntext" for i in range(50))
 
-    capped = pages.outline(markdown, cap=25)
+    capped = pages.outline(markdown)
 
-    assert capped[:25] == [f"## H{i}" for i in range(25)]
-    assert capped[25] == "+5 more"
-    assert len(capped) == 26
+    assert capped[:40] == [f"## H{i}" for i in range(40)]
+    assert capped[40] == "+10 more sections"
+    assert len(capped) == 41
+
+
+def test_outline_cap_applies_at_depth_3_too() -> None:
+    markdown = "\n\n".join(f"## H{i}\n### S{i}" for i in range(30))
+
+    capped = pages.outline(markdown, depth=3)
+
+    assert len(capped) == pages.OUTLINE_CAP + 1
+    assert capped[-1] == "+20 more sections"
+
+
+def test_a_short_outline_has_no_marker() -> None:
+    assert pages.outline("# T\n## A\n") == ["# T", "## A"]
 
 
 def test_description_prefers_the_gate_summary() -> None:
@@ -157,7 +187,7 @@ def _snapshot(url: str = "https://x/hooks.md", summary: str = "") -> PageSnapsho
     )
 
 
-def test_read_section_without_heading_returns_the_full_outline(
+def test_read_section_without_heading_returns_the_compact_outline(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     _store(monkeypatch, _snapshot(summary="Explains hooks."))
@@ -165,9 +195,59 @@ def test_read_section_without_heading_returns_the_full_outline(
     result = pages.read_section("https://x/hooks.md")
 
     assert result.description == "Explains hooks."
-    assert "#### Input" in result.outline
+    assert result.outline == [
+        "# Hooks",
+        "## Configure hooks (1 subsection)",
+        "## Hook events (2 subsections)",
+        "## Examples (1 subsection)",
+    ]
     assert result.heading is None and result.text == ""
     assert result.next_offset is None
+
+
+def test_read_section_outline_depth_3_lists_subsections(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _store(monkeypatch, _snapshot())
+
+    result = pages.read_section("https://x/hooks.md", outline_depth=3)
+
+    assert "### PreToolUse" in result.outline
+    assert "#### Input" not in result.outline
+    assert "## Hook events" in result.outline
+
+
+def test_heading_read_is_unchanged_by_the_outline_depth_and_includes_subsections(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _store(monkeypatch, _snapshot())
+
+    plain = pages.read_section("https://x/hooks.md", "Hook events")
+    deep = pages.read_section("https://x/hooks.md", "Hook events", outline_depth=3)
+
+    assert plain == deep and plain.outline == []
+    assert plain.text == pages.find_section(PAGE, "Hook events").text
+    assert "### PreToolUse" in plain.text and "#### Input" in plain.text
+    assert "## Examples" not in plain.text
+
+
+def test_an_outline_line_with_its_count_is_accepted_as_a_heading(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _store(monkeypatch, _snapshot())
+
+    result = pages.read_section("https://x/hooks.md", "## Hook events (2 subsections)")
+
+    assert result.heading == "Hooks > Hook events"
+
+
+def test_read_section_rejects_an_unsupported_outline_depth(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    _store(monkeypatch, _snapshot())
+
+    with pytest.raises(core.QuestionRejected):
+        pages.read_section("https://x/hooks.md", outline_depth=4)
 
 
 def test_read_section_returns_the_section_and_continues_from_offset(
@@ -258,7 +338,7 @@ def test_find_pages_returns_cards_with_description_and_outline(
     ]
     assert cards[0].title == "T https://x/hooks.md" and cards[0].product == "cursor"
     assert cards[0].description == "Explains hooks."
-    assert cards[0].outline[:2] == ["# Hooks", "## Configure hooks"]
+    assert cards[0].outline[:2] == ["# Hooks", "## Configure hooks (1 subsection)"]
     # A page without a stored snapshot still gets a card.
     assert cards[1].description == "" and cards[1].outline == []
 

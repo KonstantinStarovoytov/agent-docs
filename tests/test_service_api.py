@@ -281,7 +281,9 @@ def test_section_maps_unknown_page_to_404_and_bad_heading_to_422(
 ) -> None:
     from src.service import pages
 
-    def read_section(url: str, heading: str | None = None, offset: int = 0) -> Any:
+    def read_section(
+        url: str, heading: str | None = None, offset: int = 0, outline_depth: int = 2
+    ) -> Any:
         if heading:
             raise pages.SectionNotFound("No heading matches")
         raise pages.PageNotFound("not a page")
@@ -304,7 +306,7 @@ def test_section_returns_text(client: Any, monkeypatch: pytest.MonkeyPatch) -> N
     monkeypatch.setattr(
         pages,
         "read_section",
-        lambda url, heading=None, offset=0: pages.SectionRead(
+        lambda url, heading=None, offset=0, outline_depth=2: pages.SectionRead(
             url, "T", "D.", [], "T > H", "## H\nbody", offset, None, 9
         ),
     )
@@ -349,3 +351,30 @@ def test_search_returns_page_descriptions(
 
     assert response.status_code == 200
     assert response.json()["passages"][0]["description"] == "D."
+
+
+def test_section_passes_outline_depth(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.service import pages
+
+    seen: list[int] = []
+
+    def read_section(
+        url: str, heading: str | None = None, offset: int = 0, outline_depth: int = 2
+    ) -> Any:
+        seen.append(outline_depth)
+        return pages.SectionRead(url, "T", "D.", ["# T"], None, "", 0, None, 0)
+
+    monkeypatch.setattr(pages, "read_section", read_section)
+    headers = {"Authorization": f"Bearer {TOKEN}"}
+
+    client.post("/section", json={"url": "https://x"}, headers=headers)
+    client.post(
+        "/section", json={"url": "https://x", "outline_depth": 3}, headers=headers
+    )
+    bad = client.post(
+        "/section", json={"url": "https://x", "outline_depth": 4}, headers=headers
+    )
+
+    assert seen == [2, 3] and bad.status_code == 422
