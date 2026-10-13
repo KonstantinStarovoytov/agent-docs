@@ -337,3 +337,40 @@ def test_backfill_copies_manifest_summaries_into_stored_pages() -> None:
     pages = store.pages(["https://x/a.md", "https://x/b.md"])
     assert pages["https://x/a.md"].summary == "A is."
     assert pages["https://x/b.md"].summary == ""
+
+
+def test_unchanged_page_without_a_snapshot_gets_one() -> None:
+    """Pages indexed before the snapshot store existed have no snapshot;
+    find_pages and read_section need one. Filling it must not re-embed."""
+    content = "# A\ntext"
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/a.md": reindex.ManifestEntry(
+                sha256=reindex.fingerprint(content), chunks=1, title="A", summary="S."
+            )
+        },
+    )
+    deps, added, deleted = _deps([_doc("https://x/a.md", content)])
+
+    reindex.run(manifest, deps, today=DAY)
+
+    assert deps.snapshots.texts["https://x/a.md"] == content
+    assert not added and not deleted
+
+
+def test_dry_run_does_not_fill_missing_snapshots() -> None:
+    content = "# A\ntext"
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/a.md": reindex.ManifestEntry(
+                sha256=reindex.fingerprint(content), chunks=1, title="A"
+            )
+        },
+    )
+    deps, _, _ = _deps([_doc("https://x/a.md", content)])
+
+    reindex.run(manifest, deps, today=DAY, dry_run=True)
+
+    assert not deps.snapshots.texts

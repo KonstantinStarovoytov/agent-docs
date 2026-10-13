@@ -340,6 +340,19 @@ def run(
         index(document, documents[document.url].summary)
         report.changed.append(line)
 
+    # Pages indexed before the snapshot store existed have no snapshot, and
+    # find_pages / read_section read pages from it. Fill those in place; the
+    # index itself is untouched, so nothing is re-embedded.
+    if not dry_run and plan.unchanged:
+        have = set(deps.snapshots.all_texts())
+        by_url = {document.url: document for document in load.documents}
+        for url in plan.unchanged:
+            entry = documents.get(url)
+            if url in have or entry is None or entry.status != "indexed":
+                continue
+            deps.snapshots.put(by_url[url], entry.sha256, entry.summary)
+            print(f"  snapshot filled {url}")
+
     for url in removals.delete:
         if not dry_run:
             deps.delete_source(url)
