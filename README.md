@@ -84,6 +84,14 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
 
 ## Connect
 
+Two ways in, one header each:
+
+- **Your own Cohere key:** `X-Cohere-Api-Key: <key>`. A free trial key is at
+  [dashboard.cohere.com](https://dashboard.cohere.com). Reranking runs on your
+  key; the key is used for that request only and never stored or logged.
+  Limit: 30 requests/min per IP.
+- **A token from the owner:** `Authorization: Bearer <API_TOKEN>`.
+
 **As an MCP server** (Claude Code, Cursor, OpenWebUI, any MCP client):
 
 ```json
@@ -91,7 +99,7 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
   "mcpServers": {
     "agent-docs": {
       "url": "https://agent-docs-mcp.onrender.com/mcp/",
-      "headers": { "Authorization": "Bearer <API_TOKEN>" }
+      "headers": { "X-Cohere-Api-Key": "<your Cohere key>" }
     }
   }
 }
@@ -123,9 +131,13 @@ curl -X POST https://agent-docs-mcp.onrender.com/ask \
 | `POST /mcp/` | MCP (streamable HTTP) |
 | `GET /docs` | Interactive API docs (use **Authorize** with the token) |
 
-**Try it.** Open an [issue](https://github.com/KonstantinStarovoytov/rag-context-assembly/issues/new?title=Guest%20token%20request)
-titled "Guest token request" and you'll get a guest token. It works exactly
-like `API_TOKEN` and is shared and rate-limited. The first request after
+With your own key, replace the `Authorization` line in the curl with
+`-H "X-Cohere-Api-Key: $COHERE_API_KEY"`.
+
+**Try it.** The quickest way is your own free Cohere trial key (above), limited
+to 30 requests a minute per IP. Or open an
+[issue](https://github.com/KonstantinStarovoytov/rag-context-assembly/issues/new?title=Guest%20token%20request)
+titled "Guest token request" for a shared guest token. The first request after
 15 idle minutes takes about a minute while the free host wakes up.
 
 Listed in the [official MCP Registry](https://registry.modelcontextprotocol.io)
