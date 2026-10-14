@@ -104,14 +104,7 @@ design choice is backed by an experiment.
 
 Your agent calls a **remote MCP server** with two tools: `search_docs`, then
 `read_section` when a passage is not enough. No model runs on this path; the
-agent writes the answer itself.
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/readme-how-it-works-dark.png">
-  <img alt="How a request flows: search_docs, then read_section" src="docs/diagrams/readme-how-it-works-light.png">
-</picture>
-
-<sub>Diagram source: [docs/diagrams/readme-how-it-works.mmd](docs/diagrams/readme-how-it-works.mmd)</sub>
+agent writes the answer itself. The animation at the top walks through it.
 
 The `/ask` REST endpoint, for clients that are not agents, adds a few steps
 after the rerank:
