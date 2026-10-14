@@ -7,9 +7,10 @@
 <meta name="description" content="How Agent Docs answers an AI agent: search_docs, read_section, and how each step is measured.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Libre+Franklin:wght@700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Libre+Franklin:wght@400;600;700&display=block" rel="stylesheet">
 <style>
-  /* Direction: one motif (the tabbed file: a docs page). Type: Libre Franklin / Source Serif 4.
+  /* Direction: one motif (the tabbed file: a docs page). Type: Libre Franklin for every word, IBM Plex Mono only for code.
+     Five sizes: 96 title, 30 step title, 19 reading text, 15 labels, 13 small; code 14–15.
      Colour: orange and black, grounds taken from GitHub's light and dark themes. */
   :root, [data-theme="light"] {
     --ground: #FFFFFF; --zone: #EEF1F4; --inner: #E2E7EC; --node: #FFFFFF;
@@ -27,7 +28,7 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { background: var(--ground); }
-  body { font-family: 'Source Serif 4', serif; color: var(--ink); }
+  body { font-family: 'Libre Franklin', sans-serif; color: var(--ink); }
   #stage { position: relative; width: 1080px; height: 1350px; background: var(--ground); overflow: hidden; transform-origin: 0 0; }
   .capture, .capture body { width: 1080px; height: 1350px; overflow: hidden; }
 
@@ -41,16 +42,16 @@
   #controls button:active { transform: translateY(1px); }
   #controls button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
   #controls #play { background: var(--accent); color: var(--accent-ink); min-width: 92px; }
-  #status { font-size: 16px; min-width: 260px; text-align: center; }
+  #status { font-size: 15px; min-width: 260px; text-align: center; }
   body.interactive #tabs i { cursor: pointer; }
   .franklin { font-family: 'Libre Franklin', sans-serif; font-weight: 700; }
   .code { font-family: 'IBM Plex Mono', monospace; }
 
   h1 { position: absolute; left: 36px; top: 30px; font: 700 96px/0.92 'Libre Franklin'; letter-spacing: -0.035em; text-transform: uppercase; }
-  .lead { position: absolute; left: 40px; top: 136px; font-size: 23px; line-height: 1.3; }
+  .lead { position: absolute; left: 40px; top: 138px; font-size: 19px; line-height: 1.4; }
 
   #left { position: absolute; left: 40px; top: 990px; width: 350px; }
-  #ctitle { font: 700 32px/1.08 'Libre Franklin'; letter-spacing: -0.02em; }
+  #ctitle { font: 700 30px/1.1 'Libre Franklin'; letter-spacing: -0.02em; }
   #cdesc { font-size: 19px; line-height: 1.5; margin-top: 14px; }
   #tabs { position: absolute; left: 40px; top: 1252px; display: flex; gap: 3px; }
   #tabs i { display: block; width: 20px; height: 12px; background: var(--future); clip-path: polygon(0 100%, 22% 0, 78% 0, 100% 100%); }
@@ -58,50 +59,52 @@
   #tabs i.on { background: var(--accent); }
 
   #art { position: absolute; left: 420px; top: 968px; width: 630px; height: 312px; }
-  #atab { position: absolute; left: 0; top: 0; height: 32px; padding: 0 28px; background: var(--zone); clip-path: polygon(0 100%, 14px 0, calc(100% - 14px) 0, 100% 100%); font: 700 14px/34px 'Libre Franklin'; white-space: nowrap; }
+  #atab { position: absolute; left: 0; top: 0; height: 32px; padding: 0 28px; background: var(--zone); clip-path: polygon(0 100%, 14px 0, calc(100% - 14px) 0, 100% 100%); font: 700 15px/34px 'Libre Franklin'; white-space: nowrap; }
   #abox { position: absolute; left: 0; top: 32px; width: 630px; height: 280px; background: var(--zone); padding: 14px 20px; overflow: hidden; }
-  #abody { font: 14.5px/21px 'IBM Plex Mono'; white-space: pre; }
+  #abody { font: 14px/21px 'IBM Plex Mono'; white-space: pre; }
   #abody i { font-style: normal; }
-  #aex { position: absolute; right: 20px; bottom: 10px; font-size: 13px; font-style: italic; color: var(--muted); }
+  #aex { position: absolute; right: 20px; bottom: 10px; font-size: 13px; color: var(--muted); }
   .k { color: var(--ink); font-weight: 600; } .s { color: var(--string); } .n { color: var(--ink); }
   .c { color: var(--muted); } .g { color: var(--line); } .h { font-weight: 600; }
-  .note { font-family: 'Source Serif 4'; font-size: 13.5px; font-style: italic; color: var(--muted); }
+  .note { font-family: 'Libre Franklin'; font-size: 13px; color: var(--muted); }
   .hl { background-image: linear-gradient(var(--accent), var(--accent)); background-repeat: no-repeat; background-size: var(--hl, 0%) 100%; }
   .lit .hl { color: color-mix(in srgb, var(--accent-ink) var(--hlc, 0%), var(--ink)); }
   .pass { font-weight: 600; } .fail { font-weight: 600; text-decoration: line-through; }
 
-  .chat { white-space: normal; font-family: 'Source Serif 4'; }
+  .chat { white-space: normal; font-family: 'Libre Franklin'; }
   .bubble { padding: 14px 18px; font-size: 19px; line-height: 1.45; max-width: 540px; }
-  .bubble code { font: 15.5px 'IBM Plex Mono'; }
-  .who { font-size: 14px; color: var(--muted); margin: 0 2px 6px; }
+  .bubble code { font: 15px 'IBM Plex Mono'; }
+  .who { font-size: 13px; color: var(--muted); margin: 0 2px 6px; }
 
   .bars { white-space: normal; }
-  .bar-row { display: flex; align-items: center; height: 36px; gap: 14px; font-size: 14px; }
-  .bar-row .sc { width: 40px; text-align: right; font-family: 'IBM Plex Mono'; }
+  .bar-row { display: flex; align-items: center; height: 36px; gap: 14px; font-size: 13px; }
+  .bar-row .sc { width: 40px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
   .bar-row .track { width: 220px; height: 14px; background: var(--node); }
   .bar-row .fill { display: block; height: 100%; background: var(--ink); width: var(--w); }
-  .bar-row .lbl { font-family: 'IBM Plex Mono'; }
+  .bar-row .lbl { font-size: 15px; }
 
   .sheets { white-space: normal; display: flex; gap: 10px; margin-top: 4px; }
-  .sheet { width: 190px; }
-  .sheet .ft { display: inline-block; height: 24px; padding: 0 16px; font-size: 12.5px !important; background: var(--node); clip-path: polygon(0 100%, 10px 0, calc(100% - 10px) 0, 100% 100%); font: 600 13px/26px 'IBM Plex Mono'; }
+  .sheet { width: 180px; }
+  .sheet:first-child { width: 210px; }
+  .sheet .ft { white-space: nowrap; }
+  .sheet .ft { display: inline-block; height: 24px; padding: 0 16px; font-size: 13px !important; background: var(--node); clip-path: polygon(0 100%, 10px 0, calc(100% - 10px) 0, 100% 100%); font: 600 13px/26px 'IBM Plex Mono'; }
   .sheet .pg { background: var(--node); }
-  .chunk { font: 12.5px/1.3 'IBM Plex Mono'; padding: 9px 8px; gap: 8px; align-items: flex-start; color: var(--muted); display: flex; justify-content: space-between; }
+  .chunk { font: 13px/1.3 'Libre Franklin'; font-variant-numeric: tabular-nums; padding: 9px 8px; gap: 8px; align-items: flex-start; color: var(--muted); display: flex; justify-content: space-between; }
   .chunk + .chunk { box-shadow: inset 0 3px 0 var(--zone); }
   .chunk.cand { color: var(--ink); }
   .chunk.best { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
   .chunk.drop { text-decoration: line-through; color: var(--muted); }
-  .key { margin-top: 14px; font: 16px/1.55 'Source Serif 4'; }
+  .key { margin-top: 14px; font: 15px/1.55 'Libre Franklin'; }
   .key b { font-weight: 600; }
 
-  .foot { position: absolute; left: 40px; right: 30px; top: 1306px; display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); }
+  .foot { position: absolute; left: 40px; right: 30px; top: 1306px; display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
 </style>
 </head>
 <body>
 <div id="frame"><div id="stage">
 <div aria-hidden="true" style="position:absolute;left:-9999px;opacity:0">
   <span class="code">Aa</span><span class="code" style="font-weight:600">Aa</span>
-  <span>Aa</span><span style="font-style:italic">Aa</span><span style="font-weight:600">Aa</span><span class="franklin">Agent</span>
+  <span style="font-weight:400">Aa</span><span style="font-weight:600">Aa</span><span class="franklin">Agent</span>
 </div>
 
 <h1>Agent Docs</h1>
@@ -145,11 +148,11 @@ const el = (tag, attrs, parent = svg) => {
   return e;
 };
 const txt = (x, y, s, attrs, parent) => { const t = el('text', { x, y, ...attrs }, parent); t.textContent = s; return t; };
-const FRANKLIN = "'Libre Franklin', sans-serif", SERIF = "'Source Serif 4', serif", MONO = "'IBM Plex Mono', monospace";
+const FRANKLIN = "'Libre Franklin', sans-serif", MONO = "'IBM Plex Mono', monospace";
 
 // The motif: a file with a tab. Zones, inner groups, data stores and the inspector are all this shape.
 function folder(x, y, w, h, tabX, tabH, label, fill, labelAttrs, slant = 12) {
-  const t = txt(0, 0, label, { 'font-size': 14, fill: C.ink, ...labelAttrs });
+  const t = txt(0, 0, label, { 'font-size': 15, fill: C.ink, ...labelAttrs });
   const tw = t.getComputedTextLength() + 2 * slant + 26;
   const p = el('path', { d: `M${x},${y + tabH} H${tabX} L${tabX + slant},${y} H${tabX + tw - slant} L${tabX + tw},${y + tabH} H${x + w} V${y + h} H${x} Z`, fill });
   svg.insertBefore(p, t);
@@ -242,7 +245,7 @@ const ART = [
     '<i class=c>a chunk is a piece of a page, up to 3,000</i>',
     '<i class=c>characters, cut at headings when indexing</i>'] },
   { name: 'The chat', ex: '', html: `<div class="chat"><div class="who" style="text-align:right">user</div>
-     <div style="display:flex;justify-content:flex-end"><div class="bubble" style="background:var(--inverse);color:var(--inverse-ink);font-style:italic">How do I create a skill in Claude Code?</div></div>
+     <div style="display:flex;justify-content:flex-end"><div class="bubble" style="background:var(--inverse);color:var(--inverse-ink);">How do I create a skill in Claude Code?</div></div>
      <div class="who" style="margin-top:28px">tools the agent can call</div>
      <div class="code lit" style="font-size:15px;line-height:26px"><span class="hl">search_docs</span>   find where the answer is<br><span class="hl">read_section</span>  read it whole</div></div>` },
   { name: 'The agent’s plan', ex: 'Example', lines: [
@@ -344,7 +347,7 @@ const ART = [
     '  <i class=c>…three more code blocks…</i>'] },
   { name: 'The answer', ex: 'Example', html: `<div class="chat"><div class="who">agent</div>
      <div class="bubble" style="background:var(--node)">Create a folder <code>.claude/skills/&lt;name&gt;/</code> with a <code>SKILL.md</code> file, and set <code>name</code> and <code>description</code> in its frontmatter. Personal skills go in <code>~/.claude/skills/</code>.
-     <div class="lit" style="margin-top:12px;font-size:16px">Source: <span class="hl" style="text-decoration:underline">Extend Claude with skills, Claude Code docs</span></div></div></div>` },
+     <div class="lit" style="margin-top:12px;font-size:15px">Source: <span class="hl" style="text-decoration:underline">Extend Claude with skills, Claude Code docs</span></div></div></div>` },
   { name: 'What Langfuse records', ex: '', lines: [
     '<i class=h>hybrid-search</i>',
     '  <i class=k>input</i>   query, k: 20, vendor scope',
@@ -426,7 +429,7 @@ function build() {
     const m = el('marker', { id: 'a-' + id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 10, markerHeight: 10, markerUnits: 'userSpaceOnUse', orient: 'auto-start-reverse' }, defs);
     el('path', { d: 'M0,0 L10,5 L0,10 z', fill: color }, m);
   }
-  txt(552, 818, 'trace spans', { 'font-family': SERIF, 'font-size': 13.5, 'font-style': 'italic', fill: C.muted });
+  txt(552, 818, 'trace spans', { 'font-family': FRANKLIN, 'font-size': 13, fill: C.muted });
 
   for (const [id, [cx, cy, w, h, title, sub, kind]] of Object.entries(NODES)) {
     const g = el('g', {});
@@ -441,10 +444,10 @@ function build() {
     const mono = kind === 'tool';
     const ty = sub ? cy - 3 : cy + 5;
     const t1 = txt(cx, ty, title, {
-      'font-family': kind === 'quote' ? SERIF : (mono ? MONO : FRANKLIN), 'font-size': kind === 'quote' ? 17 : 15.5,
-      'font-weight': kind === 'quote' ? 400 : (mono ? 600 : 700), 'font-style': kind === 'quote' && id === 'A_q' ? 'italic' : 'normal', 'text-anchor': 'middle',
+      'font-family': mono ? MONO : FRANKLIN, 'font-size': 15,
+      'font-weight': kind === 'quote' ? 600 : (mono ? 600 : 700), 'text-anchor': 'middle',
     }, g);
-    const t2 = sub ? txt(cx, ty + 19, sub, { 'font-family': SERIF, 'font-size': 14, 'text-anchor': 'middle' }, g) : null;
+    const t2 = sub ? txt(cx, ty + 18, sub, { 'font-family': FRANKLIN, 'font-size': 13, 'text-anchor': 'middle' }, g) : null;
     nodeEls[id] = { shape, tab, t1, t2, kind };
   }
   dotLayer = el('g', {});
