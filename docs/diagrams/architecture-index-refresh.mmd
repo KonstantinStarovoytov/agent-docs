@@ -1,0 +1,13 @@
+flowchart TD
+    C[Daily GitHub Actions run] --> L[Read each vendor's llms.txt]
+    L --> F[Keep .md pages,<br/>drop excluded patterns]
+    F --> D{Compare with<br/>manifest}
+    D -- new page --> GATE{Page gate:<br/>size, language,<br/>duplicate, path,<br/>LLM review}
+    GATE -- looks fine --> IDX[Embed and index]
+    GATE -- suspicious --> QR[Quarantine:<br/>issue for the owner]
+    D -- changed --> IDX
+    D -- gone --> GUARD{Removal guard:<br/>>10% of a vendor?}
+    GUARD -- no --> DEL[Delete from index]
+    GUARD -- yes --> STOP[Delete nothing,<br/>open an issue]
+    IDX --> REP[Change report:<br/>added / changed / removed]
+    DEL --> REP

@@ -1,0 +1,13 @@
+flowchart TD
+    C["GitHub Actions, daily"] --> V["Read each vendor's llms.txt"]
+    V --> N{"Compare with<br/>the last run"}
+    N -->|new page| GATE{"Junk check<br/>size, language,<br/>duplicate, path, LLM"}
+    GATE -->|looks fine| IDX["Embed and index"]
+    GATE -->|suspicious| QR["Quarantine:<br/>review issue"]
+    N -->|changed page| IDX
+    N -->|page gone| GUARD{"More than 10%<br/>of a vendor gone?"}
+    GUARD -->|no| DEL["Remove from index"]
+    GUARD -->|yes| STOP["Remove nothing,<br/>open an issue"]
+    IDX --> REP["Readable change report"]
+    DEL --> REP
+    QR --> REP

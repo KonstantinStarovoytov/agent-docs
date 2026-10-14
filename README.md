@@ -17,19 +17,12 @@ Your agent calls a **remote MCP server** with two tools: `search_docs`, then
 `read_section` when a passage is not enough. No model runs on this path; the
 agent writes the answer itself.
 
-```mermaid
-flowchart TD
-    A["Your agent<br/>Claude Code · Cursor · OpenWebUI"] -->|"remote MCP + Bearer token"| S0["search_docs(query)"]
-    S0 --> S["Hybrid search in Qdrant<br/>dense (meaning) + BM25 (keywords)<br/>3x overfetch"]
-    S --> F["RRF fusion<br/>ties broken by chunk id"]
-    F -->|"20 candidates"| R["Cohere rerank<br/>against the question"]
-    R --> P["Best passage of each page,<br/>with score and page description"]
-    P --> A2{"Passage<br/>enough?"}
-    A2 -->|yes| DONE["Agent answers"]
-    A2 -->|no| RS["read_section(url)<br/>page description + section outline"]
-    RS --> RT["read_section(url, heading)<br/>full section text, no model call"]
-    RT --> DONE
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/readme-how-it-works-dark.png">
+  <img alt="How a request flows: search_docs, then read_section" src="docs/diagrams/readme-how-it-works-light.png">
+</picture>
+
+<sub>Diagram source: [docs/diagrams/readme-how-it-works.mmd](docs/diagrams/readme-how-it-works.mmd)</sub>
 
 The `/ask` REST endpoint, for clients that are not agents, adds a few steps
 after the rerank:
@@ -52,21 +45,12 @@ text from the stored page (no model call). Every request is traced in Langfuse.
 
 ## Fresh every day
 
-```mermaid
-flowchart TD
-    C["GitHub Actions, daily"] --> V["Read each vendor's llms.txt"]
-    V --> N{"Compare with<br/>the last run"}
-    N -->|new page| GATE{"Junk check<br/>size, language,<br/>duplicate, path, LLM"}
-    GATE -->|looks fine| IDX["Embed and index"]
-    GATE -->|suspicious| QR["Quarantine:<br/>review issue"]
-    N -->|changed page| IDX
-    N -->|page gone| GUARD{"More than 10%<br/>of a vendor gone?"}
-    GUARD -->|no| DEL["Remove from index"]
-    GUARD -->|yes| STOP["Remove nothing,<br/>open an issue"]
-    IDX --> REP["Readable change report"]
-    DEL --> REP
-    QR --> REP
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/readme-daily-refresh-dark.png">
+  <img alt="Daily refresh: discover, gate, index, report" src="docs/diagrams/readme-daily-refresh-light.png">
+</picture>
+
+<sub>Diagram source: [docs/diagrams/readme-daily-refresh.mmd](docs/diagrams/readme-daily-refresh.mmd)</sub>
 
 New pages are indexed automatically; suspicious ones wait for a human. Each run
 writes a short report of what changed in the products: [reports/docs-changes/](reports/docs-changes/).

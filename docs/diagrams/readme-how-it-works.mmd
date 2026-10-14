@@ -1,0 +1,11 @@
+flowchart TD
+    A["Your agent<br/>Claude Code · Cursor · OpenWebUI"] -->|"remote MCP: token or own Cohere key"| S0["search_docs(query)"]
+    S0 --> S["Hybrid search in Qdrant<br/>dense (meaning) + BM25 (keywords)<br/>3x overfetch"]
+    S --> F["RRF fusion<br/>ties broken by chunk id"]
+    F -->|"20 candidates"| R["Cohere rerank<br/>against the question"]
+    R --> P["Best passage of each page,<br/>with score and page description"]
+    P --> A2{"Passage<br/>enough?"}
+    A2 -->|yes| DONE["Agent answers"]
+    A2 -->|no| RS["read_section(url)<br/>page description + section outline"]
+    RS --> RT["read_section(url, heading)<br/>full section text, no model call"]
+    RT --> DONE
