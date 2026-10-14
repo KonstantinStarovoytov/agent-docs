@@ -68,6 +68,7 @@ class PassageResponse(BaseModel):
     score: float
     content: str
     description: str
+    other_sections: list[str]
 
 
 class SearchResponse(BaseModel):

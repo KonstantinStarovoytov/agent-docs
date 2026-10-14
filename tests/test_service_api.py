@@ -351,6 +351,7 @@ def test_search_returns_page_descriptions(
 
     assert response.status_code == 200
     assert response.json()["passages"][0]["description"] == "D."
+    assert response.json()["passages"][0]["other_sections"] == []
 
 
 def test_section_passes_outline_depth(

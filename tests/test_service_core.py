@@ -318,3 +318,77 @@ def test_search_fills_limit_with_distinct_pages_in_one_rerank_call(
     assert [p.score for p in passages] == sorted(
         (p.score for p in passages), reverse=True
     )
+
+
+def _sectioned_chunks(
+    monkeypatch: pytest.MonkeyPatch, chunks: list[tuple[str, str, float]]
+) -> None:
+    """One chunk per (url, h2, score) under the page's h1, ranked by score."""
+    from langchain_core.documents import Document
+
+    from src.rag.reranker import RerankResult
+    from src.rag.retriever import SearchResult
+
+    monkeypatch.setattr(core.settings, "per_query_top_k", 20)
+    monkeypatch.setattr(core.settings, "rerank_pool", None)
+    monkeypatch.setattr(
+        core,
+        "search_hybrid",
+        lambda *, query, k, vendor=None: [
+            SearchResult(
+                document=Document(
+                    page_content=f"{url}#{i}",
+                    metadata={"source": url, "h1": url.upper(), "h2": h2, "s": s},
+                ),
+                score=1.0,
+            )
+            for i, (url, h2, s) in enumerate(chunks)
+        ],
+    )
+
+    def rerank(query: str, results, top_n: int):
+        ordered = sorted(results, key=lambda r: -r.document.metadata["s"])
+        return [
+            RerankResult(r.document, r.score, r.document.metadata["s"], i, i)
+            for i, r in enumerate(ordered[:top_n], start=1)
+        ]
+
+    monkeypatch.setattr(core, "CohereReranker", lambda: SimpleNamespace(rerank=rerank))
+
+
+def test_search_names_the_pages_other_matching_sections(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    # Experiment 25: one passage per page, plus the headings of the page's
+    # other chunks that score at least 0.35, best first, at most three.
+    _sectioned_chunks(
+        monkeypatch,
+        [
+            ("a", "Setup", 0.9),
+            ("a", "Install", 0.8),
+            ("a", "Setup", 0.75),  # the passage's own section: not repeated
+            ("b", "Intro", 0.7),
+            ("a", "Remove", 0.6),
+            ("a", "Remove", 0.55),  # listed once
+            ("a", "Share", 0.5),
+            ("a", "Debug", 0.45),  # past the first three
+            ("a", "Limits", 0.3),  # below 0.35
+        ],
+    )
+
+    passages = core.search("q", limit=5)
+
+    assert [p.heading for p in passages] == ["A > Setup", "B > Intro"]
+    assert passages[0].other_sections == ("A > Install", "A > Remove", "A > Share")
+    assert passages[1].other_sections == ()
+
+
+def test_other_sections_never_cross_pages(monkeypatch: pytest.MonkeyPatch) -> None:
+    _sectioned_chunks(
+        monkeypatch, [("a", "Setup", 0.9), ("b", "Setup", 0.8), ("b", "Use", 0.7)]
+    )
+
+    passages = core.search("q", limit=5)
+
+    assert passages[0].other_sections == ()
+    assert passages[1].other_sections == ("B > Use",)
