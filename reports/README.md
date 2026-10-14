@@ -14,6 +14,7 @@ the report that reads it.
 | [index-v2-2026-10.md](index-v2-2026-10.md) | Index v2: BM25 IDF, excludes, reference chunks, product filter (18–21); raw data in [index-v2/](index-v2/) |
 | [dedup-abstain-2026-10.md](dedup-abstain-2026-10.md) | One passage per page, and refusing on a low top score (22, 23) |
 | [find-pages-2026-10.md](find-pages-2026-10.md) | Page cards and `read_section` (24) |
+| [passages-per-page-2026-10.md](passages-per-page-2026-10.md) | One passage per page vs. more; headings of the page's other sections (25) |
 
 ## September 2026: first index
 
