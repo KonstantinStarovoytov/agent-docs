@@ -1,0 +1,594 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Docs, step by step</title>
+<meta name="description" content="How Agent Docs answers an AI agent: search_docs, read_section, and how each step is measured.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Libre+Franklin:wght@700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=block" rel="stylesheet">
+<style>
+  /* Direction: one motif (the tabbed file: a docs page). Type: Libre Franklin / Source Serif 4.
+     Colour: orange and black, grounds taken from GitHub's light and dark themes. */
+  :root, [data-theme="light"] {
+    --ground: #FFFFFF; --zone: #EEF1F4; --inner: #E2E7EC; --node: #FFFFFF;
+    --ink: #050F16; --muted: #4E5B66; --line: #7D8994;
+    --accent: #FF7A1F; --accent-ink: #050F16;
+    --inverse: #050F16; --inverse-ink: #FFFFFF;
+    --string: #A24400; --future: #DDE2E7;
+  }
+  [data-theme="dark"] {
+    --ground: #0D1117; --zone: #161B22; --inner: #1D242D; --node: #252D37;
+    --ink: #E6EDF3; --muted: #9AA6B2; --line: #6E7A86;
+    --accent: #FF7A1F; --accent-ink: #050F16;
+    --inverse: #E6EDF3; --inverse-ink: #0D1117;
+    --string: #FFA766; --future: #2A323C;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--ground); }
+  body { font-family: 'Source Serif 4', serif; color: var(--ink); }
+  #stage { position: relative; width: 1080px; height: 1350px; background: var(--ground); overflow: hidden; transform-origin: 0 0; }
+  .capture, .capture body { width: 1080px; height: 1350px; overflow: hidden; }
+
+  /* Interactive page (GitHub Pages): the same stage, scaled to fit, with controls. */
+  body.interactive { min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 16px 0 0; }
+  #frame { position: relative; flex: none; }
+  #controls { display: none; }
+  body.interactive #controls { display: flex; align-items: center; gap: 10px; padding: 14px 16px 20px; flex-wrap: wrap; justify-content: center; }
+  #controls button { font: 700 15px/1 'Libre Franklin', sans-serif; padding: 12px 18px; min-height: 44px; border: 0; border-radius: 0; background: var(--zone); color: var(--ink); cursor: pointer; transition: background-color 200ms, transform 120ms; }
+  #controls button:hover { background: var(--inner); }
+  #controls button:active { transform: translateY(1px); }
+  #controls button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  #controls #play { background: var(--accent); color: var(--accent-ink); min-width: 92px; }
+  #status { font-size: 16px; min-width: 260px; text-align: center; }
+  body.interactive #tabs i { cursor: pointer; }
+  .franklin { font-family: 'Libre Franklin', sans-serif; font-weight: 700; }
+  .code { font-family: 'IBM Plex Mono', monospace; }
+
+  h1 { position: absolute; left: 36px; top: 30px; font: 700 96px/0.92 'Libre Franklin'; letter-spacing: -0.035em; text-transform: uppercase; }
+  .lead { position: absolute; left: 40px; top: 136px; font-size: 23px; line-height: 1.3; }
+
+  #left { position: absolute; left: 40px; top: 990px; width: 350px; }
+  #ctitle { font: 700 32px/1.08 'Libre Franklin'; letter-spacing: -0.02em; }
+  #cdesc { font-size: 19px; line-height: 1.5; margin-top: 14px; }
+  #tabs { position: absolute; left: 40px; top: 1252px; display: flex; gap: 3px; }
+  #tabs i { display: block; width: 20px; height: 12px; background: var(--future); clip-path: polygon(0 100%, 22% 0, 78% 0, 100% 100%); }
+  #tabs i.done { background: var(--line); }
+  #tabs i.on { background: var(--accent); }
+
+  #art { position: absolute; left: 420px; top: 968px; width: 630px; height: 312px; }
+  #atab { position: absolute; left: 0; top: 0; height: 32px; padding: 0 28px; background: var(--zone); clip-path: polygon(0 100%, 14px 0, calc(100% - 14px) 0, 100% 100%); font: 700 14px/34px 'Libre Franklin'; white-space: nowrap; }
+  #abox { position: absolute; left: 0; top: 32px; width: 630px; height: 280px; background: var(--zone); padding: 14px 20px; overflow: hidden; }
+  #abody { font: 14.5px/21px 'IBM Plex Mono'; white-space: pre; }
+  #abody i { font-style: normal; }
+  #aex { position: absolute; right: 20px; bottom: 10px; font-size: 13px; font-style: italic; color: var(--muted); }
+  .k { color: var(--ink); font-weight: 600; } .s { color: var(--string); } .n { color: var(--ink); }
+  .c { color: var(--muted); } .g { color: var(--line); } .h { font-weight: 600; }
+  .note { font-family: 'Source Serif 4'; font-size: 13.5px; font-style: italic; color: var(--muted); }
+  .hl { background-image: linear-gradient(var(--accent), var(--accent)); background-repeat: no-repeat; background-size: var(--hl, 0%) 100%; }
+  .lit .hl { color: color-mix(in srgb, var(--accent-ink) var(--hlc, 0%), var(--ink)); }
+  .pass { font-weight: 600; } .fail { font-weight: 600; text-decoration: line-through; }
+
+  .chat { white-space: normal; font-family: 'Source Serif 4'; }
+  .bubble { padding: 14px 18px; font-size: 19px; line-height: 1.45; max-width: 540px; }
+  .bubble code { font: 15.5px 'IBM Plex Mono'; }
+  .who { font-size: 14px; color: var(--muted); margin: 0 2px 6px; }
+
+  .bars { white-space: normal; }
+  .bar-row { display: flex; align-items: center; height: 36px; gap: 14px; font-size: 14px; }
+  .bar-row .sc { width: 40px; text-align: right; font-family: 'IBM Plex Mono'; }
+  .bar-row .track { width: 220px; height: 14px; background: var(--node); }
+  .bar-row .fill { display: block; height: 100%; background: var(--ink); width: var(--w); }
+  .bar-row .lbl { font-family: 'IBM Plex Mono'; }
+
+  .sheets { white-space: normal; display: flex; gap: 10px; margin-top: 4px; }
+  .sheet { width: 190px; }
+  .sheet .ft { display: inline-block; height: 24px; padding: 0 16px; font-size: 12.5px !important; background: var(--node); clip-path: polygon(0 100%, 10px 0, calc(100% - 10px) 0, 100% 100%); font: 600 13px/26px 'IBM Plex Mono'; }
+  .sheet .pg { background: var(--node); }
+  .chunk { font: 12.5px/1.3 'IBM Plex Mono'; padding: 9px 8px; gap: 8px; align-items: flex-start; color: var(--muted); display: flex; justify-content: space-between; }
+  .chunk + .chunk { box-shadow: inset 0 3px 0 var(--zone); }
+  .chunk.cand { color: var(--ink); }
+  .chunk.best { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+  .chunk.drop { text-decoration: line-through; color: var(--muted); }
+  .key { margin-top: 14px; font: 16px/1.55 'Source Serif 4'; }
+  .key b { font-weight: 600; }
+
+  .foot { position: absolute; left: 40px; right: 30px; top: 1306px; display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="frame"><div id="stage">
+<div aria-hidden="true" style="position:absolute;left:-9999px;opacity:0">
+  <span class="code">Имя</span><span class="code" style="font-weight:600">Имя</span>
+  <span>Имя</span><span style="font-style:italic">Имя</span><span style="font-weight:600">Имя</span><span class="franklin">Agent</span>
+</div>
+
+<h1>Agent Docs</h1>
+<p class="lead">Fresh official docs of Claude Code, Cursor, Codex and MCP, for any AI agent.</p>
+
+<svg id="d" width="1080" height="960" viewBox="0 0 1080 960" style="position:absolute;left:0;top:0"></svg>
+
+<div id="left"><div id="ctitle"></div><p id="cdesc"></p></div>
+<div id="tabs"></div>
+<div id="art"><div id="atab"></div><div id="abox"><div id="abody"></div><div id="aex"></div></div></div>
+<div class="foot">
+  <span id="legend"></span>
+  <span>github.com/KonstantinStarovoytov/rag-context-assembly</span>
+</div>
+
+</div></div>
+<nav id="controls" aria-label="Steps">
+  <button id="prev" type="button">Previous</button>
+  <button id="play" type="button">Pause</button>
+  <button id="next" type="button">Next</button>
+  <span id="status" aria-live="polite"></span>
+</nav>
+
+<script>
+const PARAMS = new URLSearchParams(location.search);
+const CAPTURE = PARAMS.has('capture');
+const DARK_QUERY = matchMedia('(prefers-color-scheme: dark)');
+const THEME = PARAMS.get('theme') ? (PARAMS.get('theme') === 'dark' ? 'dark' : 'light') : (DARK_QUERY.matches ? 'dark' : 'light');
+document.documentElement.classList.toggle('capture', CAPTURE);
+document.documentElement.dataset.theme = THEME;
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = {};
+for (const n of ['ground', 'zone', 'inner', 'node', 'ink', 'muted', 'line', 'accent', 'accent-ink', 'inverse', 'inverse-ink']) C[n] = css('--' + n);
+
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('d');
+const el = (tag, attrs, parent = svg) => {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  parent.appendChild(e);
+  return e;
+};
+const txt = (x, y, s, attrs, parent) => { const t = el('text', { x, y, ...attrs }, parent); t.textContent = s; return t; };
+const FRANKLIN = "'Libre Franklin', sans-serif", SERIF = "'Source Serif 4', serif", MONO = "'IBM Plex Mono', monospace";
+
+// The motif: a file with a tab. Zones, inner groups, data stores and the inspector are all this shape.
+function folder(x, y, w, h, tabX, tabH, label, fill, labelAttrs, slant = 12) {
+  const t = txt(0, 0, label, { 'font-size': 14, fill: C.ink, ...labelAttrs });
+  const tw = t.getComputedTextLength() + 2 * slant + 26;
+  const p = el('path', { d: `M${x},${y + tabH} H${tabX} L${tabX + slant},${y} H${tabX + tw - slant} L${tabX + tw},${y + tabH} H${x + w} V${y + h} H${x} Z`, fill });
+  svg.insertBefore(p, t);
+  t.setAttribute('x', tabX + tw / 2); t.setAttribute('y', y + tabH / 2 + 5); t.setAttribute('text-anchor', 'middle');
+  return { p, t, tw };
+}
+
+// id: [cx, cy, w, h, title, sub, kind]
+const NODES = {
+  A_q:      [180, 266, 260, 46, 'Как создать skill?', '', 'quote'],
+  A_plan:   [180, 334, 260, 50, 'Plans the call', 'English query, one topic', 'node'],
+  A_call1:  [180, 400, 260, 42, 'search_docs()', '', 'tool'],
+  A_read:   [180, 516, 260, 50, 'Reads the previews', 'enough, or read more?', 'node'],
+  A_call2:  [180, 652, 260, 42, 'read_section()', '', 'tool'],
+  A_write:  [180, 718, 260, 50, 'Writes the answer', 'with links to the pages', 'node'],
+  A_ans:    [180, 790, 260, 44, 'Answer with sources', '', 'quote'],
+  S_hybrid: [540, 298, 280, 50, 'Hybrid search', 'meaning and exact words', 'node'],
+  S_rrf:    [540, 364, 280, 50, 'Rank fusion', 'merge two lists, stable ties', 'node'],
+  S_rerank: [540, 430, 280, 50, 'Rerank', 'score 20 chunks from 0 to 1', 'node'],
+  S_page:   [540, 516, 280, 50, 'Best chunk per page', 'a passage: 300-character preview', 'node'],
+  S_read:   [540, 670, 280, 50, 'Section reader', 'the page’s Markdown, no LLM', 'node'],
+  E_openai: [900, 298, 260, 50, 'OpenAI embeddings', 'text-embedding-3-small', 'node'],
+  E_chunks: [900, 364, 260, 50, 'Qdrant chunks', '~13k chunks of 617 pages', 'store'],
+  E_cohere: [900, 430, 260, 50, 'Cohere rerank', 'rerank-v4.0-fast', 'node'],
+  E_reindex:[900, 516, 260, 50, 'Daily reindex', 'llms.txt, gate, embed', 'node'],
+  E_snap:   [900, 670, 260, 50, 'Qdrant pages', 'full Markdown of each page', 'store'],
+  O_traces: [138, 904, 180, 50, 'Traces', 'search and rerank spans', 'node'],
+  O_data:   [336, 904, 180, 50, 'Datasets', 'labelled questions', 'node'],
+  O_metrics:[534, 904, 180, 50, 'Code metrics', 'hit@5, MRR, coverage', 'node'],
+  O_judge:  [732, 904, 180, 50, 'LLM judge', 'faithfulness, refusals', 'node'],
+  O_gate:   [930, 904, 180, 50, 'Gate', 'no drop over 0.03', 'node'],
+};
+
+const EDGES = {
+  e_q_plan:        [[[180, 289], [180, 309]], 'solid'],
+  e_plan_call1:    [[[180, 359], [180, 379]], 'solid'],
+  e_call1_hyb:     [[[310, 400], [345, 400], [345, 298], [400, 298]], 'dash'],
+  e_hyb_rrf:       [[[540, 323], [540, 339]], 'solid'],
+  e_rrf_rerank:    [[[540, 389], [540, 405]], 'solid'],
+  e_rerank_page:   [[[540, 455], [540, 491]], 'solid'],
+  e_page_read:     [[[400, 516], [310, 516]], 'dash'],
+  e_read_call2:    [[[180, 541], [180, 631]], 'solid'],
+  e_call2_sread:   [[[310, 652], [400, 652]], 'dash'],
+  e_sread_write:   [[[400, 686], [352, 686], [352, 718], [310, 718]], 'dash'],
+  e_write_ans:     [[[180, 743], [180, 768]], 'solid'],
+  e_hyb_openai:    [[[680, 298], [770, 298]], 'dash'],
+  e_rrf_qdrant:    [[[680, 364], [770, 364]], 'dash'],
+  e_rerank_cohere: [[[680, 430], [770, 430]], 'dash'],
+  e_sread_snap:    [[[680, 670], [770, 670]], 'dash'],
+  e_reindex_chunks:[[[1030, 516], [1041, 516], [1041, 364], [1030, 364]], 'dash'],
+  e_reindex_snap:  [[[900, 541], [900, 633]], 'dash'],
+  e_spans:         [[[540, 752], [540, 826], [138, 826], [138, 879]], 'dash'],
+  e_ds_metrics:    [[[426, 904], [444, 904]], 'solid'],
+  e_metrics_judge: [[[624, 904], [642, 904]], 'solid'],
+  e_judge_gate:    [[[822, 904], [840, 904]], 'solid'],
+};
+
+const STEPS = [
+  { t: 'How a question becomes a cited answer', d: 'An agent calls two MCP tools: one finds where the answer is, the other returns it whole. Langfuse measures every step.', n: [], s: [], e: [], dur: 4.4 },
+  { t: 'The question', d: 'A user asks any agent, in any language. The agent can call two tools from Agent Docs.', n: ['A_q'], s: [], e: [], dur: 3.4 },
+  { t: 'The agent plans the call', d: 'Its own LLM follows the tool descriptions: search in English, one topic per call, a product filter when the product is named.', n: ['A_plan'], s: [], e: ['e_q_plan'], dur: 4.2 },
+  { t: 'search_docs goes out', d: 'The call reaches the MCP server on Render. The agent decides what to ask; the server only retrieves.', n: ['A_call1'], s: [], e: ['e_plan_call1', 'e_call1_hyb'], dur: 3.8 },
+  { t: 'Hybrid search over chunks', d: 'Pages are cut into chunks in advance. Embeddings match the meaning, BM25 matches exact words like SKILL.md.', n: ['S_hybrid'], s: ['E_openai', 'E_chunks'], e: ['e_hyb_openai', 'e_rrf_qdrant'], dur: 4.8 },
+  { t: 'Rank fusion', d: 'The two lists merge by rank, not by score. A fixed tie-break gives the same question the same results.', n: ['S_rrf'], s: ['E_chunks'], e: ['e_hyb_rrf'], dur: 4.4 },
+  { t: 'Rerank', d: 'Cohere reads the question with each of the 20 chunks and scores them from 0 to 1. Slower than search, and precise.', n: ['S_rerank'], s: ['E_cohere'], e: ['e_rrf_rerank', 'e_rerank_cohere'], dur: 4.0 },
+  { t: 'One chunk per page', d: 'A passage is one chunk: the best of its page. The rest of that page is dropped, so every result is a different page.', n: ['S_page'], s: [], e: ['e_rerank_page'], dur: 4.8 },
+  { t: 'What the agent receives', d: 'Each passage carries the page, the section, a link, a one-line page description, a score and a 300-character preview.', n: ['A_read'], s: [], e: ['e_page_read'], dur: 5.0 },
+  { t: 'read_section maps the page', d: 'The preview cuts the steps short, so the agent opens the page. Without a heading it gets a short outline of it.', n: ['A_call2', 'S_read'], s: ['E_snap'], e: ['e_read_call2', 'e_call2_sread', 'e_sread_snap'], dur: 4.4 },
+  { t: 'read_section returns the section', d: 'With a heading it gets the section as the page’s own Markdown, subsections included, code and lists intact.', n: ['A_call2', 'S_read'], s: ['E_snap'], e: ['e_call2_sread', 'e_sread_snap'], dur: 5.4 },
+  { t: 'A cited answer', d: 'The agent’s LLM answers in the user’s language from the official text, and links the page it used.', n: ['A_write', 'A_ans'], s: [], e: ['e_sread_write', 'e_write_ans'], dur: 4.2 },
+  { t: 'Search is traced', d: 'Every search_docs call leaves two observations in Langfuse: the hybrid search and the rerank, with inputs, outputs and timing.', n: ['O_traces'], s: [], e: ['e_spans'], dur: 4.2 },
+  { t: 'Evals: code and an LLM judge', d: 'Labelled datasets. Code scores the retrieval; a different LLM grades faithfulness and refusals.', n: ['O_data', 'O_metrics', 'O_judge'], s: [], e: ['e_ds_metrics', 'e_metrics_judge'], dur: 4.8 },
+  { t: 'The regression gate', d: 'Each change is run against labelled datasets. A metric that drops by more than 0.03 fails the gate. Two real verdicts:', n: ['O_gate'], s: [], e: ['e_judge_gate'], dur: 5.0 },
+  { t: 'Refreshed every day', d: 'Every day a reindex job follows each vendor’s llms.txt. Only changed pages are embedded again; new pages pass a gate first.', n: ['E_reindex'], s: ['E_chunks', 'E_snap'], e: ['e_reindex_chunks', 'e_reindex_snap'], dur: 4.6 },
+];
+
+const vis = s => s.replace(/<[^>]+>/g, '').replace(/&lt;|&gt;|&amp;/g, 'x').length;
+const N = (s, note, col = 42) => s + ' '.repeat(Math.max(2, col - vis(s))) + `<i class=note>${note}</i>`;
+const ART = [
+  { name: 'The two tools', ex: '', lines: [
+    '<i class=h>search_docs</i>(query, product?, limit?, response_format?)',
+    '  <i class=c>returns passages: the best chunk of each page,</i>',
+    '  <i class=c>by default as a</i> <i class=hl>300-character preview</i>',
+    '',
+    '<i class=h>read_section</i>(url, heading?, offset?, outline_depth?)',
+    '  <i class=c>no heading:</i> the page outline',
+    '  <i class=c>a heading:</i>  that section, as the page’s',
+    '              own <i class=hl>Markdown</i>, 8,000 characters a call',
+    '',
+    '<i class=c>a chunk is a piece of a page, up to 3,000</i>',
+    '<i class=c>characters, cut at headings when indexing</i>'] },
+  { name: 'The chat', ex: '', html: `<div class="chat"><div class="who" style="text-align:right">user</div>
+     <div style="display:flex;justify-content:flex-end"><div class="bubble" style="background:var(--inverse);color:var(--inverse-ink);font-style:italic">Как создать skill в Claude Code?</div></div>
+     <div class="who" style="margin-top:28px">tools the agent can call</div>
+     <div class="code lit" style="font-size:15px;line-height:26px"><span class="hl">search_docs</span>   find where the answer is<br><span class="hl">read_section</span>  read it whole</div></div>` },
+  { name: 'The agent’s plan', ex: 'Example', lines: [
+    '<i class=k>question</i>  <i class=s>"Как создать skill в Claude Code?"</i>',
+    '<i class=k>language</i>  Russian; the tool asks for English',
+    '<i class=k>topics</i>    one, so one call',
+    '<i class=k>product</i>   Claude Code is named, so filter',
+    '',
+    '<i class=k>call</i>      <i class=hl>search_docs("create a skill",</i>',
+    '          <i class=hl>  product="claude-code", limit=5)</i>'] },
+  { name: 'The MCP request', ex: 'Example', lines: [
+    '{',
+    '  <i class=k>"jsonrpc"</i>: <i class=s>"2.0"</i>, <i class=k>"id"</i>: 3,',
+    '  <i class=k>"method"</i>: <i class=s>"tools/call"</i>,',
+    '  <i class=k>"params"</i>: {',
+    '    <i class=k>"name"</i>: <i class="s hl">"search_docs"</i>,',
+    '    <i class=k>"arguments"</i>: {',
+    '      <i class=k>"query"</i>: <i class=s>"create a skill"</i>,',
+    '      <i class=k>"product"</i>: <i class=s>"claude-code"</i>,',
+    '      <i class=k>"limit"</i>: 5',
+    '    }',
+    '  }',
+    '}'] },
+  { name: 'Inside Qdrant', ex: 'Real pages, example ranks', lines: [
+    '<i class=c>617 pages, cut into</i> <i class=hl>12,913 chunks</i> <i class=c>of ≤ 3,000 chars</i>',
+    '',
+    '<i class=h>dense: meaning</i>                <i class=h>BM25: exact words</i>',
+    '1 claude-code/skills.md        1 cursor/skills.md',
+    '  <i class=g>›</i> Create your first skill       <i class=g>›</i> <i class=hl>SKILL.md</i> file format',
+    '2 agent-sdk/skills.md          2 claude-code/skills.md',
+    '  <i class=g>›</i> Create skills                 <i class=g>›</i> Create your first skill',
+    '3 cursor/skills.md             3 agent-sdk/skills.md',
+    '  <i class=g>›</i> SKILL.md file format          <i class=g>›</i> Create skills',
+    '<i class=c>… 60 chunks in each list</i>'] },
+  { name: 'Rank fusion', ex: 'Example ranks', lines: [
+    '<i class=c>score = 1/(60 + dense rank) + 1/(60 + BM25 rank)</i>',
+    '',
+    '<i class=h>chunk                               dense BM25     RRF</i>',
+    'claude-code › Create your first skill   1    2  0.0325',
+    'cursor › SKILL.md file format           3    1  0.0323',
+    'agent-sdk › Create skills               2    3  0.0320',
+    '<i class=c>…</i>',
+    '',
+    '<i class=c>ranks, because the two scores are not comparable</i>',
+    '<i class=hl>ties sorted by chunk id: same question, same list</i>',
+    '<i class=c>the top 20 of the merged list go to the reranker</i>'] },
+  { name: 'Cohere scores', ex: 'Real headings, example scores', html: `<div class="bars">
+     ${[['0.91', 91, 'claude-code › Create your first skill'], ['0.84', 84, 'claude-code › Configure skills'], ['0.77', 77, 'cursor › SKILL.md file format'], ['0.62', 62, 'agent-sdk › Create skills'], ['0.35', 35, 'claude-code › Share skills'], ['0.18', 18, 'cursor › Skill directories']]
+       .map(([s, w, l]) => `<div class="bar-row"><span class="sc">${s}</span><span class="track"><span class="fill" style="--w:${w}%"></span></span><span class="lbl">${l}</span></div>`).join('')}
+     <div class="key" style="color:var(--muted)">The question and each chunk are read together.</div></div>` },
+  { name: 'Pages, one chunk each', ex: 'Real headings, example scores', html: `<div class="sheets">
+     <div class="sheet"><span class="ft">claude-code/skills.md</span><div class="pg">
+       <div class="chunk best"><span>Create your first skill</span><span>0.91</span></div>
+       <div class="chunk cand drop"><span>Configure skills</span><span>0.84</span></div>
+       <div class="chunk cand drop"><span>Share skills</span><span>0.35</span></div></div></div>
+     <div class="sheet"><span class="ft">cursor/skills.md</span><div class="pg">
+       <div class="chunk best"><span>SKILL.md file format</span><span>0.77</span></div>
+       <div class="chunk cand drop"><span>Skill directories</span><span>0.18</span></div></div></div>
+     <div class="sheet"><span class="ft">agent-sdk/skills.md</span><div class="pg">
+       <div class="chunk best"><span>Create skills</span><span>0.62</span></div></div></div>
+     </div>
+     <div class="key"><b>Orange</b> is a passage: the best chunk of its page.<br><b>Struck out</b> is the same page again, dropped.</div>` },
+  { name: 'One passage, as returned', ex: 'Real page; score and text are examples', lines: [
+    '{',
+    '  <i class=k>"rank"</i>: 1, <i class=k>"score"</i>: 0.91,',
+    '  <i class=k>"title"</i>: <i class=s>"Extend Claude with skills"</i>,',
+    N('  <i class=k>"heading"</i>: <i class=s>"Extend Claude with skills ></i>', 'where the chunk sits', 49),
+    '     <i class=s>Getting started > Create your first skill"</i>,',
+    '  <i class=k>"url"</i>: <i class=s>"https://code.claude.com/docs/en/skills.md"</i>,',
+    '  <i class=k>"description"</i>: <i class=s>"Explains how to create, manage,</i>',
+    '     <i class=s>and invoke skills in Claude Code."</i>,',
+    N('  <i class=k>"content"</i>: <i class="s hl">"first 300 chars of the chunk"</i>,', 'a preview', 49),
+    N('  <i class=k>"truncated"</i>: <i class=hl>true</i>', 'the chunk goes on', 49),
+    '}'] },
+  { name: 'The page outline', ex: '', lines: [
+    '<i class=c>read_section(url)</i>',
+    '{',
+    '  <i class=k>"title"</i>: <i class=s>"Extend Claude with skills"</i>,',
+    '  <i class=k>"outline"</i>: [',
+    '    <i class=s>"# Extend Claude with skills"</i>,',
+    '    <i class=s>"## Bundled skills (4 subsections)"</i>,',
+    '    <i class="s hl">"## Getting started (3 subsections)"</i>,',
+    '    <i class=s>"## Configure skills (7 subsections)"</i>,',
+    '    <i class=c>… five more sections</i>',
+    '  ]',
+    '}',
+    '<i class=c>the whole map is about 75 tokens</i>'] },
+  { name: 'The section, as Markdown', ex: 'Real numbers; the text is abridged', lines: [
+    '<i class=c>read_section(url, "Create your first skill")</i>',
+    '<i class=k>"heading"</i>: <i class=s>"… > Getting started > Create your first skill"</i>',
+    N('<i class=k>"total_chars"</i>: 9478, <i class=k>"next_offset"</i>: <i class=hl>7952</i>', 'two calls to read it all', 46),
+    '<i class=k>"text"</i>:',
+    N('  <i class="g hl">###</i><i class=hl> </i><i class="h hl">Create your first skill</i>', 'the heading asked for', 46),
+    '  <i class=c>…the paragraphs, as on the page…</i>',
+    N('  <i class="g hl">```</i><i class=hl>bash</i>', 'code block, kept', 46),
+    '  <i class=c>…</i>',
+    '  <i class=g>```</i>',
+    N('  <i class="g hl">| … | … |</i>', 'table, kept', 46),
+    '  <i class=c>…three more code blocks…</i>'] },
+  { name: 'The answer', ex: 'Example', html: `<div class="chat"><div class="who">agent</div>
+     <div class="bubble" style="background:var(--node)">Создайте папку <code>.claude/skills/&lt;имя&gt;/</code> с файлом <code>SKILL.md</code>. Во frontmatter укажите <code>name</code> и <code>description</code>. Личные skills лежат в <code>~/.claude/skills/</code>.
+     <div class="lit" style="margin-top:12px;font-size:16px">Источник: <span class="hl" style="text-decoration:underline">Extend Claude with skills, Claude Code docs</span></div></div></div>` },
+  { name: 'What Langfuse records', ex: '', lines: [
+    '<i class=h>hybrid-search</i>',
+    '  <i class=k>input</i>   query, k: 20, vendor scope',
+    '  <i class=k>output</i>  20 chunks: page, heading, score',
+    '<i class=h>rerank-candidates</i>',
+    '  <i class=k>input</i>   query and the 20 chunks',
+    '  <i class=k>output</i>  <i class=hl>rerank score, old rank, new rank</i>',
+    '  <i class=k>model</i>   rerank-v4.0-fast',
+    '',
+    '<i class=c>each with its timing, tagged environment: production</i>',
+    '<i class=c>read_section is not traced: it calls no model</i>',
+    '<i class=c>a caller’s own Cohere key is never recorded</i>'] },
+  { name: 'Eval results, October 2026', ex: '', lines: [
+    '<i class=h>dataset               metric          score  by</i>',
+    'retrieval-v3          hit@5           0.957  code',
+    'retrieval-v3          MRR             0.826  code',
+    'evidence-coverage-v1  faithfulness    0.987  <i class=hl>judge</i>',
+    'negative-v1           correct refusal 1.000  <i class=hl>judge</i>',
+    'full-corpus-v1        hit@5           1.000  code',
+    '',
+    '<i class=c>code scores retrieval against labelled pages</i>',
+    '<i class=c>the judge is a different model from the generator</i>',
+    '<i class=c>measured on the /ask path, which shares the search</i>'] },
+  { name: 'The gate at work', ex: '', lines: [
+    '<i class=h>rule</i>  a drop of more than 0.03 fails the gate',
+    '',
+    '<i class=h>one passage per page</i>      before  after',
+    '  page hit@5                0.936   0.979  pass',
+    '  distinct pages in top 5   3.1     5.0    pass',
+    '  <i class="pass hl">kept</i>',
+    '',
+    '<i class=h>per-page cap in the pool</i>  before  after',
+    '  MRR                       0.825   0.739  fail',
+    '  <i class=hl>rejected</i>'] },
+  { name: 'Reindex report', ex: 'Example run', lines: [
+    '<i class=k>sources</i>    llms.txt of 4 vendors, 617 pages',
+    '<i class=k>unchanged</i>  601  one HTTP request each',
+    '<i class=k>changed</i>     12  <i class=hl>chunked and embedded again</i>',
+    '<i class=k>new</i>          3  page gate: 2 indexed, 1 quarantined',
+    '<i class=k>removed</i>      1  guarded: at most 10% per vendor',
+    '',
+    '<i class=c>quarantined pages wait for a person to review</i>',
+    '<i class=c>the change report lists every page added or removed</i>'] },
+];
+
+const nodeEls = {}, edgeEls = {};
+let dotLayer;
+const COUNT = STEPS.length - 1;
+const STARTS = []; let acc = 0;
+for (const s of STEPS) { STARTS.push(acc); acc += s.dur; }
+window.TOTAL = acc;
+// The settled state of each step, for still images of it.
+window.SETTLED = STEPS.map((s, i) => +(STARTS[i] + s.dur - 0.1).toFixed(2));
+
+function build() {
+  // Zones (large tabs), then the two tool groups (medium tabs)
+  folder(30, 196, 300, 554, 46, 28, 'Agent and its own LLM', C.zone, { 'font-family': FRANKLIN, 'font-weight': 700 });
+  folder(360, 196, 360, 554, 376, 28, 'Agent Docs MCP server', C.zone, { 'font-family': FRANKLIN, 'font-weight': 700 });
+  folder(750, 196, 300, 554, 766, 28, 'Services', C.zone, { 'font-family': FRANKLIN, 'font-weight': 700 });
+  folder(378, 238, 324, 322, 390, 22, 'search_docs', C.inner, { 'font-family': MONO, 'font-size': 13, 'font-weight': 600 }, 9);
+  folder(378, 594, 324, 140, 390, 22, 'read_section', C.inner, { 'font-family': MONO, 'font-size': 13, 'font-weight': 600 }, 9);
+  const lf = folder(30, 836, 1020, 104, 0, 28, 'Langfuse: traces and evals', C.zone, { 'font-family': FRANKLIN, 'font-weight': 700 });
+  // Langfuse tab sits at the right end, out of the trace line's way
+  lf.p.remove(); lf.t.remove();
+  const lf2 = folder(30, 836, 1020, 104, 1050 - 16 - lf.tw, 28, 'Langfuse: traces and evals', C.zone, { 'font-family': FRANKLIN, 'font-weight': 700 });
+
+  const edgeLayer = el('g', {});
+  for (const [id, [pts, style]] of Object.entries(EDGES)) {
+    const p = el('polyline', { points: pts.map(q => q.join(',')).join(' '), fill: 'none', 'stroke-linejoin': 'round' }, edgeLayer);
+    let len = 0; const segs = [];
+    for (let i = 1; i < pts.length; i++) {
+      const l = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+      segs.push([pts[i - 1], pts[i], l]); len += l;
+    }
+    edgeEls[id] = { p, style, segs, len };
+  }
+  const defs = el('defs', {});
+  for (const [id, color] of [['base', C.line], ['act', C.accent]]) {
+    const m = el('marker', { id: 'a-' + id, viewBox: '0 0 10 10', refX: 9, refY: 5, markerWidth: 10, markerHeight: 10, markerUnits: 'userSpaceOnUse', orient: 'auto-start-reverse' }, defs);
+    el('path', { d: 'M0,0 L10,5 L0,10 z', fill: color }, m);
+  }
+  txt(552, 818, 'trace spans', { 'font-family': SERIF, 'font-size': 13.5, 'font-style': 'italic', fill: C.muted });
+
+  for (const [id, [cx, cy, w, h, title, sub, kind]] of Object.entries(NODES)) {
+    const g = el('g', {});
+    const x = cx - w / 2, y = cy - h / 2;
+    let back = null, tab = null;
+    if (kind === 'store') {
+      // a stack of files: one sheet behind, a tab on the front one
+      back = el('path', { d: `M${x + 8},${y - 6} H${x + w + 6} V${y + h - 8} H${x + w} V${y} H${x + 8} Z`, fill: C.inner }, g);
+      tab = el('path', { d: `M${x + 12},${y} L${x + 20},${y - 9} H${x + 74} L${x + 82},${y} Z` }, g);
+    }
+    const shape = el('rect', { x, y, width: w, height: h }, g);
+    const mono = kind === 'tool';
+    const ty = sub ? cy - 3 : cy + 5;
+    const t1 = txt(cx, ty, title, {
+      'font-family': kind === 'quote' ? SERIF : (mono ? MONO : FRANKLIN), 'font-size': kind === 'quote' ? 17 : 15.5,
+      'font-weight': kind === 'quote' ? 400 : (mono ? 600 : 700), 'font-style': kind === 'quote' && id === 'A_q' ? 'italic' : 'normal', 'text-anchor': 'middle',
+    }, g);
+    const t2 = sub ? txt(cx, ty + 19, sub, { 'font-family': SERIF, 'font-size': 14, 'text-anchor': 'middle' }, g) : null;
+    nodeEls[id] = { shape, tab, t1, t2, kind };
+  }
+  dotLayer = el('g', {});
+  const tabs = document.getElementById('tabs');
+  for (let i = 0; i < COUNT; i++) tabs.appendChild(document.createElement('i'));
+}
+
+function pointAt(edge, d) {
+  for (const [a, b, l] of edge.segs) {
+    if (d <= l) { const k = d / l; return [a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k]; }
+    d -= l;
+  }
+  return edge.segs[edge.segs.length - 1][1];
+}
+const ease = x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+const clamp = x => Math.max(0, Math.min(1, x));
+const hex = c => { const v = c.replace('#', ''); return [0, 2, 4].map(i => parseInt(v.substr(i, 2), 16)); };
+const mix = (a, b, k) => '#' + hex(a).map((v, i) => Math.round(v + (hex(b)[i] - v) * k).toString(16).padStart(2, '0')).join('');
+
+const body = document.getElementById('abody');
+let lastStep = -1, lineEls = [], hlAt = 1.2;
+function showArtifact(i) {
+  const a = ART[i];
+  document.getElementById('atab').textContent = a.name;
+  document.getElementById('aex').textContent = a.ex || '';
+  body.className = 'lit';
+  if (a.lines) {
+    body.innerHTML = a.lines.map(l => `<div class="ln">${l || ' '}</div>`).join('');
+    hlAt = 0.35 + a.lines.length * 0.07 + 0.25;
+  } else {
+    body.innerHTML = `<div class="ln" style="white-space:normal">${a.html}</div>`;
+    hlAt = 0.9;
+  }
+  lineEls = [...body.querySelectorAll('.ln')];
+}
+
+window.render = function (t) {
+  let si = STEPS.length - 1;
+  for (let i = 0; i < STEPS.length; i++) if (t < STARTS[i] + STEPS[i].dur) { si = i; break; }
+  const local = t - STARTS[si];
+  const step = STEPS[si];
+  const fade = clamp(local / 0.3);
+
+  for (const [id, n] of Object.entries(nodeEls)) {
+    const isN = step.n.includes(id), isS = step.s.includes(id);
+    let fill = n.kind === 'quote' ? C.inverse : C.node;
+    let ink = n.kind === 'quote' ? C['inverse-ink'] : C.ink, sub = C.muted;
+    if (isN) { fill = mix(fill, C.accent, fade); ink = mix(ink, C['accent-ink'], fade); sub = mix(sub, C['accent-ink'], fade); }
+    else if (isS) { fill = mix(fill, C.inverse, fade); ink = mix(ink, C['inverse-ink'], fade); sub = mix(sub, C['inverse-ink'], fade * 0.8); }
+    n.shape.setAttribute('fill', fill);
+    if (n.tab) n.tab.setAttribute('fill', fill);
+    n.t1.setAttribute('fill', ink); if (n.t2) n.t2.setAttribute('fill', sub);
+  }
+
+  for (const [id, e] of Object.entries(edgeEls)) {
+    const on = step.e.includes(id), solid = e.style === 'solid';
+    e.p.setAttribute('stroke', on ? C.accent : C.line);
+    e.p.setAttribute('stroke-width', on ? 3 : 2);
+    e.p.setAttribute('marker-end', `url(#a-${on ? 'act' : 'base'})`);
+    e.p.setAttribute('stroke-dasharray', solid ? 'none' : '6 5');
+    e.p.setAttribute('stroke-dashoffset', on && !solid ? String(-local * 22) : '0');
+  }
+
+  dotLayer.innerHTML = '';
+  const travel = 1.1;
+  if (step.e.length && local < travel + 0.3) {
+    const total = step.e.reduce((a, id) => a + edgeEls[id].len, 0);
+    let d = ease(clamp(local / travel)) * total;
+    for (const id of step.e) {
+      const e = edgeEls[id];
+      if (d <= e.len) {
+        const [x, y] = pointAt(e, d);
+        el('rect', { x: x - 7, y: y - 7, width: 14, height: 14, fill: C.accent, stroke: C.ground, 'stroke-width': 2.5, opacity: local > travel ? 1 - (local - travel) / 0.3 : 1 }, dotLayer);
+        break;
+      }
+      d -= e.len;
+    }
+  }
+
+  if (si !== lastStep) {
+    lastStep = si;
+    document.getElementById('ctitle').textContent = step.t;
+    document.getElementById('cdesc').textContent = step.d;
+    [...document.getElementById('tabs').children].forEach((b, i) => { b.className = i + 1 < si ? 'done' : (i + 1 === si ? 'on' : ''); });
+    showArtifact(si);
+  }
+  document.getElementById('left').style.opacity = clamp(local / 0.25);
+  lineEls.forEach((ln, i) => { ln.style.opacity = clamp((local - 0.3 - i * 0.07) / 0.15); });
+  const hp = ease(clamp((local - hlAt) / 0.45)) * 100;
+  body.style.setProperty('--hl', hp + '%');
+  body.style.setProperty('--hlc', hp + '%');
+};
+
+document.getElementById('legend').textContent = `Orange: happening now. ${THEME === 'dark' ? 'White' : 'Black'}: a service at work. Dashed: a call or a trace.`;
+window.ready = document.fonts.ready.then(() => { build(); render(0); if (!CAPTURE) interactive(); });
+
+// Interactive mode: play, pause, step with buttons, arrow keys or the tabs; #step-N links to a step.
+function interactive() {
+  document.body.classList.add('interactive');
+  const stage = document.getElementById('stage'), frame = document.getElementById('frame');
+  const play = document.getElementById('play'), status = document.getElementById('status');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let t = 0, playing = !reduced, last = performance.now();
+
+  function fit() {
+    const w = innerWidth, h = innerHeight - 110;
+    const k = w < 700 ? w / 1080 : Math.min(w / 1080, h / 1350, 1);
+    stage.style.transform = `scale(${k})`;
+    frame.style.width = 1080 * k + 'px'; frame.style.height = 1350 * k + 'px';
+  }
+  const stepAt = x => { let i = STEPS.length - 1; for (let j = 0; j < STEPS.length; j++) if (x < STARTS[j] + STEPS[j].dur) { i = j; break; } return i; };
+  function go(i) {
+    i = (i + STEPS.length) % STEPS.length;
+    t = playing && !reduced ? STARTS[i] : SETTLED[i];
+    history.replaceState(null, '', '#step-' + i);
+    draw();
+  }
+  function draw() {
+    render(t);
+    const i = stepAt(t);
+    status.textContent = i === 0 ? 'Overview' : `Step ${i} of ${COUNT}: ${STEPS[i].t}`;
+    play.textContent = playing ? 'Pause' : 'Play';
+  }
+  function tick(now) {
+    if (playing) { t += (now - last) / 1000; if (t >= TOTAL) t = 0; draw(); }
+    last = now;
+    requestAnimationFrame(tick);
+  }
+  document.getElementById('prev').onclick = () => go(stepAt(t) - 1);
+  document.getElementById('next').onclick = () => go(stepAt(t) + 1);
+  play.onclick = () => { playing = !playing; draw(); };
+  [...document.getElementById('tabs').children].forEach((tab, k) => { tab.title = STEPS[k + 1].t; tab.onclick = () => go(k + 1); });
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') go(stepAt(t) + 1);
+    else if (e.key === 'ArrowLeft') go(stepAt(t) - 1);
+    else if (e.key === ' ' && e.target === document.body) { e.preventDefault(); play.click(); }
+  });
+  addEventListener('resize', fit);
+  DARK_QUERY.addEventListener('change', () => { if (!PARAMS.get('theme')) location.reload(); });
+  fit();
+  const m = location.hash.match(/^#step-(\d+)$/);
+  if (m) { playing = false; go(Math.min(+m[1], COUNT)); } else draw();
+  requestAnimationFrame(tick);
+}
+</script>
+</body>
+</html>

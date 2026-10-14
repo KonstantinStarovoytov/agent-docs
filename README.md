@@ -9,6 +9,95 @@ design choice is backed by an experiment.
 > Why it is built this way, what was tested, and a glossary of every term:
 > **[ARCHITECTURE.md](ARCHITECTURE.md)**
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/agent-docs-flow-dark.gif">
+  <img alt="Animation: an agent asks how to create a skill; search_docs finds the page, read_section returns the section, Langfuse measures every step" src="docs/flow/agent-docs-flow-light.gif">
+</picture>
+
+**[Step through it at your own pace](https://konstantinstarovoytov.github.io/rag-context-assembly/)** (arrow keys work), or open the stills:
+
+<details>
+<summary>The 15 steps as still images</summary>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-01-dark.webp">
+  <img alt="Step 1: The question" src="docs/flow/steps/step-01-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-02-dark.webp">
+  <img alt="Step 2: The agent plans the call" src="docs/flow/steps/step-02-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-03-dark.webp">
+  <img alt="Step 3: search_docs goes out" src="docs/flow/steps/step-03-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-04-dark.webp">
+  <img alt="Step 4: Hybrid search over chunks" src="docs/flow/steps/step-04-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-05-dark.webp">
+  <img alt="Step 5: Rank fusion" src="docs/flow/steps/step-05-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-06-dark.webp">
+  <img alt="Step 6: Rerank" src="docs/flow/steps/step-06-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-07-dark.webp">
+  <img alt="Step 7: One chunk per page" src="docs/flow/steps/step-07-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-08-dark.webp">
+  <img alt="Step 8: What the agent receives" src="docs/flow/steps/step-08-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-09-dark.webp">
+  <img alt="Step 9: read_section maps the page" src="docs/flow/steps/step-09-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-10-dark.webp">
+  <img alt="Step 10: read_section returns the section" src="docs/flow/steps/step-10-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-11-dark.webp">
+  <img alt="Step 11: A cited answer" src="docs/flow/steps/step-11-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-12-dark.webp">
+  <img alt="Step 12: Search is traced" src="docs/flow/steps/step-12-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-13-dark.webp">
+  <img alt="Step 13: Evals: code and an LLM judge" src="docs/flow/steps/step-13-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-14-dark.webp">
+  <img alt="Step 14: The regression gate" src="docs/flow/steps/step-14-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/step-15-dark.webp">
+  <img alt="Step 15: Refreshed every day" src="docs/flow/steps/step-15-light.webp">
+</picture>
+
+<sub>Source and how to rebuild: [docs/flow/](docs/flow/)</sub>
+
+</details>
+
 ---
 
 ## How it works
@@ -41,7 +130,8 @@ after the rerank:
 page, so one long page cannot fill the list. Each passage carries the page's
 one-line description. The agent reads the passages itself, which is cheaper;
 for a longer read, `read_section` returns a page's outline, then one section's
-text from the stored page (no model call). Every request is traced in Langfuse.
+text from the stored page (no model call). Searches are traced in Langfuse;
+`read_section`, which calls no model, is not.
 
 ## Fresh every day
 
