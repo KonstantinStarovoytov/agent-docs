@@ -121,7 +121,8 @@ after the rerank:
 
 `search_docs` stops after the rerank and returns the best passage of each
 page, so one long page cannot fill the list. Each passage carries the page's
-one-line description. The agent reads the passages itself, which is cheaper;
+one-line description and the headings of the page's other matching sections
+(`other_sections`). The agent reads the passages itself, which is cheaper;
 for a longer read, `read_section` returns a page's outline, then one section's
 text from the stored page (no model call). Searches are traced in Langfuse;
 `read_section`, which calls no model, is not.

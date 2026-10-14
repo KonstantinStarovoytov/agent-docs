@@ -104,6 +104,8 @@ class Passage:
     content: str
     # The page's one-sentence description; filled in by `pages.search`.
     description: str = ""
+    # Headings of the page's other chunks that also match, best first.
+    other_sections: tuple[str, ...] = ()
 
 
 def _validated_question(question: str) -> str:
@@ -157,13 +159,47 @@ def one_per_page(reranked: list[RerankResult]) -> list[RerankResult]:
     return sorted(best.values(), key=lambda result: -result.rerank_score)
 
 
-def rerank_pages(
-    question: str, *, limit: int | None = None, vendor: str | None = None
-) -> list[RerankResult]:
-    """The best-scoring chunk of each of the top `limit` pages, best first.
+# A page's other chunks are named by heading when they score at least this
+# much, at most this many (experiment 25: section hit 0.667 -> 0.867 on
+# retrieval-v3, no page lost, +8-10% tokens).
+OTHER_SECTIONS_MIN_SCORE = 0.35
+OTHER_SECTIONS_MAX = 3
 
-    Shared by search_docs and /pages: one hybrid search, one Cohere call.
+
+def _heading(metadata: dict[str, Any]) -> str:
+    return " > ".join(
+        value
+        for value in (metadata.get("h1"), metadata.get("h2"), metadata.get("h3"))
+        if value
+    )
+
+
+def other_sections(reranked: list[RerankResult], best: RerankResult) -> tuple[str, ...]:
+    """Headings of `best`'s page's other matching chunks, best first.
+
+    Only headings: the agent reads the text with read_section(url, heading),
+    so the list costs no result slot (one passage per page stays).
     """
+    page = best.document.metadata.get("source")
+    if not page:
+        return ()
+    own = _heading(best.document.metadata)
+    found: list[str] = []
+    for result in sorted(reranked, key=lambda r: -r.rerank_score):
+        if result.rerank_score < OTHER_SECTIONS_MIN_SCORE:
+            break
+        if result.document.metadata.get("source") != page:
+            continue
+        heading = _heading(result.document.metadata)
+        if heading and heading != own and heading not in found:
+            found.append(heading)
+    return tuple(found[:OTHER_SECTIONS_MAX])
+
+
+def _rerank_pool(
+    question: str, limit: int | None, vendor: str | None
+) -> tuple[list[RerankResult], int]:
+    """The whole reranked pool, and how many pages the caller asked for."""
     question = _validated_question(question)
     k = limit if limit is not None else settings.retrieval_top_k
     if k < 1:
@@ -180,13 +216,24 @@ def rerank_pages(
     pool = max(k, settings.per_query_top_k, rerank_pool_size())
     candidates = search_hybrid(query=question, k=pool, vendor=vendor)
     if not candidates:
-        return []
+        return [], k
     # Cohere returns the whole pool (still one call) so that `k` distinct pages
     # can be filled; a page's weaker chunks would otherwise crowd out other
     # pages. Only the best-scoring passage of each page is kept.
     reranked = CohereReranker().rerank(
         query=question, results=candidates, top_n=len(candidates)
     )
+    return reranked, k
+
+
+def rerank_pages(
+    question: str, *, limit: int | None = None, vendor: str | None = None
+) -> list[RerankResult]:
+    """The best-scoring chunk of each of the top `limit` pages, best first.
+
+    Shared by search_docs and /pages: one hybrid search, one Cohere call.
+    """
+    reranked, k = _rerank_pool(question, limit, vendor)
     return one_per_page(reranked)[:k]
 
 
@@ -194,28 +241,20 @@ def search(
     question: str, *, limit: int | None = None, vendor: str | None = None
 ) -> list[Passage]:
     """Retrieval without generation, for callers that want to read the sources."""
-    best_per_page = rerank_pages(question, limit=limit, vendor=vendor)
+    reranked, k = _rerank_pool(question, limit, vendor)
 
     passages = []
-    for rank, result in enumerate(best_per_page, start=1):
+    for rank, result in enumerate(one_per_page(reranked)[:k], start=1):
         metadata = result.document.metadata
-        heading = " > ".join(
-            value
-            for value in (
-                metadata.get("h1"),
-                metadata.get("h2"),
-                metadata.get("h3"),
-            )
-            if value
-        )
         passages.append(
             Passage(
                 rank=rank,
                 title=metadata.get("title", "Untitled"),
-                heading=heading,
+                heading=_heading(metadata),
                 url=metadata.get("source", ""),
                 score=result.rerank_score,
                 content=metadata.get("raw_content", result.document.page_content),
+                other_sections=other_sections(reranked, result),
             )
         )
     return passages

@@ -112,6 +112,10 @@ class PassageModel(BaseModel):
     truncated: bool = Field(
         description="True when `content` was trimmed; re-run detailed for the rest."
     )
+    other_sections: list[str] = Field(
+        description="Other sections of this page that also match, best first; "
+        "pass one to read_section as `heading`. Empty when none does."
+    )
 
 
 class SearchDocsResult(BaseModel):
@@ -205,7 +209,8 @@ def search_docs(
     Returns one passage per page, with the page's one-line description and a
     relevance score; under ~0.5 means the docs probably don't cover it. One
     topic per call: split multi-part questions. Need more than the passage?
-    Call read_section(url).
+    Call read_section(url), or read_section(url, heading) for one of the
+    passage's other_sections.
     """
     vendor = PRODUCT_VENDOR[product] if product is not None else None
     try:
@@ -231,6 +236,7 @@ def search_docs(
                     else passage.content
                 ),
                 truncated=concise and len(passage.content) > CONCISE_CHARS,
+                other_sections=list(passage.other_sections),
             )
             for passage in passages
         ],

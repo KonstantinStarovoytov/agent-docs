@@ -75,7 +75,7 @@ This is the `/ask` path (REST; agents use `search_docs` and `read_section` inste
 
 `search_docs` is shorter: one query (no translation), an optional product
 filter, a pool of 20 candidates, Cohere rerank, and the best passage of each
-page; the first `limit` are returned with their scores and the page's one-line description (one Qdrant read of the page snapshots for all results). There is no 0.35 threshold and no generation.
+page; the first `limit` are returned with their scores and the page's one-line description (one Qdrant read of the page snapshots for all results). Each passage also names the page's other chunks that score at least 0.35, by heading only, at most three (`other_sections`), so the agent can open them with `read_section`. There is no 0.35 threshold on the passages themselves and no generation.
 
 Every chunk is stored with a short header (vendor, product, page, section)
 added before embedding. Without it, a chunk saying "set `model` in settings"
@@ -140,6 +140,7 @@ The same pipeline is served two ways from one process: an **MCP server**
 | Index everything minus excludes, with a gate | Users wanted the whole documentation; new pages arrive by themselves. | Hand-picked allow-list | 35 → ~600 pages. |
 | Free hosting (Render, Qdrant Cloud, Langfuse Hobby) | Zero fixed cost, no bank card. | Paid hosting | See README → Cost. |
 | `search_docs` returns one passage per page | Several chunks of one page filled the list; the agent can search again per part. | All chunks in score order | retrieval-v3, limit 5: distinct pages 3.1 → 5.0, page hit@5 0.936 → 0.979 (experiment 22). |
+| Passages name the page's other matching sections (`other_sections`) | One passage per page hides a second relevant section of the same page; headings point the agent to `read_section` without taking a result slot. | Two passages per page; a second one only when it scores near the best | Section hit 0.667 → 0.867 on retrieval-v3, page hit unchanged, +8–10% tokens; two passages per page pushed pages out, all-groups coverage @5 0.438 → 0.312 (experiment 25). |
 | Abstain when the best score is below 0.55 (`MIN_TOP_RERANK_SCORE`) | Saves the LLM call when nothing in the docs fits. | Raise the 0.35 per-chunk floor | Lowest top score of 131 answerable questions 0.64 (margin 0.09); catches 8 of 12 negatives (experiment 23). |
 | `find_pages` + `read_section`: pick pages from cards, then read whole sections from the page snapshot | A 3,000-char chunk can cut a section; the agent should read the section itself. Same ranking as `search_docs`, no extra Cohere call, no model call to read. | More or longer passages from `search_docs` | find_pages page hit@5 0.979 on retrieval-v3; read_section returns the labelled section for 25 of 25 labels once every page has a snapshot (experiment 24). The `find_pages` card is now REST `/pages`; on MCP `search_docs` carries the description. |
 | Two MCP tools, no LLM on the agent path | Agents generate the answer themselves; a second generation costs money and hides the sources. `search_docs` gives passages with page descriptions, `read_section` gives whole sections. | `ask_docs` and `find_pages` as extra MCP tools | Production traces, 30 days: agents chose `search_docs` 103 times and `ask_docs` 11. `/ask` and `/pages` stay on REST. |

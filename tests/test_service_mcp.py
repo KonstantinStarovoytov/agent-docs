@@ -196,6 +196,32 @@ async def test_search_docs_passages_carry_the_page_description(
 
 
 @pytest.mark.anyio
+async def test_search_docs_passages_name_the_pages_other_sections(
+    monkeypatch: pytest.MonkeyPatch, stub_pipeline: list[list[str]]
+) -> None:
+    monkeypatch.setattr(
+        core,
+        "search",
+        lambda *_a, **_k: [
+            core.Passage(
+                1,
+                "Skills",
+                "Skills > Create",
+                "https://docs.test/skills.md",
+                0.9,
+                "text",
+                other_sections=("Skills > Share",),
+            )
+        ],
+    )
+    async with Client(build_mcp_server()) as client:
+        result = await client.call_tool("search_docs", {"query": "skills"})
+
+    passage = result.structured_content["passages"][0]  # type: ignore[index]
+    assert passage["other_sections"] == ["Skills > Share"]
+
+
+@pytest.mark.anyio
 async def test_search_docs_reads_snapshots_once_for_all_passages(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
