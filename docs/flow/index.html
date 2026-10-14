@@ -100,8 +100,8 @@
 <body>
 <div id="frame"><div id="stage">
 <div aria-hidden="true" style="position:absolute;left:-9999px;opacity:0">
-  <span class="code">Имя</span><span class="code" style="font-weight:600">Имя</span>
-  <span>Имя</span><span style="font-style:italic">Имя</span><span style="font-weight:600">Имя</span><span class="franklin">Agent</span>
+  <span class="code">Aa</span><span class="code" style="font-weight:600">Aa</span>
+  <span>Aa</span><span style="font-style:italic">Aa</span><span style="font-weight:600">Aa</span><span class="franklin">Agent</span>
 </div>
 
 <h1>Agent Docs</h1>
@@ -159,8 +159,8 @@ function folder(x, y, w, h, tabX, tabH, label, fill, labelAttrs, slant = 12) {
 
 // id: [cx, cy, w, h, title, sub, kind]
 const NODES = {
-  A_q:      [180, 266, 260, 46, 'Как создать skill?', '', 'quote'],
-  A_plan:   [180, 334, 260, 50, 'Plans the call', 'English query, one topic', 'node'],
+  A_q:      [180, 266, 260, 46, 'How do I create a skill?', '', 'quote'],
+  A_plan:   [180, 334, 260, 50, 'Plans the call', 'keywords, one topic', 'node'],
   A_call1:  [180, 400, 260, 42, 'search_docs()', '', 'tool'],
   A_read:   [180, 516, 260, 50, 'Reads the previews', 'enough, or read more?', 'node'],
   A_call2:  [180, 652, 260, 42, 'read_section()', '', 'tool'],
@@ -219,7 +219,7 @@ const STEPS = [
   { t: 'What the agent receives', d: 'Each passage carries the page, the section, a link, a one-line page description, a score and a 300-character preview.', n: ['A_read'], s: [], e: ['e_page_read'], dur: 5.0 },
   { t: 'read_section maps the page', d: 'The preview cuts the steps short, so the agent opens the page. Without a heading it gets a short outline of it.', n: ['A_call2', 'S_read'], s: ['E_snap'], e: ['e_read_call2', 'e_call2_sread', 'e_sread_snap'], dur: 4.4 },
   { t: 'read_section returns the section', d: 'With a heading it gets the section as the page’s own Markdown, subsections included, code and lists intact.', n: ['A_call2', 'S_read'], s: ['E_snap'], e: ['e_call2_sread', 'e_sread_snap'], dur: 5.4 },
-  { t: 'A cited answer', d: 'The agent’s LLM answers in the user’s language from the official text, and links the page it used.', n: ['A_write', 'A_ans'], s: [], e: ['e_sread_write', 'e_write_ans'], dur: 4.2 },
+  { t: 'A cited answer', d: 'The agent’s LLM answers from the official text, in the user’s language, and links the page it used.', n: ['A_write', 'A_ans'], s: [], e: ['e_sread_write', 'e_write_ans'], dur: 4.2 },
   { t: 'Search is traced', d: 'Every search_docs call leaves two observations in Langfuse: the hybrid search and the rerank, with inputs, outputs and timing.', n: ['O_traces'], s: [], e: ['e_spans'], dur: 4.2 },
   { t: 'Evals: code and an LLM judge', d: 'Labelled datasets. Code scores the retrieval; a different LLM grades faithfulness and refusals.', n: ['O_data', 'O_metrics', 'O_judge'], s: [], e: ['e_ds_metrics', 'e_metrics_judge'], dur: 4.8 },
   { t: 'The regression gate', d: 'Each change is run against labelled datasets. A metric that drops by more than 0.03 fails the gate. Two real verdicts:', n: ['O_gate'], s: [], e: ['e_judge_gate'], dur: 5.0 },
@@ -242,12 +242,12 @@ const ART = [
     '<i class=c>a chunk is a piece of a page, up to 3,000</i>',
     '<i class=c>characters, cut at headings when indexing</i>'] },
   { name: 'The chat', ex: '', html: `<div class="chat"><div class="who" style="text-align:right">user</div>
-     <div style="display:flex;justify-content:flex-end"><div class="bubble" style="background:var(--inverse);color:var(--inverse-ink);font-style:italic">Как создать skill в Claude Code?</div></div>
+     <div style="display:flex;justify-content:flex-end"><div class="bubble" style="background:var(--inverse);color:var(--inverse-ink);font-style:italic">How do I create a skill in Claude Code?</div></div>
      <div class="who" style="margin-top:28px">tools the agent can call</div>
      <div class="code lit" style="font-size:15px;line-height:26px"><span class="hl">search_docs</span>   find where the answer is<br><span class="hl">read_section</span>  read it whole</div></div>` },
   { name: 'The agent’s plan', ex: 'Example', lines: [
-    '<i class=k>question</i>  <i class=s>"Как создать skill в Claude Code?"</i>',
-    '<i class=k>language</i>  Russian; the tool asks for English',
+    '<i class=k>question</i>  <i class=s>"How do I create a skill in Claude Code?"</i>',
+    '<i class=k>query</i>     keywords, in English as the tool asks',
     '<i class=k>topics</i>    one, so one call',
     '<i class=k>product</i>   Claude Code is named, so filter',
     '',
@@ -343,8 +343,8 @@ const ART = [
     N('  <i class="g hl">| … | … |</i>', 'table, kept', 46),
     '  <i class=c>…three more code blocks…</i>'] },
   { name: 'The answer', ex: 'Example', html: `<div class="chat"><div class="who">agent</div>
-     <div class="bubble" style="background:var(--node)">Создайте папку <code>.claude/skills/&lt;имя&gt;/</code> с файлом <code>SKILL.md</code>. Во frontmatter укажите <code>name</code> и <code>description</code>. Личные skills лежат в <code>~/.claude/skills/</code>.
-     <div class="lit" style="margin-top:12px;font-size:16px">Источник: <span class="hl" style="text-decoration:underline">Extend Claude with skills, Claude Code docs</span></div></div></div>` },
+     <div class="bubble" style="background:var(--node)">Create a folder <code>.claude/skills/&lt;name&gt;/</code> with a <code>SKILL.md</code> file, and set <code>name</code> and <code>description</code> in its frontmatter. Personal skills go in <code>~/.claude/skills/</code>.
+     <div class="lit" style="margin-top:12px;font-size:16px">Source: <span class="hl" style="text-decoration:underline">Extend Claude with skills, Claude Code docs</span></div></div></div>` },
   { name: 'What Langfuse records', ex: '', lines: [
     '<i class=h>hybrid-search</i>',
     '  <i class=k>input</i>   query, k: 20, vendor scope',
