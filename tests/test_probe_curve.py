@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from evals.probe_context_assembly import coverage_curve
+from evals.experiments.probe_context_assembly import coverage_curve
 
 CASE = {
     "id": "c",
@@ -39,7 +39,7 @@ def test_curve_reports_complete_coverage_per_pool_size() -> None:
 
 def test_curve_reports_progress_as_each_pool_completes() -> None:
     """A crash on pool 30 must not lose the results already computed for pool 5."""
-    from evals.probe_context_assembly import coverage_curve
+    from evals.experiments.probe_context_assembly import coverage_curve
 
     seen: list[tuple[int, float]] = []
 
@@ -59,7 +59,7 @@ def test_curve_reports_progress_as_each_pool_completes() -> None:
 def test_retry_on_rate_limit_backs_off_and_retries() -> None:
     from cohere.errors.too_many_requests_error import TooManyRequestsError
 
-    from evals.probe_context_assembly import with_cohere_retry
+    from evals.experiments.probe_context_assembly import with_cohere_retry
 
     calls = 0
     slept: list[float] = []
@@ -82,7 +82,7 @@ def test_retry_gives_up_after_max_attempts() -> None:
     import pytest as _pytest
     from cohere.errors.too_many_requests_error import TooManyRequestsError
 
-    from evals.probe_context_assembly import with_cohere_retry
+    from evals.experiments.probe_context_assembly import with_cohere_retry
 
     def always_fails() -> str:
         raise TooManyRequestsError(headers={}, body={"message": "rate limited"})

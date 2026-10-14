@@ -1,5 +1,6 @@
 """Seed the manually reviewed multi-aspect retrieval dataset in Langfuse."""
 
+import argparse
 from uuid import NAMESPACE_URL, uuid5
 
 from langfuse import Langfuse
@@ -34,4 +35,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # Running writes to Langfuse; --help must not.
+    argparse.ArgumentParser(description=__doc__).parse_args()
     main()

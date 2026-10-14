@@ -1,3 +1,6 @@
+"""Retrieval on `rag/retrieval-query-transform-v1`, with and without query transformation."""
+
+import argparse
 import time
 
 from langfuse import Langfuse
@@ -235,4 +238,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # Running writes to Langfuse; --help must not.
+    argparse.ArgumentParser(description=__doc__).parse_args()
     main()

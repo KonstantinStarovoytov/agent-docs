@@ -1,7 +1,7 @@
 import pytest
 from langchain_core.documents import Document
 
-from evals.frozen_selection import Aspect, Assignment, pick_ids, select_set
+from evals.experiments.frozen_selection import Aspect, Assignment, pick_ids, select_set
 from src.rag.reranker import RerankResult
 from src.rag.retriever import document_key
 

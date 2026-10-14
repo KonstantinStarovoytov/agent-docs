@@ -3,9 +3,9 @@
 Run from the repository root:
 
 ```sh
-uv run python -m evals.frozen_selection capture reports/frozen-selection-v1.json
-uv run python -m evals.frozen_selection compare reports/frozen-selection-v1.json
-uv run python -m evals.frozen_selection answers reports/frozen-selection-v1.json
+uv run python -m evals.experiments.frozen_selection capture reports/frozen-selection-v1.json
+uv run python -m evals.experiments.frozen_selection compare reports/frozen-selection-v1.json
+uv run python -m evals.experiments.frozen_selection answers reports/frozen-selection-v1.json
 ```
 
 Capture refuses to overwrite an existing snapshot. It stores questions, existing

@@ -1,4 +1,4 @@
-from evals.rescore_query_transform_results import (
+from evals.experiments.rescore_query_transform_results import (
     EXPERIMENT_IDS,
     calculate_scores,
     summarize_runs,

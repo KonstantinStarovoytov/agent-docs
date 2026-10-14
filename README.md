@@ -289,5 +289,16 @@ Re-index locally: `uv run python -m src.reindex --dry-run --out /tmp/r`
 | `src/ingestion/` | Page selection, chunking, junk gate, change report |
 | `src/rag/` | Search, rerank, context selection, generation |
 | `src/service/` | REST API and MCP server (one shared handler) |
-| `evals/` | Datasets and experiment runners (Langfuse) |
-| `reports/` | Experiment outputs and daily change reports |
+| `src/prompts/` | Prompts, versioned in Langfuse |
+| `evals/` | The eval gate: datasets, runners, scorers ([guide](evals/README.md)) |
+| `reports/` | Experiment results and daily change reports ([index](reports/README.md)) |
+| `docs/` | Diagrams, the animation, findings, publishing notes |
+| `data/manifests/` | What each index holds, page by page |
+| `scripts/` | Diagram rendering, Langfuse CLI with the project's keys |
+
+Diagrams: edit `docs/diagrams/*.mmd`, then `uv run python scripts/render_diagrams.py`.
+Animation: edit `docs/flow/index.html`, then `docs/flow/render.sh`.
+
+## License
+
+[MIT](LICENSE)
