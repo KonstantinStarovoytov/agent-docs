@@ -8,7 +8,7 @@ group, which separates "the selector is wrong" from "the context is too small".
 The judge matrix compares EvidencePlanner.sufficient against the ground-truth
 completeness of the context it was shown.
 
-Run: uv run python -m evals.probe_context_assembly
+Run: uv run python -m evals.experiments.probe_context_assembly
 """
 
 import argparse

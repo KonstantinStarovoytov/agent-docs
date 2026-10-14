@@ -1,3 +1,6 @@
+"""List the last day's experiment runs on a dataset and print their failed cases."""
+
+import argparse
 import json
 from datetime import UTC, datetime, timedelta
 
@@ -165,4 +168,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # Running writes to Langfuse; --help must not.
+    argparse.ArgumentParser(description=__doc__).parse_args()
     main()

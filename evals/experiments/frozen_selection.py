@@ -19,7 +19,7 @@ from pydantic import BaseModel, Field
 
 from evals.answer_quality import assess_answer_quality
 from evals.evidence_coverage import CASES, coverage
-from evals.probe_context_assembly import _rows, oracle_complete
+from evals.experiments.probe_context_assembly import _rows, oracle_complete
 from src.config import settings
 from src.observability import flush, model_config
 from src.rag.context_selector import select_generation_context

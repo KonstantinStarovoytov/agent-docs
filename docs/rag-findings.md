@@ -10,7 +10,7 @@ Review correction: the historical probes below do not isolate rerank pool size.
 `search_hybrid(k)` currently passes `3*k` to LangChain, which changes both dense
 and sparse prefetch depth. A larger pool comparison therefore also changes retrieval.
 Overfetch plus sorting improves observed stability but does not guarantee it when
-ties cross the overfetch boundary. The new `evals/frozen_selection.py` experiment
+ties cross the overfetch boundary. The new `evals/experiments/frozen_selection.py` experiment
 captures one common pool and compares selectors offline; it does not reuse these
 historical numbers as its control. Source coverage remains a proxy for answerability.
 
@@ -304,7 +304,7 @@ Observations:
 
 Comparing 0.948 coverage over 20 candidates with 0.646 over 5 selected chunks conflates two
 things: selection error and capacity. The fair question is whether *any* selection of k
-candidates could cover every group. Measured with `evals/probe_context_assembly.py`
+candidates could cover every group. Measured with `evals/experiments/probe_context_assembly.py`
 (exhaustive minimum hitting set over the evidence groups, capped at k):
 
 | Selection | complete_evidence_coverage |
@@ -416,7 +416,7 @@ the pipeline's 10-candidate pool the ceiling is 0.812.
 
 ## 7.7 Hybrid RRF retrieval was not deterministic
 
-Repeating `evals/probe_context_assembly.py --pool 10 --skip-judge` after the 7.6 numbers
+Repeating `evals/experiments/probe_context_assembly.py --pool 10 --skip-judge` after the 7.6 numbers
 gave complete coverage 0.688, then 0.750, then 0.688. Pool-level complete coverage moved
 between 0.750 and 0.812. Dense search of the same query was identical across calls;
 `search_hybrid` was not.

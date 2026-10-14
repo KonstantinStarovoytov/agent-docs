@@ -1,3 +1,6 @@
+"""Seed `rag/retrieval-query-transform-v1`: the same needs in English, Russian, Polish and mixed queries."""
+
+import argparse
 from typing import Any
 from uuid import NAMESPACE_URL, uuid5
 
@@ -273,4 +276,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    # Running writes to Langfuse; --help must not.
+    argparse.ArgumentParser(description=__doc__).parse_args()
     main()

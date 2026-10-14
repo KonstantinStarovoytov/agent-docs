@@ -12,7 +12,7 @@ from evals.evaluators import (
     precision_at_8,
     reciprocal_rank,
 )
-from evals.seed_vendor_scope_dataset import DATASET_NAME
+from evals.experiments.seed_vendor_scope_dataset import DATASET_NAME
 from src.config import settings
 from src.rag.reranker import CohereReranker
 from src.rag.retriever import SearchResult, search_hybrid
