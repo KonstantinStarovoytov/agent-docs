@@ -1,0 +1,15 @@
+flowchart TD
+    Q["Question"] --> T{"Russian or Polish?"}
+    T -->|yes| TR["Add an English translation:<br/>2 queries"]
+    T -->|no| ONE["1 query"]
+    TR --> H
+    ONE --> H
+    H["Hybrid search per query in Qdrant<br/>dense + BM25, fused with RRF<br/>3x overfetch, ties broken by chunk id"] --> M{"2 queries?"}
+    M -->|yes| RRF2["Merge the 2 result lists<br/>with RRF again"]
+    M -->|no| C10
+    RRF2 --> C10["Top 10 candidates"]
+    C10 --> R["Cohere rerank<br/>against the original question"]
+    R --> TH{"Best score<br/>0.55 or more?"}
+    TH -->|no| A["Answer: not covered<br/>by the documentation"]
+    TH -->|yes| S["Select context:<br/>8 chunks, max 2 per section"]
+    S --> G["gpt-6-luna writes the answer<br/>with numbered citations"]

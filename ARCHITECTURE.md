@@ -57,23 +57,12 @@ Short definitions of every term used below.
 
 This is the `/ask` path (REST; agents use `search_docs` and `read_section` instead). Every step runs in order.
 
-```mermaid
-flowchart TD
-    Q["Question"] --> T{"Russian or Polish?"}
-    T -->|yes| TR["Add an English translation:<br/>2 queries"]
-    T -->|no| ONE["1 query"]
-    TR --> H
-    ONE --> H
-    H["Hybrid search per query in Qdrant<br/>dense + BM25, fused with RRF<br/>3x overfetch, ties broken by chunk id"] --> M{"2 queries?"}
-    M -->|yes| RRF2["Merge the 2 result lists<br/>with RRF again"]
-    M -->|no| C10
-    RRF2 --> C10["Top 10 candidates"]
-    C10 --> R["Cohere rerank<br/>against the original question"]
-    R --> TH{"Best score<br/>0.55 or more?"}
-    TH -->|no| A["Answer: not covered<br/>by the documentation"]
-    TH -->|yes| S["Select context:<br/>8 chunks, max 2 per section"]
-    S --> G["gpt-6-luna writes the answer<br/>with numbered citations"]
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-ask-path-dark.png">
+  <img alt="The ask path, step by step" src="docs/diagrams/architecture-ask-path-light.png">
+</picture>
+
+<sub>Diagram source: [docs/diagrams/architecture-ask-path.mmd](docs/diagrams/architecture-ask-path.mmd)</sub>
 
 | Step | What it does | Why |
 |---|---|---|
@@ -101,21 +90,12 @@ The same pipeline is served two ways from one process: an **MCP server**
 
 ## How the index stays fresh
 
-```mermaid
-flowchart TD
-    C[Daily GitHub Actions run] --> L[Read each vendor's llms.txt]
-    L --> F[Keep .md pages,<br/>drop excluded patterns]
-    F --> D{Compare with<br/>manifest}
-    D -- new page --> GATE{Page gate:<br/>size, language,<br/>duplicate, path,<br/>LLM review}
-    GATE -- looks fine --> IDX[Embed and index]
-    GATE -- suspicious --> QR[Quarantine:<br/>issue for the owner]
-    D -- changed --> IDX
-    D -- gone --> GUARD{Removal guard:<br/>>10% of a vendor?}
-    GUARD -- no --> DEL[Delete from index]
-    GUARD -- yes --> STOP[Delete nothing,<br/>open an issue]
-    IDX --> REP[Change report:<br/>added / changed / removed]
-    DEL --> REP
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-index-refresh-dark.png">
+  <img alt="How the index stays fresh" src="docs/diagrams/architecture-index-refresh-light.png">
+</picture>
+
+<sub>Diagram source: [docs/diagrams/architecture-index-refresh.mmd](docs/diagrams/architecture-index-refresh.mmd)</sub>
 
 - **Which pages:** every Markdown page in each vendor's `llms.txt`, minus
   excludes for translations, changelogs and release notes, weekly news,
