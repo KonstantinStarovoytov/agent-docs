@@ -19,7 +19,7 @@ def test_quality_metrics_fan_out_one_judge_assessment(monkeypatch):
         "assess_answer_quality",
         lambda *_args: answer_quality.AnswerQualityResult(
             assessment=assessment,
-            prompt_metadata={"prompt_name": "doc-bot/answer-evaluator"},
+            prompt_metadata={"prompt_name": "agent-docs/answer-evaluator"},
         ),
     )
     monkeypatch.setattr(

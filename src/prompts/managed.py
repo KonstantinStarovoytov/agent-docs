@@ -57,11 +57,11 @@ def _evidence_planner_messages() -> list[dict[str, str]]:
 
 
 PROMPT_SPECS: dict[str, tuple[str, Callable[[], list[dict[str, str]]]]] = {
-    "answer": ("doc-bot/answer", _answer_messages),
-    "answer-evaluator": ("doc-bot/answer-evaluator", _answer_evaluator_messages),
-    "translate": ("doc-bot/translate", _translate_messages),
+    "answer": ("agent-docs/answer", _answer_messages),
+    "answer-evaluator": ("agent-docs/answer-evaluator", _answer_evaluator_messages),
+    "translate": ("agent-docs/translate", _translate_messages),
     "evidence-planner": (
-        "doc-bot/evidence-planner",
+        "agent-docs/evidence-planner",
         _evidence_planner_messages,
     ),
 }
@@ -170,7 +170,7 @@ def publish_managed_prompt(name: str, client: Any | None = None) -> tuple[str, i
         type="chat",
         prompt=fallback_factory(),
         labels=["production"],
-        commit_message="Publish doc-bot prompt from local source",
+        commit_message="Publish agent-docs prompt from local source",
     )
     return remote_name, prompt.version
 

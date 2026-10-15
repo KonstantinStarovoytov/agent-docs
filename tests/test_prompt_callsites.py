@@ -22,7 +22,7 @@ def _managed(name, messages):
 
 def test_generator_uses_versioned_answer_prompt_and_links_it(monkeypatch):
     prompt = _managed(
-        "doc-bot/answer",
+        "agent-docs/answer",
         [
             {"role": "system", "content": "grounding"},
             {"role": "user", "content": "question and context"},
@@ -68,7 +68,7 @@ def test_generator_uses_versioned_answer_prompt_and_links_it(monkeypatch):
 
 def test_generate_from_selected_does_not_drop_same_section_chunks(monkeypatch):
     prompt = _managed(
-        "doc-bot/answer",
+        "agent-docs/answer",
         [
             {"role": "system", "content": "grounding"},
             {"role": "user", "content": "question and context"},
@@ -105,7 +105,7 @@ def test_generate_from_selected_does_not_drop_same_section_chunks(monkeypatch):
 
 def test_translate_uses_versioned_prompt_and_links_it(monkeypatch):
     prompt = _managed(
-        "doc-bot/translate",
+        "agent-docs/translate",
         [
             {"role": "system", "content": "translate"},
             {"role": "user", "content": "вопрос"},
@@ -131,7 +131,7 @@ def test_translate_uses_versioned_prompt_and_links_it(monkeypatch):
 
 def test_evidence_planner_uses_pinned_prompt_settings(monkeypatch):
     prompt = _managed(
-        "doc-bot/evidence-planner",
+        "agent-docs/evidence-planner",
         [
             {"role": "system", "content": "assess"},
             {"role": "user", "content": "payload"},
@@ -173,7 +173,7 @@ def test_generate_answer_drops_weak_candidates_before_selecting(monkeypatch):
         generator,
         "get_chat_prompt",
         Mock(
-            return_value=_managed("doc-bot/answer", [{"role": "user", "content": "q"}])
+            return_value=_managed("agent-docs/answer", [{"role": "user", "content": "q"}])
         ),
     )
     monkeypatch.setattr(generator.settings, "min_rerank_score", 0.35)

@@ -309,7 +309,7 @@ def build_mcp_server() -> MCPServer[Any]:
     """A fresh server per app instance; its session manager cannot be reused."""
     mcp: MCPServer[Any] = MCPServer(
         name="agent-docs",
-        title="Agent documentation RAG",
+        title="Agent Docs",
         version=_server_version(),
         instructions=INSTRUCTIONS,
     )

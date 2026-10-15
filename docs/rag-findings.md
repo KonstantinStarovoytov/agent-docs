@@ -132,7 +132,7 @@ After (`src/rag/planner.py`):
 Status: implemented, unit-tested, and exercised in the experiment in section 6. It did not
 change the outcome metric — see section 8.
 
-**Open item:** the local prompt now differs from `doc-bot/evidence-planner` v1 in Langfuse.
+**Open item:** the local prompt now differs from `agent-docs/evidence-planner` v1 in Langfuse.
 A new version must be published (`uv run python -m src.prompts.publish`) before tracing
 runs are comparable.
 
@@ -534,6 +534,6 @@ The pool-10 vs pool-20 crowding result from 7.6 **reproduces after the fix**. Ex
    candidate pool rather than to issue a new query. In 14 of 16 cases the missing evidence is
    already in the pool, so promoting it is cheaper than another retrieval.
 7. Narrow the judge's criterion from topical exhaustiveness to answerability (section 7.4),
-   and publish the new `doc-bot/evidence-planner` prompt version to Langfuse.
+   and publish the new `agent-docs/evidence-planner` prompt version to Langfuse.
 8. Only after the above: consider compact evidence (keep the number of sources, shorten the
    text), and only if context length or cost becomes a real constraint.
