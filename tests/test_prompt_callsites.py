@@ -173,7 +173,9 @@ def test_generate_answer_drops_weak_candidates_before_selecting(monkeypatch):
         generator,
         "get_chat_prompt",
         Mock(
-            return_value=_managed("agent-docs/answer", [{"role": "user", "content": "q"}])
+            return_value=_managed(
+                "agent-docs/answer", [{"role": "user", "content": "q"}]
+            )
         ),
     )
     monkeypatch.setattr(generator.settings, "min_rerank_score", 0.35)

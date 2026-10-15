@@ -138,4 +138,6 @@ def test_publish_one_prompt_does_not_republish_unchanged_prompts():
 
     assert (name, version) == ("agent-docs/answer-evaluator", 8)
     client.create_prompt.assert_called_once()
-    assert client.create_prompt.call_args.kwargs["name"] == "agent-docs/answer-evaluator"
+    assert (
+        client.create_prompt.call_args.kwargs["name"] == "agent-docs/answer-evaluator"
+    )
