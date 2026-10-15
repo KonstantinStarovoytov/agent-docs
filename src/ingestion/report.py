@@ -158,7 +158,7 @@ def render_report(r: ChangeReport) -> str:
         ]
     if r.fetch_failures:
         out += [
-            "## Fetch failures (old version kept)",
+            "## Fetch failures (an indexed copy, if any, is kept)",
             *(f"- <{u}>: {why}" for u, why in r.fetch_failures.items()),
             "",
         ]

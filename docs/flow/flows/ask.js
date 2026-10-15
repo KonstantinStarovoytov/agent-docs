@@ -1,9 +1,9 @@
 // The agent path: a question, search_docs, read_section, an answer, and how
 // Langfuse measures it. Data only; the engine is index.html.
 FLOW = {
-  title: 'Agent Docs, step by step',
-  h1: 'Agent Docs',
-  lead: 'Fresh official docs of Claude Code, Cursor, Codex and MCP, for any AI agent.',
+  title: 'Agent Docs: query flow',
+  h1: 'Query flow',
+  lead: 'Agent Docs: how an agent’s question becomes a cited answer, and how each step is measured.',
   legend: inverse => `Orange: happening now. ${inverse}: a service at work. Dashed: a call or a trace.`,
   zones() {
     // Zones (large tabs), then the two tool groups (medium tabs)
