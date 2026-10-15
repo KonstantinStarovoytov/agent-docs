@@ -474,8 +474,8 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "6fd0ece4d00702b54440590e8afe7e4a413191c7c9115cce7243a2ed46a1f6fc",
-      "chunks": 194,
+      "sha256": "426e43660c97a79cc538124a434ca95f1d65b41999f90d3fc3c40cc37d3ca101",
+      "chunks": 192,
       "title": "Claude Tag",
       "status": "indexed",
       "reason": "",
