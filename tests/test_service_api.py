@@ -384,3 +384,14 @@ def test_section_passes_outline_depth(
     )
 
     assert seen == [2, 3] and bad.status_code == 422
+
+
+def test_glama_claim_is_public(client: Any) -> None:
+    """Glama checks domain ownership without credentials; the file must answer."""
+    response = client.get("/.well-known/glama.json")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "$schema": "https://glama.ai/mcp/schemas/connector.json",
+        "claim": "glama_claim_ZWryPHPb61IhpHEj3XJG6iWZRcps5dLr",
+    }
