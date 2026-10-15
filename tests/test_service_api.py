@@ -143,10 +143,15 @@ def test_overlong_question_is_rejected_before_retrieval(
     assert called is False
 
 
-def test_mcp_endpoint_requires_token(client: Any) -> None:
+def test_mcp_tool_call_requires_token(client: Any) -> None:
     response = client.post(
         "/mcp",
-        json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
+        json={
+            "jsonrpc": "2.0",
+            "id": 1,
+            "method": "tools/call",
+            "params": {"name": "search_docs", "arguments": {"query": "hooks"}},
+        },
         headers={"Accept": "application/json, text/event-stream"},
     )
 

@@ -217,7 +217,9 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
 
 ## Connect
 
-Two ways in, one header each:
+Listing the tools needs nothing: `initialize` and `tools/list` answer without a
+key (30 requests/min per IP), so MCP directories can check the server. Calling a
+tool needs one header, either of:
 
 - **Your own Cohere key:** `X-Cohere-Api-Key: <key>`. A free trial key is at
   [dashboard.cohere.com](https://dashboard.cohere.com). Reranking runs on your

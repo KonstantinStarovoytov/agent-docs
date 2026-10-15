@@ -409,10 +409,16 @@ async def test_undeclared_host_is_rejected(monkeypatch: pytest.MonkeyPatch) -> N
 
 @pytest.mark.anyio
 async def test_mounted_http_transport_rejects_missing_token(served_app: str) -> None:
+    """Calling a tool costs a search; without a token or a key it is refused."""
     async with httpx2.AsyncClient() as http_client:
         response = await http_client.post(
             f"{served_app}/mcp/",
-            json={"jsonrpc": "2.0", "id": 1, "method": "tools/list"},
+            json={
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "tools/call",
+                "params": {"name": "search_docs", "arguments": {"query": "hooks"}},
+            },
             headers={"Accept": "application/json, text/event-stream"},
         )
 
@@ -509,3 +515,70 @@ async def test_mounted_transport_accepts_a_cohere_key_instead_of_a_token(
     text = result.content[0].text  # type: ignore[union-attr]
     assert "Your Cohere API key was rejected" in text
     assert key not in text
+
+
+async def _anonymous_mcp_post(body: dict[str, Any]) -> httpx2.Response:
+    """POST to the mounted transport with no token and no Cohere key."""
+    app = app_module.create_app()
+    transport = httpx2.ASGITransport(app=app)
+    async with app.router.lifespan_context(app):
+        async with httpx2.AsyncClient(transport=transport) as http_client:
+            return await http_client.post(
+                "http://docs.example.test/mcp/",
+                json=body,
+                headers={
+                    "Accept": "application/json, text/event-stream",
+                    "Content-Type": "application/json",
+                },
+            )
+
+
+TOOLS_LIST = {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}
+TOOLS_CALL = {
+    "jsonrpc": "2.0",
+    "id": 3,
+    "method": "tools/call",
+    "params": {"name": "search_docs", "arguments": {"query": "hooks"}},
+}
+
+
+@pytest.mark.anyio
+async def test_tools_are_listed_without_credentials(
+    stub_pipeline: Any, served_app: str
+) -> None:
+    """Directories (Glama, the MCP Registry's checks) list tools anonymously;
+    describing the server costs nothing, so it needs no token or key."""
+    async with httpx2.AsyncClient() as http_client:
+        transport = streamable_http_client(
+            f"{served_app}/mcp/", http_client=http_client
+        )
+        async with Client(transport) as client:
+            tools = await client.list_tools()
+
+    assert sorted(tool.name for tool in tools.tools) == ["read_section", "search_docs"]
+
+
+@pytest.mark.anyio
+async def test_calling_a_tool_without_credentials_is_refused(
+    stub_pipeline: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(settings, "api_token", SecretStr(TOKEN))
+    app_module.reset_rate_limiter()
+
+    response = await _anonymous_mcp_post(TOOLS_CALL)
+
+    assert response.status_code == 401
+
+
+@pytest.mark.anyio
+async def test_anonymous_discovery_is_limited_per_ip(
+    stub_pipeline: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    monkeypatch.setattr(settings, "api_token", SecretStr(TOKEN))
+    monkeypatch.setattr(settings, "api_byok_rate_limit_per_minute", 2)
+    monkeypatch.setattr(settings, "api_allowed_hosts", "docs.example.test")
+    app_module.reset_rate_limiter()
+
+    codes = [(await _anonymous_mcp_post(TOOLS_LIST)).status_code for _ in range(3)]
+
+    assert codes == [200, 200, 429]
