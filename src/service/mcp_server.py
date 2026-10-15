@@ -294,7 +294,7 @@ def _server_version() -> str:
     importlib knows nothing about it; read pyproject.toml in that case.
     """
     try:
-        return version("rag-context-assembly")
+        return version("agent-docs")
     except PackageNotFoundError:
         pass
     pyproject = Path(__file__).resolve().parents[2] / "pyproject.toml"
@@ -308,7 +308,7 @@ def _server_version() -> str:
 def build_mcp_server() -> MCPServer[Any]:
     """A fresh server per app instance; its session manager cannot be reused."""
     mcp: MCPServer[Any] = MCPServer(
-        name="agent-docs-mcp",
+        name="agent-docs",
         title="Agent documentation RAG",
         version=_server_version(),
         instructions=INSTRUCTIONS,

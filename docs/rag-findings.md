@@ -1,4 +1,4 @@
-# rag-context-assembly: RAG architecture findings
+# Agent Docs: RAG architecture findings
 
 Consolidated record of the literature review, the code changes derived from it, and the
 measurements that supported or contradicted them. Written for external review: every

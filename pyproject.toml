@@ -1,6 +1,6 @@
 [project]
-name = "rag-context-assembly"
-version = "0.1.0"
+name = "agent-docs"
+version = "0.1.1"
 requires-python = ">=3.14"
 license = "MIT"
 dependencies = [

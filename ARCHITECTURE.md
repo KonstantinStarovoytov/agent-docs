@@ -95,7 +95,7 @@ The same pipeline is served two ways from one process: an **MCP server**
   <img alt="Animation of the daily reindex" src="docs/flow/reindex-flow-light.gif">
 </picture>
 
-<sub>[Step by step](https://konstantinstarovoytov.github.io/rag-context-assembly/?flow=reindex) · source: [docs/flow/flows/reindex.js](docs/flow/flows/reindex.js)</sub>
+<sub>[Step by step](https://konstantinstarovoytov.github.io/agent-docs/?flow=reindex) · source: [docs/flow/flows/reindex.js](docs/flow/flows/reindex.js)</sub>
 
 - **Which pages:** every Markdown page in each vendor's `llms.txt`, minus
   excludes for translations, changelogs and release notes, weekly news,

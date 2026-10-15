@@ -17,7 +17,7 @@ The registry hosts [server.json](../server.json). It was checked against the
 
 ```bash
 brew install mcp-publisher
-cd rag-context-assembly
+cd agent-docs
 mcp-publisher login github      # opens a browser; uses your GitHub account
 mcp-publisher publish           # reads ./server.json
 ```
@@ -43,7 +43,7 @@ Open a pull request to <https://github.com/punkpeye/awesome-mcp-servers> that
 adds one line under the knowledge / documentation search category:
 
 ```markdown
-- [KonstantinStarovoytov/rag-context-assembly](https://github.com/KonstantinStarovoytov/rag-context-assembly) 🐍 ☁️ - Hybrid RAG over the official docs of Claude Code, Cursor, OpenAI Codex and MCP (~600 pages, refreshed daily): `search_docs` returns one passage per page, `read_section` reads whole sections.
+- [KonstantinStarovoytov/agent-docs](https://github.com/KonstantinStarovoytov/agent-docs) 🐍 ☁️ - Hybrid RAG over the official docs of Claude Code, Cursor, OpenAI Codex and MCP (~600 pages, refreshed daily): `search_docs` returns one passage per page, `read_section` reads whole sections.
 ```
 
 Follow that repository's legend for the emoji (language, hosting).
@@ -64,6 +64,6 @@ pages, refreshed daily, with a gate that quarantines junk pages.
 - **Ops:** runs on free tiers ($0/month) with a daily re-index, a readable
   change report and Langfuse tracing.
 
-Links: [repository](https://github.com/KonstantinStarovoytov/rag-context-assembly) ·
-[architecture and experiments](https://github.com/KonstantinStarovoytov/rag-context-assembly/blob/main/ARCHITECTURE.md) ·
+Links: [repository](https://github.com/KonstantinStarovoytov/agent-docs) ·
+[architecture and experiments](https://github.com/KonstantinStarovoytov/agent-docs/blob/main/ARCHITECTURE.md) ·
 MCP Registry entry `io.github.KonstantinStarovoytov/agent-docs`
