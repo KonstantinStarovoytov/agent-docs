@@ -181,7 +181,7 @@ def _metadata(mode: str) -> dict[str, Any]:
         "answer_model": settings.openai_chat_model,
         "evaluator_model": judge_model(),
         "evaluator_independent": judge_is_independent(),
-        "evaluator_prompt": "doc-bot/answer-evaluator",
+        "evaluator_prompt": "agent-docs/answer-evaluator",
         "evaluator_prompt_version": (
             settings.answer_evaluator_prompt_version or "production"
         ),

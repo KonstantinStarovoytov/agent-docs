@@ -19,7 +19,7 @@ def test_runtime_fetches_production_chat_prompt_and_compiles_variables(monkeypat
     prompt = managed.get_chat_prompt("answer", query="MCP", context="docs")
 
     client.get_prompt.assert_called_once_with(
-        "doc-bot/answer",
+        "agent-docs/answer",
         type="chat",
         label="production",
         cache_ttl_seconds=300,
@@ -40,7 +40,7 @@ def test_eval_fetches_exact_prompt_version_without_floating_label(monkeypatch):
     prompt = managed.get_chat_prompt("translate", version=4, query="MCP")
 
     client.get_prompt.assert_called_once_with(
-        "doc-bot/translate",
+        "agent-docs/translate",
         type="chat",
         version=4,
         cache_ttl_seconds=300,
@@ -91,7 +91,7 @@ def test_unknown_prompt_is_rejected():
 
 def test_prompt_trace_metadata_is_stable():
     prompt = managed.ManagedPrompt(
-        name="doc-bot/answer",
+        name="agent-docs/answer",
         messages=[],
         version=3,
         source="langfuse",
@@ -100,7 +100,7 @@ def test_prompt_trace_metadata_is_stable():
     )
 
     assert prompt.metadata == {
-        "prompt_name": "doc-bot/answer",
+        "prompt_name": "agent-docs/answer",
         "prompt_version": 3,
         "prompt_source": "langfuse",
         "prompt_hash": "abc",
@@ -119,10 +119,10 @@ def test_publish_creates_all_production_chat_prompts():
     versions = managed.publish_managed_prompts(client)
 
     assert versions == {
-        "doc-bot/answer": 1,
-        "doc-bot/answer-evaluator": 2,
-        "doc-bot/translate": 3,
-        "doc-bot/evidence-planner": 4,
+        "agent-docs/answer": 1,
+        "agent-docs/answer-evaluator": 2,
+        "agent-docs/translate": 3,
+        "agent-docs/evidence-planner": 4,
     }
     assert client.create_prompt.call_count == 4
     for call in client.create_prompt.call_args_list:
@@ -136,6 +136,6 @@ def test_publish_one_prompt_does_not_republish_unchanged_prompts():
 
     name, version = managed.publish_managed_prompt("answer-evaluator", client)
 
-    assert (name, version) == ("doc-bot/answer-evaluator", 8)
+    assert (name, version) == ("agent-docs/answer-evaluator", 8)
     client.create_prompt.assert_called_once()
-    assert client.create_prompt.call_args.kwargs["name"] == "doc-bot/answer-evaluator"
+    assert client.create_prompt.call_args.kwargs["name"] == "agent-docs/answer-evaluator"
