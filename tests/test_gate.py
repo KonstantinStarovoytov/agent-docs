@@ -48,6 +48,17 @@ def test_duplicate_of_an_indexed_page_is_flagged() -> None:
     assert flags == ["duplicate of https://x/a.md"]
 
 
+def test_a_page_is_not_a_duplicate_of_its_own_stored_copy() -> None:
+    # A run that indexed the page but lost its manifest commit leaves the
+    # page's own copy in the store; the next run sees the page as new again.
+    text = " ".join(f"word{i}" for i in range(200))
+    flags = gate.heuristic_flags(
+        _doc("https://x/a.md", text), 1, 10.0, {"https://x/a.md": text}
+    )
+
+    assert flags == []
+
+
 def test_non_doc_path_keywords_are_flagged() -> None:
     for path in ("release-notes.md", "blog/post.md", "terms.md", "llms-full.md"):
         assert gate.heuristic_flags(_doc(f"https://x/{path}"), 1, 10.0, {}), path
