@@ -130,11 +130,76 @@ text from the stored page (no model call). Searches are traced in Langfuse;
 ## Fresh every day
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/readme-daily-refresh-dark.png">
-  <img alt="Daily refresh: discover, gate, index, report" src="docs/diagrams/readme-daily-refresh-light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/reindex-flow-dark.gif">
+  <img alt="Animation of the daily reindex: read llms.txt, fetch, compare fingerprints, handle new, changed and gone pages, check and report" src="docs/flow/reindex-flow-light.gif">
 </picture>
 
-<sub>Diagram source: [docs/diagrams/readme-daily-refresh.mmd](docs/diagrams/readme-daily-refresh.mmd)</sub>
+**[Step through it at your own pace](https://konstantinstarovoytov.github.io/rag-context-assembly/?flow=reindex)**, or open the stills:
+
+<details>
+<summary>The 12 steps as still images</summary>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-01-dark.webp">
+  <img alt="Reindex step 1: Every day at 06:00 UTC" src="docs/flow/steps/reindex-01-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-02-dark.webp">
+  <img alt="Reindex step 2: Read each llms.txt" src="docs/flow/steps/reindex-02-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-03-dark.webp">
+  <img alt="Reindex step 3: Fetch every page" src="docs/flow/steps/reindex-03-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-04-dark.webp">
+  <img alt="Reindex step 4: Compare fingerprints" src="docs/flow/steps/reindex-04-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-05-dark.webp">
+  <img alt="Reindex step 5: Unchanged" src="docs/flow/steps/reindex-05-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-06-dark.webp">
+  <img alt="Reindex step 6: New page: the page gate" src="docs/flow/steps/reindex-06-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-07-dark.webp">
+  <img alt="Reindex step 7: Changed page" src="docs/flow/steps/reindex-07-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-08-dark.webp">
+  <img alt="Reindex step 8: Gone page: the removal guard" src="docs/flow/steps/reindex-08-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-09-dark.webp">
+  <img alt="Reindex step 9: Smoke check" src="docs/flow/steps/reindex-09-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-10-dark.webp">
+  <img alt="Reindex step 10: Change report" src="docs/flow/steps/reindex-10-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-11-dark.webp">
+  <img alt="Reindex step 11: Review issue" src="docs/flow/steps/reindex-11-light.webp">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-12-dark.webp">
+  <img alt="Reindex step 12: Failure issue" src="docs/flow/steps/reindex-12-light.webp">
+</picture>
+
+</details>
 
 New pages are indexed automatically; suspicious ones wait for a human. Each run
 writes a short report of what changed in the products: [reports/docs-changes/](reports/docs-changes/).
@@ -300,7 +365,8 @@ Re-index locally: `uv run python -m src.reindex --dry-run --out /tmp/r`
 | `scripts/` | Diagram rendering, Langfuse CLI with the project's keys |
 
 Diagrams: edit `docs/diagrams/*.mmd`, then `uv run python scripts/render_diagrams.py`.
-Animation: edit `docs/flow/index.html`, then `docs/flow/render.sh`.
+Animations: edit `docs/flow/flows/ask.js` (a question) or `docs/flow/flows/reindex.js`
+(the daily reindex), then `docs/flow/render.sh`.
 
 ## License
 

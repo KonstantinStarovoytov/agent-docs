@@ -91,11 +91,11 @@ The same pipeline is served two ways from one process: an **MCP server**
 ## How the index stays fresh
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-index-refresh-dark.png">
-  <img alt="How the index stays fresh" src="docs/diagrams/architecture-index-refresh-light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/flow/reindex-flow-dark.gif">
+  <img alt="Animation of the daily reindex" src="docs/flow/reindex-flow-light.gif">
 </picture>
 
-<sub>Diagram source: [docs/diagrams/architecture-index-refresh.mmd](docs/diagrams/architecture-index-refresh.mmd)</sub>
+<sub>[Step by step](https://konstantinstarovoytov.github.io/rag-context-assembly/?flow=reindex) · source: [docs/flow/flows/reindex.js](docs/flow/flows/reindex.js)</sub>
 
 - **Which pages:** every Markdown page in each vendor's `llms.txt`, minus
   excludes for translations, changelogs and release notes, weekly news,
@@ -108,8 +108,19 @@ The same pipeline is served two ways from one process: an **MCP server**
 - **Page gate:** each new page is checked for free first (size, language,
   near-duplicate, suspicious path). Then the LLM reads its beginning and says in
   one sentence what the page is. Anything flagged goes to quarantine.
-- **Cheap when nothing changed:** pages are fingerprinted; only changed pages
-  are embedded again.
+- **Cheap when nothing changed:** pages are fingerprinted (SHA-256 of the
+  Markdown and the chunker version); only new and changed pages are embedded
+  again. A new chunker version therefore re-embeds every page once.
+- **Fetch failures:** a page that fails to fetch keeps its indexed copy; if more
+  than 10% of a vendor's pages fail, the run fails.
+- **Removals:** a page that leaves `llms.txt` or becomes excluded is deleted
+  from the chunks, the stored pages and the manifest, unless more than 10% of a
+  vendor's indexed pages would go or its `llms.txt` lists under half of them;
+  then nothing is deleted for that vendor and the run fails.
+- **Smoke check:** after the index changes, 8 known questions must still find
+  their page in the top 10 of a hybrid search, or the run fails.
+- **Issues:** quarantined pages wait in one "Pages waiting for review" issue; a
+  failed run opens "Reindex needs attention" with the end of its log.
 - **Change report:** each run writes a readable list of added, removed and
   significantly changed pages to the run summary and `reports/docs-changes/`.
   Only our summaries and links go to git, never the vendors' text.
@@ -318,7 +329,11 @@ BM25 IDF, the new excludes, one chunk per reference entry, and an optional
 product filter for answers. Without the reranker, recall in the pool is the
 same as v1; only the product filter brings evidence back (coverage pool 10
 0.765 → 0.794). Details: [reports/index-v2-2026-10.md](reports/index-v2-2026-10.md).
-Production stays on v1. Switching means setting
+Since the daily reindex went live, v1 has v2's excludes and chunker too: the
+run of 2026-10-14 deleted the 40 pages the new excludes drop and re-chunked
+every page, because the chunker version is part of each page's fingerprint
+([report](reports/docs-changes/2026-10-14.md)). The two indexes now differ only
+in BM25 IDF. Production stays on v1. Switching means setting
 `QDRANT_HYBRID_COLLECTION=agent_docs_hybrid_v2` on Render and in the reindex
 workflow variable, after the reranked gate passes on v2 in November.
 
