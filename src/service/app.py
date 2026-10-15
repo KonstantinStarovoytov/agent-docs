@@ -29,7 +29,17 @@ from src.service.mcp_server import PRODUCT_VENDOR, Product, build_mcp_server
 
 COHERE_KEY_HEADER = "x-cohere-api-key"
 
-PUBLIC_PATHS = frozenset({"/health", "/docs", "/openapi.json", "/redoc"})
+GLAMA_CLAIM_PATH = "/.well-known/glama.json"
+PUBLIC_PATHS = frozenset(
+    {"/health", "/docs", "/openapi.json", "/redoc", GLAMA_CLAIM_PATH}
+)
+# Glama verifies that this domain is ours with a public claim token. It must
+# stay published: without it Glama drops the verified owner after a grace
+# period. The token holds no secret and no personal information.
+GLAMA_CLAIM = {
+    "$schema": "https://glama.ai/mcp/schemas/connector.json",
+    "claim": "glama_claim_ZWryPHPb61IhpHEj3XJG6iWZRcps5dLr",
+}
 # MCP messages anyone may send without a token or a Cohere key. They only
 # describe the server: no search, no model, no cost. Directories such as Glama
 # check a server with exactly these; calling a tool still needs credentials.
@@ -329,6 +339,10 @@ def create_app() -> FastAPI:
         return JSONResponse(
             {"detail": str(error)}, status_code=429, headers={"Retry-After": "60"}
         )
+
+    @app.get(GLAMA_CLAIM_PATH, include_in_schema=False)
+    async def glama_claim() -> dict[str, str]:
+        return GLAMA_CLAIM
 
     @app.get("/health")
     async def health() -> dict[str, Any]:
