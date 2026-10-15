@@ -110,3 +110,6 @@ The variants do not differ on hits: page hit is 1.000 and section hit is
 1. Add `other_sections` to `search_docs` passages. They come from the pool
    that is already reranked, so this needs no extra Cohere or Qdrant call.
 2. Check on real agents that they call `read_section` on those headings.
+
+**Follow-up:** `other_sections` shipped on 2026-10-14. The agent check is
+[agent-other-sections-2026-10.md](agent-other-sections-2026-10.md) (experiment 26).

@@ -266,6 +266,8 @@ Limits of the free setup: Cohere trial allows 1,000 reranks/month per key
 | Candidate pool 10, not 20 | Fully covered: 75% vs 50% (more recall pushed out the second topic) |
 | `gpt-6-luna` instead of `gpt-5.6-luna` | Faithfulness: 0.975 → 0.994 |
 | Stable tie-break in RRF | Same question → same results (was random) |
+| One passage per page in `search_docs` | Distinct pages in the top 5: 3.1 → 5.0; page hit@5: 0.936 → 0.979 |
+| Headings of a page's other matching sections (`other_sections`) | Labelled section visible: 0.667 → 0.867; with real agents, same correctness and failed section reads 11 → 1 |
 
 Main finding: **search finds the right page; the hard part is choosing what
 the model sees.** Details and every experiment: [ARCHITECTURE.md](ARCHITECTURE.md).
