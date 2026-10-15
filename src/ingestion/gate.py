@@ -112,6 +112,8 @@ def heuristic_flags(
     mine = _shingles(document.content)
     if mine:
         for url, text in indexed_texts.items():
+            if url == document.url:  # its own copy, from a run that lost its manifest
+                continue
             theirs = _shingles(text)
             if theirs and len(mine & theirs) / len(mine | theirs) >= DUPLICATE_OVERLAP:
                 flags.append(f"duplicate of {url}")

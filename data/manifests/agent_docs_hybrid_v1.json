@@ -1545,14 +1545,6 @@
       "reason": "",
       "summary": "Reference for organization-scoped API endpoints, authentication, and managing teams, usage, groups, model access, and members."
     },
-    "https://cursor.com/docs/account/pricing/legacy-cursor-plans.md": {
-      "sha256": "4674d3d3a26283c22b19eda6e9714357bb42bb2ca286cb4cddbe99be736081da",
-      "chunks": 0,
-      "title": "Legacy Cursor Plans",
-      "status": "quarantined",
-      "reason": "duplicate of https://cursor.com/docs/account/pricing/legacy-cursor-plans.md",
-      "summary": "Reference page explaining legacy Cursor plan prices, features, and how they compare with current plans."
-    },
     "https://cursor.com/docs/account/teams/admin-api.md": {
       "sha256": "251d3611714cdea73a32e7adf6da9612ff8d954c15d0553fd9f85e97ff4aeb56",
       "chunks": 131,
@@ -3472,14 +3464,6 @@
       "status": "indexed",
       "reason": "",
       "summary": "Setup and configuration instructions for using the Codex Micro keyboard with the ChatGPT desktop app."
-    },
-    "https://learn.chatgpt.com/docs/features/composer-predictions.md": {
-      "sha256": "1b0b979d352ea69e5be2930d6c8b906e25d45a6d4d3a0f08d7bf00f3a7bed37a",
-      "chunks": 0,
-      "title": "Composer Predictions",
-      "status": "quarantined",
-      "reason": "duplicate of https://learn.chatgpt.com/docs/features/composer-predictions.md",
-      "summary": "Explains how to use Composer Predictions in the Codex desktop app, including accepting suggestions and how they use conversation context."
     },
     "https://learn.chatgpt.com/docs/features/voice.md": {
       "sha256": "e481ff0d1dfc79b4d71356cb5ec5b924af54077fd853d5579f5fdb7272d0077b",
