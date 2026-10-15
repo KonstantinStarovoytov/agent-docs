@@ -30,9 +30,7 @@ from src.service.mcp_server import PRODUCT_VENDOR, Product, build_mcp_server
 COHERE_KEY_HEADER = "x-cohere-api-key"
 
 GLAMA_CLAIM_PATH = "/.well-known/glama.json"
-PUBLIC_PATHS = frozenset(
-    {"/health", "/docs", "/openapi.json", "/redoc", GLAMA_CLAIM_PATH}
-)
+PUBLIC_PATHS = frozenset({"/health", "/docs", "/openapi.json", "/redoc"})
 # Glama verifies that this domain is ours with a public claim token. It must
 # stay published: without it Glama drops the verified owner after a grace
 # period. The token holds no secret and no personal information.
@@ -40,16 +38,16 @@ GLAMA_CLAIM = {
     "$schema": "https://glama.ai/mcp/schemas/connector.json",
     "claim": "glama_claim_ZWryPHPb61IhpHEj3XJG6iWZRcps5dLr",
 }
-# MCP messages anyone may send without a token or a Cohere key. They only
-# describe the server: no search, no model, no cost. Directories such as Glama
-# check a server with exactly these; calling a tool still needs credentials.
-PUBLIC_MCP_METHODS = frozenset(
-    {"initialize", "notifications/initialized", "ping", "tools/list"}
-)
+# The only MCP message that costs anything: a tool call runs a search (OpenAI
+# embedding, Cohere rerank). It needs a token or the caller's Cohere key.
+# Everything else (initialize, ping, tools/resources/prompts lists, the
+# notifications) only describes the server or fails cheaply, so directories
+# such as Glama can check the server without credentials.
+PAID_MCP_METHODS = frozenset({"tools/call"})
 
 
-async def is_mcp_discovery(request: Request) -> bool:
-    """True for a POST to /mcp whose JSON-RPC messages are all discovery."""
+async def is_free_mcp_request(request: Request) -> bool:
+    """True for a POST to /mcp with no paid JSON-RPC message in it."""
     if request.method != "POST" or not request.url.path.startswith("/mcp"):
         return False
     try:
@@ -58,7 +56,7 @@ async def is_mcp_discovery(request: Request) -> bool:
         return False
     messages = payload if isinstance(payload, list) else [payload]
     return bool(messages) and all(
-        isinstance(message, dict) and message.get("method") in PUBLIC_MCP_METHODS
+        isinstance(message, dict) and message.get("method") not in PAID_MCP_METHODS
         for message in messages
     )
 
@@ -296,11 +294,29 @@ def create_app() -> FastAPI:
     async def require_token(
         request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
-        if request.url.path in PUBLIC_PATHS or request.method == "OPTIONS":
+        path = request.url.path
+        if path.startswith("/mcp") and request.method in ("GET", "DELETE"):
+            # Stateless: no session to delete and nothing sent unprompted, so a
+            # GET stream would only hold a connection open. The spec allows 405.
+            return JSONResponse(
+                {"detail": "Stateless MCP server: send JSON-RPC with POST."},
+                status_code=405,
+                headers={"Allow": "POST"},
+            )
+        # /.well-known is public, so an OAuth metadata probe gets a plain 404.
+        if (
+            path in PUBLIC_PATHS
+            or path.startswith("/.well-known/")
+            or request.method == "OPTIONS"
+        ):
             return await call_next(request)
         cohere_key = request.headers.get(COHERE_KEY_HEADER, "").strip() or None
         has_token = auth.token_accepted(request.headers.get("authorization"))
-        if not has_token and cohere_key is None and not await is_mcp_discovery(request):
+        if (
+            not has_token
+            and cohere_key is None
+            and not await is_free_mcp_request(request)
+        ):
             return JSONResponse(
                 {"detail": "Missing or invalid bearer token"},
                 status_code=401,

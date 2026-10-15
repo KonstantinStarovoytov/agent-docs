@@ -582,3 +582,41 @@ async def test_anonymous_discovery_is_limited_per_ip(
     codes = [(await _anonymous_mcp_post(TOOLS_LIST)).status_code for _ in range(3)]
 
     assert codes == [200, 200, 429]
+
+
+@pytest.mark.anyio
+async def test_anonymous_listing_of_any_kind_is_allowed(
+    stub_pipeline: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Directories also ask for resources and prompts; only tools/call costs."""
+    monkeypatch.setattr(settings, "api_token", SecretStr(TOKEN))
+    monkeypatch.setattr(settings, "api_allowed_hosts", "docs.example.test")
+    app_module.reset_rate_limiter()
+
+    response = await _anonymous_mcp_post(
+        {"jsonrpc": "2.0", "id": 4, "method": "resources/list"}
+    )
+
+    assert response.status_code == 200
+
+
+@pytest.mark.anyio
+async def test_get_on_the_stateless_transport_is_405_for_everyone(
+    stub_pipeline: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A stateless server sends nothing on its own; an idle GET stream would only
+    hold a connection open, so the server says to use POST instead."""
+    monkeypatch.setattr(settings, "api_token", SecretStr(TOKEN))
+    monkeypatch.setattr(settings, "api_allowed_hosts", "docs.example.test")
+    app = app_module.create_app()
+    async with app.router.lifespan_context(app):
+        async with httpx2.AsyncClient(
+            transport=httpx2.ASGITransport(app=app), base_url="http://docs.example.test"
+        ) as http_client:
+            anonymous = await http_client.get("/mcp/")
+            with_token = await http_client.get(
+                "/mcp/", headers={"Authorization": f"Bearer {TOKEN}"}
+            )
+
+    assert anonymous.status_code == with_token.status_code == 405
+    assert anonymous.headers["allow"] == "POST"

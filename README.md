@@ -217,9 +217,10 @@ writes a short report of what changed in the products: [reports/docs-changes/](r
 
 ## Connect
 
-Listing the tools needs nothing: `initialize` and `tools/list` answer without a
-key (30 requests/min per IP), so MCP directories can check the server. Calling a
-tool needs one header, either of:
+Connecting and listing the tools needs nothing: every MCP message except
+`tools/call` answers without a key (30 requests/min per IP), so MCP directories
+can check the server. The server is stateless, so `GET /mcp` answers 405; send
+everything with POST. Calling a tool needs one header, either of:
 
 - **Your own Cohere key:** `X-Cohere-Api-Key: <key>`. A free trial key is at
   [dashboard.cohere.com](https://dashboard.cohere.com). Reranking runs on your

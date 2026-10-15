@@ -395,3 +395,10 @@ def test_glama_claim_is_public(client: Any) -> None:
         "$schema": "https://glama.ai/mcp/schemas/connector.json",
         "claim": "glama_claim_ZWryPHPb61IhpHEj3XJG6iWZRcps5dLr",
     }
+
+
+def test_oauth_metadata_probe_is_a_plain_404(client: Any) -> None:
+    """Clients probe for OAuth after a 401; a 401 here would suggest OAuth exists."""
+    response = client.get("/.well-known/oauth-protected-resource")
+
+    assert response.status_code == 404
