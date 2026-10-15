@@ -3,10 +3,10 @@
   "name": "io.github.KonstantinStarovoytov/agent-docs",
   "title": "Agent Docs",
   "description": "Search the official docs of Claude Code, Cursor, OpenAI Codex and MCP, refreshed daily.",
-  "version": "0.1.0",
-  "websiteUrl": "https://github.com/KonstantinStarovoytov/rag-context-assembly",
+  "version": "0.1.1",
+  "websiteUrl": "https://github.com/KonstantinStarovoytov/agent-docs",
   "repository": {
-    "url": "https://github.com/KonstantinStarovoytov/rag-context-assembly",
+    "url": "https://github.com/KonstantinStarovoytov/agent-docs",
     "source": "github",
     "id": "1369858584"
   },

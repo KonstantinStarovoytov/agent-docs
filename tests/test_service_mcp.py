@@ -3,7 +3,9 @@
 import socket
 import threading
 import time
+import tomllib
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any
 
 import httpx2
@@ -142,7 +144,11 @@ async def test_server_reports_a_version(stub_pipeline: Any) -> None:
 
     assert info is not None
     # Read from pyproject: the project is not installed as a package.
-    assert info.version == "0.1.0"
+    pyproject = tomllib.loads(
+        (Path(__file__).parents[1] / "pyproject.toml").read_text()
+    )
+    assert info.version == pyproject["project"]["version"]
+    assert info.name == "agent-docs"
 
 
 @pytest.mark.anyio

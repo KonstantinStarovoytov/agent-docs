@@ -2,7 +2,7 @@
 # dashboard (sync: false); everything else is committed here. Render deploys
 # only after the GitHub checks pass, so the test workflow gates production.
 services:
-  - name: agent-docs-mcp
+  - name: agent-docs
     type: web
     runtime: docker
     plan: free

@@ -248,7 +248,7 @@ def create_app() -> FastAPI:
         flush()
 
     app = FastAPI(
-        title="agent-docs-mcp",
+        title="Agent Docs",
         description=(
             "Hybrid RAG over the official Claude, Cursor, Codex and MCP "
             "documentation. The same pipeline is served as an MCP server at /mcp."

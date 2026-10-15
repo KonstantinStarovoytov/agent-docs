@@ -1,4 +1,4 @@
-# rag-context-assembly
+# Agent Docs
 
 **Ask questions about Claude Code, Cursor, Codex and MCP — get answers grounded in their official docs, with citations.**
 
@@ -14,7 +14,7 @@ design choice is backed by an experiment.
   <img alt="Animation: an agent asks how to create a skill; search_docs finds the page, read_section returns the section, Langfuse measures every step" src="docs/flow/agent-docs-flow-light.gif">
 </picture>
 
-**[Step through it at your own pace](https://konstantinstarovoytov.github.io/rag-context-assembly/)** (arrow keys work), or open the stills:
+**[Step through it at your own pace](https://konstantinstarovoytov.github.io/agent-docs/)** (arrow keys work), or open the stills:
 
 <details>
 <summary>The 15 steps as still images</summary>
@@ -134,7 +134,7 @@ text from the stored page (no model call). Searches are traced in Langfuse;
   <img alt="Animation of the daily reindex: read llms.txt, fetch, compare fingerprints, handle new, changed and gone pages, check and report" src="docs/flow/reindex-flow-light.gif">
 </picture>
 
-**[Step through it at your own pace](https://konstantinstarovoytov.github.io/rag-context-assembly/?flow=reindex)**, or open the stills:
+**[Step through it at your own pace](https://konstantinstarovoytov.github.io/agent-docs/?flow=reindex)**, or open the stills:
 
 <details>
 <summary>The 12 steps as still images</summary>
@@ -269,7 +269,7 @@ With your own key, replace the `Authorization` line in the curl with
 
 **Try it.** The quickest way is your own free Cohere trial key (above), limited
 to 30 requests a minute per IP. Or open an
-[issue](https://github.com/KonstantinStarovoytov/rag-context-assembly/issues/new?title=Guest%20token%20request)
+[issue](https://github.com/KonstantinStarovoytov/agent-docs/issues/new?title=Guest%20token%20request)
 titled "Guest token request" for a shared guest token. The first request after
 15 idle minutes takes about a minute while the free host wakes up.
 
@@ -280,7 +280,7 @@ as `io.github.KonstantinStarovoytov/agent-docs` ([server.json](server.json)).
 
 ```json
 { "mcpServers": { "agent-docs": { "command": "uv",
-  "args": ["run", "--directory", "/path/to/rag-context-assembly", "rag-mcp"] } } }
+  "args": ["run", "--directory", "/path/to/agent-docs", "rag-mcp"] } } }
 ```
 
 ---
@@ -289,7 +289,7 @@ as `io.github.KonstantinStarovoytov/agent-docs` ([server.json](server.json)).
 
 | Part | Service | Plan |
 |---|---|---|
-| API + MCP server | Render (`agent-docs-mcp.onrender.com`) | Free web service |
+| API + MCP server | Render, service `agent-docs` at `agent-docs-mcp.onrender.com` | Free web service |
 | Vector index | Qdrant Cloud | Free 1 GB cluster |
 | Traces, eval datasets, prompts | Langfuse Cloud | Free Hobby |
 | Daily re-index, CI | GitHub Actions | Free |
