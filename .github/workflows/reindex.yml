@@ -86,7 +86,14 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/manifests reports/docs-changes
           git commit -m "chore(index): reindex on $(date -u +%F) [skip ci]"
-          git push
+          # main may have moved during the run (a PR merged meanwhile). This step
+          # only writes the manifest and the change reports, so rebasing the
+          # commit onto the new main is safe; a plain push would be rejected.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main && git push && exit 0
+            sleep 5
+          done
+          exit 1
       - name: Quarantine issue
         if: always()
         env:
