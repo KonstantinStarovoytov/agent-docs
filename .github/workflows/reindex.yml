@@ -50,6 +50,11 @@ jobs:
       TRACING_ENABLED: "false"
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # The `main` ruleset requires pull requests; GitHub Actions' own token
+          # cannot bypass it in a personal repository, but a deploy key can. The
+          # manifest and change-report commit below is pushed with this key.
+          ssh-key: ${{ secrets.REINDEX_DEPLOY_KEY }}
       - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
       - run: uv sync --locked
       - name: Keep Qdrant awake
