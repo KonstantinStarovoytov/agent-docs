@@ -4,6 +4,7 @@ Both live in one deployment so a single URL and a single token serve both an
 `/ask` caller and an MCP client pointed at `/mcp`.
 """
 
+import json
 import threading
 import time
 from collections.abc import AsyncIterator, Awaitable, Callable
@@ -29,6 +30,27 @@ from src.service.mcp_server import PRODUCT_VENDOR, Product, build_mcp_server
 COHERE_KEY_HEADER = "x-cohere-api-key"
 
 PUBLIC_PATHS = frozenset({"/health", "/docs", "/openapi.json", "/redoc"})
+# MCP messages anyone may send without a token or a Cohere key. They only
+# describe the server: no search, no model, no cost. Directories such as Glama
+# check a server with exactly these; calling a tool still needs credentials.
+PUBLIC_MCP_METHODS = frozenset(
+    {"initialize", "notifications/initialized", "ping", "tools/list"}
+)
+
+
+async def is_mcp_discovery(request: Request) -> bool:
+    """True for a POST to /mcp whose JSON-RPC messages are all discovery."""
+    if request.method != "POST" or not request.url.path.startswith("/mcp"):
+        return False
+    try:
+        payload = json.loads(await request.body())
+    except ValueError:
+        return False
+    messages = payload if isinstance(payload, list) else [payload]
+    return bool(messages) and all(
+        isinstance(message, dict) and message.get("method") in PUBLIC_MCP_METHODS
+        for message in messages
+    )
 
 
 class AskRequest(BaseModel):
@@ -268,7 +290,7 @@ def create_app() -> FastAPI:
             return await call_next(request)
         cohere_key = request.headers.get(COHERE_KEY_HEADER, "").strip() or None
         has_token = auth.token_accepted(request.headers.get("authorization"))
-        if not has_token and cohere_key is None:
+        if not has_token and cohere_key is None and not await is_mcp_discovery(request):
             return JSONResponse(
                 {"detail": "Missing or invalid bearer token"},
                 status_code=401,
