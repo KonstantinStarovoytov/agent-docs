@@ -11,7 +11,7 @@ design choice is backed by an experiment.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/agent-docs-flow-dark.gif">
-  <img alt="Animation: an agent asks how to create a skill; search_docs finds the page, read_section returns the section, Langfuse measures every step" src="docs/flow/agent-docs-flow-light.gif">
+  <img alt="Query flow: an agent asks how to create a skill; search_docs finds the page, read_section returns the section, Langfuse measures every step" src="docs/flow/agent-docs-flow-light.gif">
 </picture>
 
 **[Step through it at your own pace](https://konstantinstarovoytov.github.io/agent-docs/)** (arrow keys work), or open the stills:
@@ -131,7 +131,7 @@ text from the stored page (no model call). Searches are traced in Langfuse;
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/reindex-flow-dark.gif">
-  <img alt="Animation of the daily reindex: read llms.txt, fetch, compare fingerprints, handle new, changed and gone pages, check and report" src="docs/flow/reindex-flow-light.gif">
+  <img alt="Daily reindex, drawn as the ledger of the run of 14 Oct 2026: read llms.txt, fetch, compare fingerprints, then new, changed and gone pages, checks and reports" src="docs/flow/reindex-flow-light.gif">
 </picture>
 
 **[Step through it at your own pace](https://konstantinstarovoytov.github.io/agent-docs/?flow=reindex)**, or open the stills:
@@ -161,22 +161,22 @@ text from the stored page (no model call). Searches are traced in Langfuse;
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-05-dark.webp">
-  <img alt="Reindex step 5: Unchanged" src="docs/flow/steps/reindex-05-light.webp">
+  <img alt="Reindex step 5: Unchanged pages" src="docs/flow/steps/reindex-05-light.webp">
 </picture>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-06-dark.webp">
-  <img alt="Reindex step 6: New page: the page gate" src="docs/flow/steps/reindex-06-light.webp">
+  <img alt="Reindex step 6: New pages: the page gate" src="docs/flow/steps/reindex-06-light.webp">
 </picture>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-07-dark.webp">
-  <img alt="Reindex step 7: Changed page" src="docs/flow/steps/reindex-07-light.webp">
+  <img alt="Reindex step 7: Changed pages" src="docs/flow/steps/reindex-07-light.webp">
 </picture>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/steps/reindex-08-dark.webp">
-  <img alt="Reindex step 8: Gone page: the removal guard" src="docs/flow/steps/reindex-08-light.webp">
+  <img alt="Reindex step 8: Gone pages: the removal guard" src="docs/flow/steps/reindex-08-light.webp">
 </picture>
 
 <picture>

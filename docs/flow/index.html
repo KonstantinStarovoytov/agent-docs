@@ -295,6 +295,9 @@ window.render = function (t) {
     }
   }
 
+  // A flow can draw its own state on top (the reindex ledger does).
+  if (FLOW.update) FLOW.update(si, local);
+
   if (si !== lastStep) {
     lastStep = si;
     document.getElementById('ctitle').textContent = step.t;
