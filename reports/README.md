@@ -15,6 +15,7 @@ the report that reads it.
 | [dedup-abstain-2026-10.md](dedup-abstain-2026-10.md) | One passage per page, and refusing on a low top score (22, 23) |
 | [find-pages-2026-10.md](find-pages-2026-10.md) | Page cards and `read_section` (24) |
 | [passages-per-page-2026-10.md](passages-per-page-2026-10.md) | One passage per page vs. more; headings of the page's other sections (25) |
+| [agent-other-sections-2026-10.md](agent-other-sections-2026-10.md) | Real agents with and without `other_sections` (26) |
 
 ## September 2026: first index
 

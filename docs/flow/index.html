@@ -77,9 +77,9 @@
   .who { font-size: 13px; color: var(--muted); margin: 0 2px 6px; }
 
   .bars { white-space: normal; }
-  .bar-row { display: flex; align-items: center; height: 36px; gap: 14px; font-size: 13px; }
+  .bar-row { display: flex; align-items: center; height: 34px; gap: 14px; font-size: 13px; }
   .bar-row .sc { width: 40px; text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
-  .bar-row .track { width: 220px; height: 14px; background: var(--node); }
+  .bar-row .track { width: 150px; height: 14px; background: var(--node); }
   .bar-row .fill { display: block; height: 100%; background: var(--ink); width: var(--w); }
   .bar-row .lbl { font-size: 15px; }
 
@@ -218,9 +218,9 @@ const STEPS = [
   { t: 'Hybrid search over chunks', d: 'Pages are cut into chunks in advance. Dense search matches the meaning, BM25 exact words like SKILL.md; each returns its top 60.', n: ['S_hybrid'], s: ['E_openai', 'E_chunks'], e: ['e_hyb_openai', 'e_rrf_qdrant'], dur: 4.8 },
   { t: 'Rank fusion', d: 'The lists merge by rank, ties sorted by chunk id. The top 20 go on: reading 3 × more means a tie is never cut in half.', n: ['S_rrf'], s: ['E_chunks'], e: ['e_hyb_rrf'], dur: 4.4 },
   { t: 'Rerank', d: 'Cohere reads the question with each of the 20 chunks and scores it from 0 to 1. Nothing is dropped here.', n: ['S_rerank'], s: ['E_cohere'], e: ['e_rrf_rerank', 'e_rerank_cohere'], dur: 4.0 },
-  { t: 'One chunk per page', d: 'A passage is the best chunk of its page; the rest of the page is dropped. By default 8 pages come back; limit allows up to 20.', n: ['S_page'], s: [], e: ['e_rerank_page'], dur: 4.8 },
-  { t: 'What the agent receives', d: 'Each passage carries the page, the section, a link, a one-line page description, a score and a 300-character preview.', n: ['A_read'], s: [], e: ['e_page_read'], dur: 5.0 },
-  { t: 'read_section maps the page', d: 'The preview cuts the steps short, so the agent opens the page. Without a heading it gets a short outline of it.', n: ['A_call2', 'S_read'], s: ['E_snap'], e: ['e_read_call2', 'e_call2_sread', 'e_sread_snap'], dur: 4.4 },
+  { t: 'One chunk per page', d: 'A passage is the best chunk of its page. The page’s other chunks that score 0.35 or more are named in other_sections, without text. Up to 8 pages come back.', n: ['S_page'], s: [], e: ['e_rerank_page'], dur: 4.8 },
+  { t: 'What the agent receives', d: 'Each passage carries the page, the section, a link, a one-line description, a score, a 300-character preview and other_sections.', n: ['A_read'], s: [], e: ['e_page_read'], dur: 5.0 },
+  { t: 'read_section maps the page', d: 'The preview cuts the steps short. The agent can open a heading from the passage or its other_sections, or ask for the page outline first.', n: ['A_call2', 'S_read'], s: ['E_snap'], e: ['e_read_call2', 'e_call2_sread', 'e_sread_snap'], dur: 4.4 },
   { t: 'read_section returns the section', d: 'With a heading it gets the section as the page’s own Markdown, subsections included, code and lists intact.', n: ['A_call2', 'S_read'], s: ['E_snap'], e: ['e_call2_sread', 'e_sread_snap'], dur: 5.4 },
   { t: 'A cited answer', d: 'The agent’s LLM answers from the official text, in the user’s language, and links the page it used.', n: ['A_write', 'A_ans'], s: [], e: ['e_sread_write', 'e_write_ans'], dur: 4.2 },
   { t: 'Search is traced', d: 'Every search_docs call leaves two observations in Langfuse: the hybrid search and the rerank, with inputs, outputs and timing.', n: ['O_traces'], s: [], e: ['e_spans'], dur: 4.2 },
@@ -239,7 +239,7 @@ const ART = [
     '  RRF merge           60, the first 20 go on  <i class=c>3 × overfetch</i>',
     '  Cohere rerank       scores all 20',
     '  one per page        <i class=hl>up to 8 passages</i>, 300-char previews',
-    '',
+    '                      + other_sections: the page’s other headings',
     '<i class=h>read_section</i>(url, heading?, offset?)',
     '  no heading          the page outline',
     '  a heading           the section as <i class=hl>Markdown</i>, 8,000 chars a call',
@@ -295,13 +295,14 @@ const ART = [
     '<i class=hl>ties sorted by chunk id: same question, same list</i>',
     '<i class=c>the first 20 of the 60 go on to the reranker</i>'] },
   { name: 'Cohere scores', ex: 'Real headings, example scores', html: `<div class="bars">
-     ${[['0.91', 91, 'claude-code › Create your first skill'], ['0.84', 84, 'claude-code › Configure skills'], ['0.77', 77, 'cursor › SKILL.md file format'], ['0.62', 62, 'agent-sdk › Create skills'], ['0.35', 35, 'claude-code › Share skills'], ['0.18', 18, 'cursor › Skill directories']]
+     ${[['0.91', 91, 'claude-code › Create your first skill'], ['0.86', 86, 'claude-code › Extend Claude with skills'], ['0.84', 84, 'claude-code › Frontmatter reference'], ['0.77', 77, 'cursor › SKILL.md file format'], ['0.62', 62, 'agent-sdk › Create skills'], ['0.35', 35, 'claude-code › Share skills']]
        .map(([s, w, l]) => `<div class="bar-row"><span class="sc">${s}</span><span class="track"><span class="fill" style="--w:${w}%"></span></span><span class="lbl">${l}</span></div>`).join('')}
-     <div class="key" style="color:var(--muted)">The question and each chunk are read together. All 20 are scored; none is dropped.</div></div>` },
+     <div class="key" style="color:var(--muted)">Each chunk is read with the question. All 20 are scored.</div></div>` },
   { name: 'Pages, one chunk each', ex: 'Real headings, example scores', html: `<div class="sheets">
      <div class="sheet"><span class="ft">claude-code/skills.md</span><div class="pg">
        <div class="chunk best"><span>Create your first skill</span><span>0.91</span></div>
-       <div class="chunk cand drop"><span>Configure skills</span><span>0.84</span></div>
+       <div class="chunk cand drop"><span>Extend Claude with skills</span><span>0.86</span></div>
+       <div class="chunk cand drop"><span>Frontmatter reference</span><span>0.84</span></div>
        <div class="chunk cand drop"><span>Share skills</span><span>0.35</span></div></div></div>
      <div class="sheet"><span class="ft">cursor/skills.md</span><div class="pg">
        <div class="chunk best"><span>SKILL.md file format</span><span>0.77</span></div>
@@ -309,18 +310,18 @@ const ART = [
      <div class="sheet"><span class="ft">agent-sdk/skills.md</span><div class="pg">
        <div class="chunk best"><span>Create skills</span><span>0.62</span></div></div></div>
      </div>
-     <div class="key"><b>Orange</b> is a passage: the best chunk of its page.<br><b>Struck out</b> is the same page again, dropped.<br>Up to 8 pages come back; three are shown.</div>` },
-  { name: 'One passage, as returned', ex: 'Index of 14 Oct 2026; score and text are examples', lines: [
+     <div class="key"><b>Orange</b> is a passage: the best chunk of its page.<br><b>Struck out</b>: same page; text dropped, heading kept<br>in other_sections at 0.35 or more (not Skill directories).</div>` },
+  { name: 'One passage, as returned', ex: 'Index of 14 Oct 2026; rank, score and text are examples', lines: [
     '{',
-    '  <i class=k>"rank"</i>: 1, <i class=k>"score"</i>: 0.91,',
-    '  <i class=k>"title"</i>: <i class=s>"Extend Claude with skills"</i>,',
-    N('  <i class=k>"heading"</i>: <i class=s>"Extend Claude with skills ></i>', 'where the chunk sits', 49),
-    '     <i class=s>Getting started > Create your first skill"</i>,',
+    '  <i class=k>"rank"</i>: 1, <i class=k>"score"</i>: 0.91, <i class=k>"title"</i>: <i class=s>"Extend Claude with skills"</i>,',
+    '  <i class=k>"heading"</i>: <i class=s>"… > Getting started > Create your first skill"</i>,',
     '  <i class=k>"url"</i>: <i class=s>"https://code.claude.com/docs/en/skills.md"</i>,',
-    '  <i class=k>"description"</i>: <i class=s>"Explains how to create, manage,</i>',
-    '     <i class=s>and invoke skills in Claude Code."</i>,',
-    N('  <i class=k>"content"</i>: <i class="s hl">"first 300 chars of the chunk"</i>,', 'a preview', 49),
-    N('  <i class=k>"truncated"</i>: <i class=hl>true</i>', 'the chunk goes on', 49),
+    '  <i class=k>"description"</i>: <i class=s>"Explains how to create, manage, …"</i>,',
+    N('  <i class=k>"content"</i>: <i class=s>"first 300 chars of the chunk"</i>,', 'a preview', 49),
+    '  <i class=k>"truncated"</i>: true,',
+    N('  <i class=k>"other_sections"</i>: [', 'pass one to read_section', 49),
+    '    <i class="s hl">"Extend Claude with skills"</i>, <i class="s hl">"… > Configure skills</i>',
+    '    <i class="s hl">> Frontmatter reference"</i>, <i class="s hl">"… > Share skills"</i>]',
     '}'] },
   { name: 'The page outline', ex: 'Index of 14 Oct 2026', lines: [
     '<i class=c>read_section(url)</i>',
