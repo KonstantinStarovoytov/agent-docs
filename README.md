@@ -349,7 +349,7 @@ uv sync --locked                      # Python 3.14
 cp .env.example .env                  # OpenAI, Cohere, Qdrant, Langfuse keys
 docker compose up -d                  # local Qdrant + API on :8080
 uv run python -m src.ask "How do skills work?"
-uv run pytest -q && uv run ruff check src evals tests && uv run mypy
+uv run pytest -q && uv run ruff check src evals tests && uv run ruff format --check src evals tests && uv run mypy
 ```
 
 Re-index locally: `uv run python -m src.reindex --dry-run --out /tmp/r`

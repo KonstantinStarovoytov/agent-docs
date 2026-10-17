@@ -513,6 +513,11 @@ The pool-10 vs pool-20 crowding result from 7.6 **reproduces after the fix**. Ex
 
 ## 10. Next steps, in order
 
+Status on 2026-10-17: items 5–8 are not started. They concern context
+selection, which only `/ask` (REST) still has: agents now call `search_docs`
+and `read_section` and choose the context themselves. Current open work is in
+[ARCHITECTURE.md → Next](../ARCHITECTURE.md#full-corpus-october-2026).
+
 1. Done (section 7.5): k=8 improves coverage and faithfulness, so it is kept.
 2. Done (section 7.6): the 20-candidate configuration reduced delivered coverage versus 10.
    `retrieval_top_k` stays at 10; the ceiling for that pool is 0.812 and the pipeline
