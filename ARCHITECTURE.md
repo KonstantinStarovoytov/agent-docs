@@ -9,7 +9,7 @@ measurement, not a guess. The full experiment log with every run is in
 **Contents:** [Glossary](#glossary) · [How a question is answered](#how-a-question-is-answered) ·
 [How the index stays fresh](#how-the-index-stays-fresh) · [Decisions](#decisions) ·
 [Experiments](#experiments) · [What we learned](#what-we-learned) ·
-[Evaluation](#evaluation) · [Limits and open questions](#limits-and-open-questions)
+[Common RAG patterns](#common-rag-patterns-measured-here) · [Evaluation](#evaluation) · [Limits and open questions](#limits-and-open-questions)
 
 ---
 
@@ -215,6 +215,37 @@ Each row is one hypothesis. "Kept" means it is in production.
    by one case between identical runs.
 6. **Measure, then drop what does not pay.** Two-hop search and query rewriting
    were built, measured and switched off.
+
+---
+
+## Common RAG patterns, measured here
+
+RAG is often explained as eight patterns, each fixing one failure. This is
+how each one fared here. "Exp." numbers refer to [Experiments](#experiments).
+
+| Pattern | The failure it targets | Here | What the measurements say |
+|---|---|---|---|
+| Naive: embed, take the nearest chunks, generate | (the baseline) | Not used | No naive baseline was measured; hybrid search was chosen by design. |
+| Hybrid: keyword and vector search merged | Exact names, flags and error codes that embeddings blur | **Used**: dense + BM25, merged with RRF | Not measured on its own: on the original 35 pages every set already reached Hit@5 = 1.0. BM25 IDF still waits for the reranked gate (exp. 18). |
+| Reranked: a larger pool, reordered by a reranker | The right chunk was found but ranked too low | **Used**: Cohere, pool 10 for `/ask`, 20 for `search_docs` | None of the 10 full-corpus misses was lost by the reranker; 7 never reached its pool (exp. 16). Yet a larger pool was worse: complete coverage 0.750 → 0.500 with pool 20 (exp. 7), hit@5 0.979 → 0.915 with pool 40 (exp. 17). |
+| Multi-query: several phrasings, results combined | The answer depends on the wording | **Partly**: an English copy of non-English questions | Translation: Hit@5 0.958 → 1.000 (exp. 1). Paraphrasing broke a case, MRR 1.0 → 0.25, and was dropped (exp. 2). |
+| Hierarchical: broad sections first, then chunks inside them | A chunk loses the structure around it | **Used, the other way round**: find the chunk, then read its whole section | Every chunk carries vendor, product, page and section. `read_section` returns the labelled section for 25 of 25 labels (exp. 24); naming a page's other matching sections lifts section hit 0.667 → 0.867 (exp. 25). |
+| Corrective: judge the context, then refine and retry | Confident answers built on irrelevant context | **Half**: abstain, never retry | Abstaining when the top score is below 0.55 catches 8 of 12 negatives before any LLM call (exp. 23). Judge-and-retry did not pay: same coverage with a second round (exp. 3), and the judge called 5 of 8 complete contexts incomplete (exp. 11). |
+| Graph: entities and relations | An answer that spans documents | Not tried | No evidence either way. |
+| Agentic: an agent decides whether and how often to retrieve | Some questions need no search, others several rounds | **The main path**: agents call `search_docs` and `read_section` and write the answer | In 30 days of traces agents chose `search_docs` 103 times and `ask_docs` 11. With real agents, correctness 0.92–0.94 (exp. 26). |
+
+**The largest loss here is not on the list: choosing what the model sees.** On
+the original corpus, 0.948 of the evidence was among 20 candidates but only
+0.646 reached the LLM (exp. 4). The best possible pick of 5 chunks covered
+0.875; the actual pick, 0.312 (exp. 5). What helped was more room, 8 chunks
+instead of 5: complete coverage 0.250 → 0.750 (exp. 6). On the agent path
+this step does not exist: the agent assembles its own context.
+
+**The patterns do not simply stack.** A larger pool, paraphrased queries and a
+second retrieval round each sound like an upgrade; here each made results
+worse or changed nothing ([finding 2](#what-we-learned)). Each was kept only
+if a measurement showed a gain, which is possible because retrieval is scored
+by code, separately from the answers ([Evaluation](#evaluation)).
 
 ---
 
