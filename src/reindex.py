@@ -23,13 +23,6 @@ from qdrant_client import QdrantClient, models
 from src.config import settings
 from src.ingestion.chunker import chunk_document
 from src.ingestion.decisions import load_decisions, render_issue
-from src.ingestion.manifest import (
-    Manifest,
-    ManifestEntry,
-    load_manifest,
-    manifest_path,
-    save_manifest,
-)
 from src.ingestion.ingest import (
     ensure_hybrid_collection,
     get_hybrid_vector_store,
@@ -38,6 +31,13 @@ from src.ingestion.ingest import (
 from src.ingestion import report as rep
 from src.ingestion.gate import PageReview, gate_page, review_page
 from src.ingestion.loader import LoadResult, load_all_sources
+from src.ingestion.manifest import (
+    Manifest,
+    ManifestEntry,
+    load_manifest,
+    manifest_path,
+    save_manifest,
+)
 from src.ingestion.snapshots import SnapshotStore, snapshot_collection
 from src.ingestion.sources import SOURCES
 from src.models import SourceDocument
