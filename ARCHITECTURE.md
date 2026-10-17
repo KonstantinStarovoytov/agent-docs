@@ -198,6 +198,7 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 24 | Page cards plus section reads find and return the right section | Stored Cohere scores, search pool 20 (0 Cohere calls); `read_section` on the 25 labels that name a heading | Page hit@3 / @5: retrieval-v3 0.936 / 0.979; evidence groups (one call per question) 0.500 / 0.647. read_section: 11 of 25 on v1 today (14 fail: 28 v1 pages have no snapshot), 25 of 25 with them filled; median 1,415 chars, p95 7,941 | **Kept**; every v1 page has a snapshot since the 2026-10-14 reindex (591 of 591) ([report](reports/find-pages-2026-10.md)) |
 | 25 | Showing more than one passage per page helps agents find the right section | Same pools and Cohere scores (pool 20, 83 questions, all fully scored); A one per page, B up to two, C a second only if ≥ 0.8 × best, D one per page plus the headings of the page's other chunks ≥ 0.35 | retrieval-v3 section hit 0.667 → 0.867 with D, page hit unchanged, +8–10% tokens; B and C lose pages (all-groups coverage @5 0.438 → 0.312) | **Kept**: implemented as `other_sections` ([report](reports/passages-per-page-2026-10.md)) |
 | 26 | Agents use `other_sections` and answer better with it | gpt-6-luna and claude-haiku-5-5 with the real tools, with and without the field (removed from results and description); gpt-6-sol judges against the labelled section; 12 Claude Code questions with the product named, two repeats (96 runs), plus a first run of 15 questions as written | Same correctness (luna 0.94 / 0.94, Haiku 0.92 / 0.94; the only gap is one partial answer); 21–28% of reads open a heading from `other_sections`; failed reads on guessed headings 7 → 1 (luna) and 4 → 0 (Haiku) | **Partly confirmed**: used, fewer failed reads, no effect on correctness; field kept ([report](reports/agent-other-sections-2026-10.md)) |
+| 27 | Claude Haiku 5.5 can replace `gpt-6-sol` as the answer judge | The 67 answers sol judged on 2026-10-12, re-graded with the same rubric; six disagreements read against the documentation | Haiku scores lower (faithfulness 0.988 → 0.810, citations 0.987 → 0.689) and agrees on all 19 abstentions; in 5 of 6 read cases sol was right; Haiku's scores cluster (0.8 for 35 answers) and contradict its own issue lists; 1 unusable verdict | **Rejected**; sol is the default judge ([report](reports/judge-agreement-2026-10.md)) |
 
 ---
 
@@ -223,10 +224,10 @@ Each row is one hypothesis. "Kept" means it is in production.
 **Retrieval is scored by code**, because the correct pages are labelled in
 advance: Hit@k, MRR, precision@k, nDCG, evidence coverage.
 
-**Answers are scored by an LLM judge**: `gpt-6-sol` in the October runs
-(`OPENAI_JUDGE_MODEL`), while `gpt-6-luna` generates. Both are OpenAI GPT-6
-models; a judge from another vendor has not been tried. If the setting is
-unset, the judge falls back to the generator and the run records that. It scores
+**Answers are scored by an LLM judge**: `gpt-6-sol` (`JUDGE_MODEL`, the
+default), while `gpt-6-luna` generates. A judge from another vendor,
+`claude-haiku-5-5`, was tried on the same 67 answers and rejected
+(experiment 27). It scores
 faithfulness, answer relevance, context utilisation, citation
 correctness, a failure-mode label (none / refusal / empty / repeated /
 did-not-follow-instructions), and correct abstention on 12 questions the

@@ -1,6 +1,6 @@
 from typing import Literal
 
-from pydantic import Field, SecretStr, field_validator
+from pydantic import AliasChoices, Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -34,9 +34,14 @@ class Settings(BaseSettings):
     evidence_planner_prompt_version: int | None = Field(default=None, ge=1)
     prompt_strict: bool = False
     openai_chat_model: str = "gpt-6-luna"
-    # LLM-as-judge should not be the model it grades. Unset means the judge
-    # runs on the generator model and every eval run records that it did.
-    openai_judge_model: str | None = None
+    # LLM-as-judge must not be the model it grades. A `claude-` judge goes
+    # through Anthropic's OpenAI-compatible API with ANTHROPIC_API_KEY.
+    # OPENAI_JUDGE_MODEL is the variable's old name.
+    judge_model: str = Field(
+        default="gpt-6-sol",
+        validation_alias=AliasChoices("judge_model", "openai_judge_model"),
+    )
+    anthropic_api_key: SecretStr | None = None
     # GPT-6 models accept only the default temperature and answer 400 to any
     # other value, so unset means "do not send it". Set 0 for older models.
     openai_temperature: float | None = None
