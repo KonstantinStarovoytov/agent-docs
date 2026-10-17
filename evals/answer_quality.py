@@ -10,9 +10,10 @@ import json
 from dataclasses import dataclass
 from typing import Any, Literal
 
+from langchain_core.runnables import Runnable
 from langchain_openai import ChatOpenAI
 from langfuse import Evaluation
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from src.config import settings
 from src.observability import model_config, prompt_context, traced
@@ -41,9 +42,54 @@ class AnswerQualityAssessment(BaseModel):
     summary: str = Field(min_length=1)
     failure_mode: FailureMode = "none"
 
+    @field_validator(
+        "unsupported_claims", "missing_aspects", "citation_issues", mode="before"
+    )
+    @classmethod
+    def _list_sent_as_text(cls, value: object) -> object:
+        # Small judges sometimes send a tool call's array as a JSON string.
+        if not isinstance(value, str):
+            return value
+        try:
+            parsed = json.loads(value)
+        except ValueError:
+            return [value] if value.strip() else []
+        if isinstance(parsed, list) and all(isinstance(x, str) for x in parsed):
+            return parsed
+        return [value]
+
+
+ANTHROPIC_OPENAI_URL = "https://api.anthropic.com/v1/"
+
 
 def judge_model() -> str:
-    return settings.openai_judge_model or settings.openai_chat_model
+    return settings.judge_model
+
+
+def judge_llm(model: str) -> ChatOpenAI:
+    """The judge; a Claude model through Anthropic's OpenAI-compatible API."""
+    if model.startswith("claude-"):
+        if settings.anthropic_api_key is None:
+            raise RuntimeError(f"ANTHROPIC_API_KEY must be set to judge with {model}")
+        return ChatOpenAI(
+            api_key=settings.anthropic_api_key.get_secret_value(),
+            base_url=ANTHROPIC_OPENAI_URL,
+            model=model,
+        )
+    # GPT-6 judges reject any temperature, so the generator's setting must not
+    # leak here.
+    return ChatOpenAI(api_key=settings.openai_api_key.get_secret_value(), model=model)
+
+
+def structured_judge(model: str) -> Runnable[Any, Any]:
+    llm = judge_llm(model)
+    if model.startswith("claude-"):
+        # Anthropic's OpenAI-compatible API rejects the JSON-schema response
+        # format for these scores (no minimum/maximum); a tool call works.
+        return llm.with_structured_output(
+            AnswerQualityAssessment, method="function_calling"
+        )
+    return llm.with_structured_output(AnswerQualityAssessment)
 
 
 def judge_is_independent() -> bool:
@@ -73,9 +119,15 @@ def _assessment_trace_input(
     input_factory=_assessment_trace_input,
 )
 def assess_answer_quality(
-    question: str, answer: str, contexts: list[dict[str, Any]]
+    question: str,
+    answer: str,
+    contexts: list[dict[str, Any]],
+    judge: str | None = None,
 ) -> AnswerQualityResult:
-    """Judge one answer once, then fan its structured scores into Langfuse."""
+    """Judge one answer once, then fan its structured scores into Langfuse.
+
+    `judge` overrides the configured judge model (to compare two judges).
+    """
     prompt = get_chat_prompt(
         "answer-evaluator",
         version=settings.answer_evaluator_prompt_version,
@@ -86,14 +138,9 @@ def assess_answer_quality(
         answer=answer,
         contexts=json.dumps(contexts, ensure_ascii=False),
     )
-    model = ChatOpenAI(
-        api_key=settings.openai_api_key.get_secret_value(),
-        model=judge_model(),
-        # The judge is a different model from the generator; GPT-6 judges
-        # reject any temperature, so the generator's setting must not leak here.
-    )
+    model = structured_judge(judge or judge_model())
     with prompt_context(prompt):
-        assessment = model.with_structured_output(AnswerQualityAssessment).invoke(
+        assessment = model.invoke(
             prompt.messages,
             config=model_config("evaluate-answer-quality"),
         )

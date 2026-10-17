@@ -1,0 +1,1341 @@
+{
+  "note": "Scores only; answers and retrieved documentation are not kept in git.",
+  "rows": [
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How do I configure Cursor to use external MCP tools, apply instructions only to Python files, and delegate a long task to a subagent?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.92,
+        "answer_relevance": 0.78,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.6,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.4,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How should a Claude Code plugin divide a recurring test-failure investigation workflow among skills, subagents, hooks, and an MCP server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.85,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.75,
+        "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "For an MCP server, how should a client discover tools, handle tool-list changes, and implement authorization?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.75,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How do I set persistent project guidance in AGENTS.md and connect Codex to a remote MCP server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.72,
+        "context_utilization": 0.68,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "In Claude Code, when should a reusable workflow be a skill and when should it be a subagent with its own context?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.8,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "In Cursor, what is the difference between a skill and a rule, and how does each one get activated?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.5,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.8,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How do I run a command automatically on every Cursor agent event and also hand a long refactor to a separate agent?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.82,
+        "answer_relevance": 0.52,
+        "context_utilization": 0.38,
+        "citation_correctness": 0.82,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.4,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "For Codex, what belongs in AGENTS.md and what should instead be a rule?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How do I build a Codex skill, and when should the work be delegated to a subagent instead?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.8,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "What primitives does an MCP server expose, and what does the client side contribute to the same session?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.75,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How should a remote MCP server authorize callers, and what other security mistakes must it avoid?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How does MCP handle protocol version negotiation, and what must a client implement to connect to a server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.94,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.78,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How do I build an MCP server with the official SDK and then register it in Cursor?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.7,
+        "context_utilization": 0.55,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "How does configuring an MCP server differ between Claude Code and Cursor?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.5,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "Where do persistent project instructions live for Claude Code and for Codex, and how is each file loaded?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T11:20:25.136682Z",
+      "question": "Compare the hook events available in Cursor and in Codex for blocking an agent action before it runs.",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.75,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.6,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How do I configure Cursor to use external MCP tools, apply instructions only to Python files, and delegate a long task to a subagent?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.65,
+        "context_utilization": 0.62,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.7,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.4,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How should a Claude Code plugin divide a recurring test-failure investigation workflow among skills, subagents, hooks, and an MCP server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.78,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.75,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "For an MCP server, how should a client discover tools, handle tool-list changes, and implement authorization?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.72,
+        "context_utilization": 0.72,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How do I set persistent project guidance in AGENTS.md and connect Codex to a remote MCP server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.72,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "In Claude Code, when should a reusable workflow be a skill and when should it be a subagent with its own context?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.82,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "In Cursor, what is the difference between a skill and a rule, and how does each one get activated?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.45,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How do I run a command automatically on every Cursor agent event and also hand a long refactor to a separate agent?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.75,
+        "context_utilization": 0.5,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.6,
+        "answer_relevance": 0.4,
+        "context_utilization": 0.4,
+        "citation_correctness": 0.4,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "For Codex, what belongs in AGENTS.md and what should instead be a rule?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.75,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How do I build a Codex skill, and when should the work be delegated to a subagent instead?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.75,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "What primitives does an MCP server expose, and what does the client side contribute to the same session?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.68,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How should a remote MCP server authorize callers, and what other security mistakes must it avoid?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.55,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.75,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How does MCP handle protocol version negotiation, and what must a client implement to connect to a server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.78,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How do I build an MCP server with the official SDK and then register it in Cursor?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.96,
+        "answer_relevance": 0.72,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "error": "ValidationError"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "How does configuring an MCP server differ between Claude Code and Cursor?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.65,
+        "context_utilization": 0.5,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.8,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "Where do persistent project instructions live for Claude Code and for Codex, and how is each file loaded?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.65,
+        "context_utilization": 0.4,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.7,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.8,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T12:02:46.577481Z",
+      "question": "Compare the hook events available in Cursor and in Codex for blocking an agent action before it runs.",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.94,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.72,
+        "citation_correctness": 0.91,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.6,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How do I configure Cursor to use external MCP tools, apply instructions only to Python files, and delegate a long task to a subagent?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.65,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.6,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.4,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How should a Claude Code plugin divide a recurring test-failure investigation workflow among skills, subagents, hooks, and an MCP server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.85,
+        "citation_correctness": 0.97,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.72,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "For an MCP server, how should a client discover tools, handle tool-list changes, and implement authorization?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.75,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.7,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How do I set persistent project guidance in AGENTS.md and connect Codex to a remote MCP server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.65,
+        "context_utilization": 0.75,
+        "citation_correctness": 0.97,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.65,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "In Claude Code, when should a reusable workflow be a skill and when should it be a subagent with its own context?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.9,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.75,
+        "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "In Cursor, what is the difference between a skill and a rule, and how does each one get activated?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.45,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How do I run a command automatically on every Cursor agent event and also hand a long refactor to a separate agent?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.4,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.6,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "For Codex, what belongs in AGENTS.md and what should instead be a rule?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How do I build a Codex skill, and when should the work be delegated to a subagent instead?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.85,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "What primitives does an MCP server expose, and what does the client side contribute to the same session?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.55,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How should a remote MCP server authorize callers, and what other security mistakes must it avoid?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.72,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.75,
+        "citation_correctness": 0.65,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How does MCP handle protocol version negotiation, and what must a client implement to connect to a server?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.72,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How do I build an MCP server with the official SDK and then register it in Cursor?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.62,
+        "context_utilization": 0.58,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.8,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "How does configuring an MCP server differ between Claude Code and Cursor?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.5,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "Where do persistent project instructions live for Claude Code and for Codex, and how is each file loaded?",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.65,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/evidence-coverage-v1",
+      "run": "answer-quality-baseline-k8 - 2026-10-12T13:25:13.646541Z",
+      "question": "Compare the hook events available in Cursor and in Codex for blocking an agent action before it runs.",
+      "expect_abstention": false,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.63,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.6,
+        "answer_relevance": 0.6,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "none"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I write custom instructions for GitHub Copilot in VS Code?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.6,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.35,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "Where do Windsurf Cascade rules live and how are they scoped?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.4,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I configure Renovate to group dependency updates into one pull request?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.1,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I stream a response from the Claude Messages API in Python?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.3,
+        "context_utilization": 0.25,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.5,
+        "answer_relevance": 0.3,
+        "context_utilization": 0.4,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "When should I use a GIN index instead of a B-tree index in PostgreSQL?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.1,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.1,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I write a decorator in Python that caches function results?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.2,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.1,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I fine-tune an OpenAI model on my own dataset?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.7,
+        "context_utilization": 0.55,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.3,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I build a hybrid retriever with LangChain and Qdrant?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.1,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I enable Sentry performance tracing in a Django application?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.2,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.1,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I add an MCP server to JetBrains AI Assistant?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.13,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.3,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I set environment-specific feature flags in LaunchDarkly?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.8,
+        "context_utilization": 1.0,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T11:26:29.163869Z",
+      "question": "How do I deploy an MCP server on Kubernetes with a Helm chart?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.4,
+        "context_utilization": 0.25,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.3,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.7,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T13:32:04.928747Z",
+      "question": "How do I write custom instructions for GitHub Copilot in VS Code?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.55,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T13:32:04.928747Z",
+      "question": "Where do Windsurf Cascade rules live and how are they scoped?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.55,
+        "context_utilization": 0.15,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T13:32:04.928747Z",
+      "question": "How do I stream a response from the Claude Messages API in Python?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.35,
+        "context_utilization": 0.3,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.8,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.6,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T13:32:04.928747Z",
+      "question": "How do I fine-tune an OpenAI model on my own dataset?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.5,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.5,
+        "context_utilization": 0.2,
+        "citation_correctness": 0.5,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T13:32:04.928747Z",
+      "question": "How do I add an MCP server to JetBrains AI Assistant?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.15,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.2,
+        "citation_correctness": 0.4,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T13:32:04.928747Z",
+      "question": "How do I set environment-specific feature flags in LaunchDarkly?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.7,
+        "context_utilization": 0.2,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.35,
+        "context_utilization": 0.4,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "refusal"
+      }
+    },
+    {
+      "dataset": "rag/negative-v1",
+      "run": "negative-abstention-k8 - 2026-10-12T13:32:04.928747Z",
+      "question": "How do I deploy an MCP server on Kubernetes with a Helm chart?",
+      "expect_abstention": true,
+      "gpt-6-sol": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.8,
+        "context_utilization": 1.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "claude-haiku-5-5": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.45,
+        "context_utilization": 0.5,
+        "citation_correctness": 0.8,
+        "answer_failure_mode": "refusal"
+      }
+    }
+  ]
+}
