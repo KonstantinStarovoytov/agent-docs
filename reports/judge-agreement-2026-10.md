@@ -1,6 +1,10 @@
-# Judge agreement: gpt-6-sol vs claude-haiku-5-5 (2026-10-17)
+# Judge agreement: gpt-6-sol vs cheaper judges (2026-10-17)
 
-Experiment 27. Can Claude Haiku 5.5 replace `gpt-6-sol` as the answer judge?
+Experiment 27. Can a cheaper model replace `gpt-6-sol` as the answer judge?
+Tried: Claude Haiku 5.5, `gpt-6-luna` (the generator itself) and
+`gpt-5.6-luna`. `gpt-6.1-luna` is not available on the project's key.
+
+Claude Haiku 5.5 first.
 At published per-token prices it is about 20× cheaper, and it comes from another vendor than the generator
 (`gpt-6-luna`), so it would not share the generator's habits.
 
@@ -74,16 +78,48 @@ sol has the opposite weakness: 54 of 66 answers get faithfulness 1.0, so the
 score has little room to show an improvement. It still shows a drop, which is
 what the gate checks.
 
+## The luna models
+
+Same 67 answers, same rubric, OpenAI's own API. Every verdict was usable.
+Costs are Langfuse's, for these runs; sol's is October's 72 judge calls
+($0.83) scaled to 67.
+
+| Judge | Faithfulness | Citations | Relevance | Context | Same failure mode | Negatives as refusals | 67 answers | One gate run (28) |
+|---|---|---|---|---|---|---|---|---|
+| `gpt-6-sol` | 0.988 | 0.987 | 0.770 | 0.563 | — | 19/19 | ≈ $0.77 | ≈ $0.32 |
+| `gpt-6-luna` | 0.971 | 0.963 | 0.838 | 0.662 | 58/67 | 18/19 | $0.054 | ≈ $0.02 |
+| `gpt-5.6-luna` | 0.967 | 0.970 | 0.855 | 0.737 | 52/67 | 16/19 | $0.110 | ≈ $0.05 |
+| `claude-haiku-5-5` | 0.810 | 0.689 | 0.588 | 0.549 | 52/66 | 19/19 | not measured | not measured |
+
+- **Faithfulness and citations:** both lunas stay within 0.25 of sol on every
+  answer but one; Haiku was 0.25+ apart on 10 and 48.
+- **Relevance and context use:** both lunas score higher than sol (by 0.07 to
+  0.17). `gpt-6-luna` grades its own answers here, so part of that may be
+  self-preference; `gpt-5.6-luna`, another model, is higher still.
+- **Abstention, the negative gate metric:** the gate counts an abstention only
+  when the judge labels the answer `refusal`. On 1 (`gpt-6-luna`) and 3
+  (`gpt-5.6-luna`) negative answers the judge's own summary says the answer
+  correctly abstains, but the label is `none`. With either luna as judge, the
+  gate would report correct abstention below 1.0 for a system that abstained
+  every time.
+
 ## Decision
 
-`gpt-6-sol` stays the judge and is now the default in code (`JUDGE_MODEL`), so
-an eval run no longer falls back to the generator. Haiku 5.5 is not used as a
-judge: its scores would move the gate's baselines without being more correct.
+`gpt-6-sol` stays the gate's judge and is now the default in code
+(`JUDGE_MODEL`), so an eval run no longer falls back to the generator.
+
+- Haiku 5.5 is not used: its scores would move the gate's baselines without
+  being more correct.
+- `gpt-6-luna` is a fair cheap judge for trying ideas (about 1/15 of sol's
+  cost) as long as its numbers are compared only with other `gpt-6-luna`
+  runs, and abstention is read from the summaries. A decision that changes a
+  default still needs a sol run, since the gate's baselines are sol's.
 
 ## Limits
 
 - Six adjudicated cases, judged by one model, not by a person.
-- One Haiku pass, through the OpenAI-compatible API with tool-call output.
+- One pass per judge. Haiku went through the OpenAI-compatible API with
+  tool-call output.
   Anthropic's own API with native structured output was not tried and might
   behave differently.
 - 67 answers from one day's runs, mostly multi-part and negative questions.
