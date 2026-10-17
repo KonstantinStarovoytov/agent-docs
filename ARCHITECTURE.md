@@ -151,7 +151,7 @@ The same pipeline is served two ways from one process: an **MCP server**
 | Index everything minus excludes, with a gate | Users wanted the whole documentation; new pages arrive by themselves. | Hand-picked allow-list | 35 → ~600 pages. |
 | Free hosting (Render, Qdrant Cloud, Langfuse Hobby) | Zero fixed cost, no bank card. | Paid hosting | See README → Cost. |
 | `search_docs` returns one passage per page | Several chunks of one page filled the list; the agent can search again per part. | All chunks in score order | retrieval-v3, limit 5: distinct pages 3.1 → 5.0, page hit@5 0.936 → 0.979 (experiment 22). |
-| Passages name the page's other matching sections (`other_sections`) | One passage per page hides a second relevant section of the same page; headings point the agent to `read_section` without taking a result slot. | Two passages per page; a second one only when it scores near the best | Section hit 0.667 → 0.867 on retrieval-v3, page hit unchanged, +8–10% tokens; two passages per page pushed pages out, all-groups coverage @5 0.438 → 0.312 (experiment 25).; with real agents (experiment 26) correctness is unchanged and failed reads on guessed headings drop (7 → 1, 4 → 0). |
+| Passages name the page's other matching sections (`other_sections`) | One passage per page hides a second relevant section of the same page; headings point the agent to `read_section` without taking a result slot. | Two passages per page; a second one only when it scores near the best | Section hit 0.667 → 0.867 on retrieval-v3, page hit unchanged, +8–10% tokens; two passages per page pushed pages out, all-groups coverage @5 0.438 → 0.312 (experiment 25); with real agents (experiment 26) correctness is unchanged and failed reads on guessed headings drop (7 → 1, 4 → 0). |
 | Abstain when the best score is below 0.55 (`MIN_TOP_RERANK_SCORE`) | Saves the LLM call when nothing in the docs fits. | Raise the 0.35 per-chunk floor | Lowest top score of 131 answerable questions 0.64 (margin 0.09); catches 8 of 12 negatives (experiment 23). |
 | `find_pages` + `read_section`: pick pages from cards, then read whole sections from the page snapshot | A 3,000-char chunk can cut a section; the agent should read the section itself. Same ranking as `search_docs`, no extra Cohere call, no model call to read. | More or longer passages from `search_docs` | find_pages page hit@5 0.979 on retrieval-v3; read_section returns the labelled section for 25 of 25 labels once every page has a snapshot (experiment 24). The `find_pages` card is now REST `/pages`; on MCP `search_docs` carries the description. |
 | Two MCP tools, no LLM on the agent path | Agents generate the answer themselves; a second generation costs money and hides the sources. `search_docs` gives passages with page descriptions, `read_section` gives whole sections. | `ask_docs` and `find_pages` as extra MCP tools | Production traces, 30 days: agents chose `search_docs` 103 times and `ask_docs` 11. `/ask` and `/pages` stay on REST. |
@@ -176,7 +176,7 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 7 | A bigger candidate pool helps | Pool 10 vs. 20 | 0.750 → 0.500 | Rejected (pool stays 10) |
 | 8 | MMR diversifies the context | 5 chunks, λ = 0.6 | 0.688 vs. 0.771 for plain top-8 | Rejected |
 | 9 | Per-document cap diversifies | 5 chunks, max 2 per doc | Better on average, broke one-page-two-topics cases | Rejected (per-section cap kept) |
-| 10 | Picking chunks per aspect of the question | Frozen pool, offline | Complete coverage 0.50 → 0.69 | **Next step**, needs a holdout set |
+| 10 | Picking chunks per aspect of the question | Frozen pool, offline | Complete coverage 0.50 → 0.69 | Not started: needs a holdout set. Applies to `/ask` only; agents get no context selection, and `search_docs` asks them to search one topic per call |
 | 11 | The two-hop judge knows when evidence is enough | Judge vs. ground truth on 16 contexts | Finds 7/8 real gaps, but calls 5/8 complete contexts incomplete | Judge too strict; not used |
 | 12 | RRF is deterministic | Repeated identical queries | Results changed between calls | **Fixed** with tie-break |
 | 13 | `gpt-6-luna` is at least as good | 16 + 12 questions, independent judge | Faithfulness 0.975 → 0.994 | **Kept** |
@@ -185,12 +185,12 @@ Each row is one hypothesis. "Kept" means it is in production.
 | 16 | The full-corpus misses are a search problem | Where each correct chunk is lost, on the real index, with the gate's stored rerank scores (89 questions and evidence groups) | 10 misses: 7 outside the pool of 10, 3 not in the top 30 of either search, 0 lost by the reranker. Chunks ranked above the right one are 65% guide pages; MRR falls in 3 intents | **Partly confirmed:** coverage loss is the pool cut; the MRR loss is ranking among plausible pages and two unlabelled correct answers |
 | 17 | A deeper prefetch or a bigger pool brings the right chunk back | Recall@pool for prefetch 30/60/100/150 × pool 10/20/40/60, no reranker | Prefetch changes nothing. Pool 20 / 40: complete coverage in the pool 0.625 → 0.750 / 0.875 | Reranked (pool 40, prefetch 60): hit@5 0.979 → 0.915, MRR 0.847 → 0.839, complete coverage 0.250 → 0.250 (evidence runner). **Rejected;** defaults unchanged |
 | 18 | BM25 needs IDF (v1 sparse vector has no `modifier=IDF`) | Index v2 built with IDF; recall-in-pool at pools 10/20/40, no reranker | Recall unchanged on all four datasets; first-correct rank before rerank slightly lower | **Pending** reranked gate on v2 (November) |
-| 19 | Excluding changelogs, legal, marketing and link-hub pages cleans the pool | 40 quarantined pages excluded, 20 large references allowed; same recall run | Same groups lost as in v1 | Kept in v2 (corpus hygiene); no recall effect |
-| 20 | One reference entry per chunk (`####` split, 12-row tables with header) | Chunk counts per big page; same recall run | e.g. hooks 125 → 184 chunks, median 2,571 → 1,188 chars; recall unchanged | **Pending** reranked gate |
+| 19 | Excluding changelogs, legal, marketing and link-hub pages cleans the pool | 40 quarantined pages excluded, 20 large references allowed; same recall run | Same groups lost as in v1 | Kept (corpus hygiene), in v1 too since the 2026-10-14 reindex; no recall effect |
+| 20 | One reference entry per chunk (`####` split, 12-row tables with header) | Chunk counts per big page; same recall run | e.g. hooks 125 → 184 chunks, median 2,571 → 1,188 chars; recall unchanged | **Live in v1** since the 2026-10-14 reindex re-chunked every page; its reranked gate is still pending (November) |
 | 21 | A product filter on answers recovers evidence | v2 with the vendor the labels name (56 of 91 cases) | Coverage recall pool 10 0.765 → 0.794, pool 40 0.912 → 0.941; retrieval-v3 pool 40 → 1.000 | **Accepted** as optional `product` on `/ask` and `search_docs` |
 | 22 | One passage per page makes `search_docs` show more pages | Stored Cohere scores, search pool 20 rebuilt from Qdrant; page hit@k, before → after | retrieval-v3 (47, all scored): limit 5 hit 0.936 → 0.979, pages 3.1 → 5.0; limit 8 hit 0.979 → 0.979, pages 4.4 → 7.4. Query-transform and full-corpus only partly scored, no hit lost | **Kept** |
 | 23 | The best rerank score tells when the docs do not cover a question | Top score on the `/ask` path (pool 10) from stored scores: 131 answerable questions, 12 negatives | Lowest answerable 0.64; negatives below 0.55: 8 of 12 (the 0.35 floor already empties 5) | **Kept**, default 0.55 |
-| 24 | Page cards plus section reads find and return the right section | Stored Cohere scores, search pool 20 (0 Cohere calls); `read_section` on the 25 labels that name a heading | Page hit@3 / @5: retrieval-v3 0.936 / 0.979; evidence groups (one call per question) 0.500 / 0.647. read_section: 11 of 25 on v1 today (14 fail: 28 v1 pages have no snapshot), 25 of 25 with them filled; median 1,415 chars, p95 7,941 | **Kept**; fill the 28 v1 snapshots ([report](reports/find-pages-2026-10.md)) |
+| 24 | Page cards plus section reads find and return the right section | Stored Cohere scores, search pool 20 (0 Cohere calls); `read_section` on the 25 labels that name a heading | Page hit@3 / @5: retrieval-v3 0.936 / 0.979; evidence groups (one call per question) 0.500 / 0.647. read_section: 11 of 25 on v1 today (14 fail: 28 v1 pages have no snapshot), 25 of 25 with them filled; median 1,415 chars, p95 7,941 | **Kept**; every v1 page has a snapshot since the 2026-10-14 reindex (591 of 591) ([report](reports/find-pages-2026-10.md)) |
 | 25 | Showing more than one passage per page helps agents find the right section | Same pools and Cohere scores (pool 20, 83 questions, all fully scored); A one per page, B up to two, C a second only if ≥ 0.8 × best, D one per page plus the headings of the page's other chunks ≥ 0.35 | retrieval-v3 section hit 0.667 → 0.867 with D, page hit unchanged, +8–10% tokens; B and C lose pages (all-groups coverage @5 0.438 → 0.312) | **Kept**: implemented as `other_sections` ([report](reports/passages-per-page-2026-10.md)) |
 | 26 | Agents use `other_sections` and answer better with it | gpt-6-luna and claude-haiku-5-5 with the real tools, with and without the field (removed from results and description); gpt-6-sol judges against the labelled section; 12 Claude Code questions with the product named, two repeats (96 runs), plus a first run of 15 questions as written | Same correctness (luna 0.94 / 0.94, Haiku 0.92 / 0.94; the only gap is one partial answer); 21–28% of reads open a heading from `other_sections`; failed reads on guessed headings 7 → 1 (luna) and 4 → 0 (Haiku) | **Partly confirmed**: used, fewer failed reads, no effect on correctness; field kept ([report](reports/agent-other-sections-2026-10.md)) |
 
@@ -218,8 +218,11 @@ Each row is one hypothesis. "Kept" means it is in production.
 **Retrieval is scored by code**, because the correct pages are labelled in
 advance: Hit@k, MRR, precision@k, nDCG, evidence coverage.
 
-**Answers are scored by an LLM judge** that is a different model from the
-generator: faithfulness, answer relevance, context utilisation, citation
+**Answers are scored by an LLM judge**: `gpt-6-sol` in the October runs
+(`OPENAI_JUDGE_MODEL`), while `gpt-6-luna` generates. Both are OpenAI GPT-6
+models; a judge from another vendor has not been tried. If the setting is
+unset, the judge falls back to the generator and the run records that. It scores
+faithfulness, answer relevance, context utilisation, citation
 correctness, a failure-mode label (none / refusal / empty / repeated /
 did-not-follow-instructions), and correct abstention on 12 questions the
 documentation cannot answer.
@@ -290,8 +293,9 @@ What it means in plain words:
   GitHub and GitLab integrations, SDK reference and spec pages.
 - So the setting stays in the code, **off by default**.
 
-**Next:** rank guide pages above enterprise, integration, reference and spec
-pages unless the question asks for them (a page-type prior or tiered index).
+The next idea was to rank guide pages above enterprise, integration,
+reference and spec pages (a page-type prior). It is on hold: the diagnosis
+below found that most pages ranked above the right one are guides themselves.
 Details in [reports/per-page-cap-2026-10.md](reports/per-page-cap-2026-10.md).
 The MCP `schema.md` page was suspected, but it never reached the top 10.
 
@@ -313,15 +317,15 @@ search, using the same index and the gate's stored reranker scores
   chunks ranked above the right one are guides: a sibling feature, the same
   feature from another vendor, or a valid answer the labels miss. Enterprise,
   security and integration pages are 27% on the ranking datasets. Two misses
-  look like valid unlabelled answers; accepting one would bring `retrieval-v3`
-  MRR to about 0.847 (the gate is 0.835).
+  look like valid unlabelled answers. The owner accepted both on 2026-10-12;
+  on the new labels the stored `retrieval-v3` run scores MRR 0.847 and passes
+  the gate (0.835). The open failure is complete coverage.
 
 **Decision.** No default changed. Two settings now separate the prefetch depth
 (`HYBRID_PREFETCH_DEPTH`) from the candidate pool (`RERANK_POOL`); both default
-to today's behaviour. The candidate configuration is a pool of 40 with prefetch
-60. It becomes the default only if the reranked evals confirm it: complete
-coverage ≥ 0.72 and no MRR loss. That run waits for the Cohere trial quota,
-which was used up for October. The score floor stays at 0.35. A floor of 0.40
+to today's behaviour. The candidate configuration, a pool of 40 with prefetch
+60, failed its reranked run on 2026-10-12: hit@5 0.979 → 0.915, complete
+coverage unchanged (experiment 17). The score floor stays at 0.35. A floor of 0.40
 would gain one automatic refusal with only 0.016 to spare above the weakest
 needed chunk.
 
@@ -333,17 +337,20 @@ same as v1; only the product filter brings evidence back (coverage pool 10
 Since the daily reindex went live, v1 has v2's excludes and chunker too: the
 run of 2026-10-14 deleted the 40 pages the new excludes drop and re-chunked
 every page, because the chunker version is part of each page's fingerprint
-([report](reports/docs-changes/2026-10-14.md)). The two indexes now differ only
-in BM25 IDF. Production stays on v1. Switching means setting
+([report](reports/docs-changes/2026-10-14.md)). The daily reindex updates only
+v1, so v2 still holds its build of 2026-10-12: besides BM25 IDF, the page sets
+differ (16 pages only in v1, 1 only in v2), and 5 pages indexed in v1 are
+quarantined in v2. Production stays on v1. Switching means reindexing v2 (the
+Reindex workflow with `collection: agent_docs_hybrid_v2`), deciding those 5
+pages, the reranked gate passing on v2 in November, then setting
 `QDRANT_HYBRID_COLLECTION=agent_docs_hybrid_v2` on Render and in the reindex
-workflow variable, after the reranked gate passes on v2 in November.
+workflow variable.
 
-**Next:** run the reranked gate on v1 and v2 when the Cohere quota returns;
-confirm pool 40. Decide the two label gaps and the 9 pages quarantined in v2.
-Try one query per part of a multi-part
-question (experiment 10). Rank admin and security pages lower only when the
-question does not ask about them. The per-page cap on the candidate pool is
-measured separately.
+**Next:** run the reranked gate on v1 and v2 when the Cohere quota returns in
+November: neither the new chunker (experiment 20, already live in v1) nor
+BM25 IDF (experiment 18) has been checked with the reranker yet. Then decide
+v2 as above. Aspect-aware context selection (experiment 10) would only affect
+`/ask` and needs a holdout set first.
 
 ---
 
@@ -353,7 +360,9 @@ measured separately.
   One case = 0.0625 of complete coverage.
 - **The generator is not deterministic**, even with fixed inputs.
 - **Ranking dropped with the full corpus** (see above): Hit@5 holds, but the
-  right page ranks lower and multi-part coverage fell. This is being fixed.
+  right page ranks lower and multi-part coverage fell. No change tried so far
+  recovers it (experiments 15, 17); the optional product filter helps when
+  the product is known (experiment 21).
 - **Free-tier limits:** Cohere trial (1,000 calls/month per key, 10/minute),
   Render sleeps after 15 minutes idle (first request ~1 minute). One day of gate
   runs used the whole October Cohere quota. Eval runs now stop on a monthly 429
