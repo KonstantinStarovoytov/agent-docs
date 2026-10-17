@@ -16,7 +16,7 @@ the report that reads it.
 | [find-pages-2026-10.md](find-pages-2026-10.md) | Page cards and `read_section` (24) |
 | [passages-per-page-2026-10.md](passages-per-page-2026-10.md) | One passage per page vs. more; headings of the page's other sections (25) |
 | [agent-other-sections-2026-10.md](agent-other-sections-2026-10.md) | Real agents with and without `other_sections` (26) |
-| [judge-agreement-2026-10.md](judge-agreement-2026-10.md) | Claude Haiku 5.5 as the answer judge instead of gpt-6-sol: rejected (27) |
+| [judge-agreement-2026-10.md](judge-agreement-2026-10.md) | Cheaper answer judges (Haiku 5.5, gpt-6-luna, gpt-5.6-luna) instead of gpt-6-sol: not for the gate (27) |
 
 ## September 2026: first index
 

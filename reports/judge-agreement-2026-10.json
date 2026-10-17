@@ -19,6 +19,20 @@
         "context_utilization": 0.4,
         "citation_correctness": 0.5,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.92,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.93,
+        "answer_relevance": 0.82,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.91,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -38,6 +52,20 @@
         "answer_relevance": 0.85,
         "context_utilization": 0.75,
         "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.9,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.99,
+        "context_utilization": 0.83,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -59,6 +87,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.5,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.97,
+        "context_utilization": 0.86,
+        "citation_correctness": 0.96,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.96,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.82,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -79,6 +121,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 0.88,
+        "context_utilization": 0.85,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.88,
+        "context_utilization": 0.78,
+        "citation_correctness": 0.92,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -99,6 +155,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.78,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.82,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -118,6 +188,20 @@
         "answer_relevance": 0.85,
         "context_utilization": 0.6,
         "citation_correctness": 0.8,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "none"
       }
     },
@@ -139,6 +223,20 @@
         "context_utilization": 0.4,
         "citation_correctness": 0.6,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.6,
+        "citation_correctness": 0.95,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.82,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.97,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -158,6 +256,20 @@
         "answer_relevance": 0.8,
         "context_utilization": 0.7,
         "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.85,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.78,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "none"
       }
     },
@@ -179,6 +291,20 @@
         "context_utilization": 0.8,
         "citation_correctness": 0.75,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.88,
+        "citation_correctness": 0.95,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.96,
+        "answer_relevance": 0.97,
+        "context_utilization": 0.78,
+        "citation_correctness": 0.95,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -199,6 +325,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.82,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.86,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -218,6 +358,20 @@
         "answer_relevance": 0.9,
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.72,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.68,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "none"
       }
     },
@@ -239,6 +393,20 @@
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.82,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.78,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -258,6 +426,20 @@
         "answer_relevance": 0.5,
         "context_utilization": 0.6,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.78,
+        "context_utilization": 0.72,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.7,
+        "citation_correctness": 0.97,
         "answer_failure_mode": "none"
       }
     },
@@ -279,6 +461,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.99,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -298,6 +494,20 @@
         "answer_relevance": 0.5,
         "context_utilization": 0.6,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "none"
       }
     },
@@ -319,6 +529,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.5,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.92,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.78,
+        "citation_correctness": 0.86,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.91,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.82,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -338,6 +562,20 @@
         "answer_relevance": 0.45,
         "context_utilization": 0.4,
         "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.82,
+        "context_utilization": 0.68,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.84,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "none"
       }
     },
@@ -359,6 +597,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.82,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.96,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.84,
+        "citation_correctness": 0.99,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -379,6 +631,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.88,
+        "answer_relevance": 0.78,
+        "context_utilization": 0.84,
+        "citation_correctness": 0.96,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.96,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.84,
+        "citation_correctness": 0.97,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -398,6 +664,20 @@
         "answer_relevance": 0.6,
         "context_utilization": 0.6,
         "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.75,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.73,
+        "citation_correctness": 0.94,
         "answer_failure_mode": "none"
       }
     },
@@ -419,6 +699,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.8,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.83,
+        "citation_correctness": 0.97,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -438,6 +732,20 @@
         "answer_relevance": 0.85,
         "context_utilization": 0.7,
         "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.76,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "none"
       }
     },
@@ -459,6 +767,20 @@
         "context_utilization": 0.4,
         "citation_correctness": 0.4,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.84,
+        "context_utilization": 0.58,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.96,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -479,6 +801,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.85,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 0.97,
+        "context_utilization": 0.88,
+        "citation_correctness": 0.99,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -498,6 +834,20 @@
         "answer_relevance": 0.85,
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.84,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.86,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "none"
       }
     },
@@ -519,6 +869,20 @@
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.65,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.84,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -538,6 +902,20 @@
         "answer_relevance": 0.9,
         "context_utilization": 0.75,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.68,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.56,
+        "citation_correctness": 0.95,
         "answer_failure_mode": "none"
       }
     },
@@ -559,6 +937,20 @@
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.85,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.99,
+        "context_utilization": 0.82,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -575,6 +967,20 @@
       },
       "claude-haiku-5-5": {
         "error": "ValidationError"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.92,
+        "answer_relevance": 0.68,
+        "context_utilization": 0.72,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.88,
+        "context_utilization": 0.72,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -595,6 +1001,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.8,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.58,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.62,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -614,6 +1034,20 @@
         "answer_relevance": 0.7,
         "context_utilization": 0.6,
         "citation_correctness": 0.8,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.99,
+        "context_utilization": 0.34,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -635,6 +1069,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.5,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.76,
+        "citation_correctness": 0.88,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.92,
+        "answer_relevance": 0.89,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.93,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -654,6 +1102,20 @@
         "answer_relevance": 0.5,
         "context_utilization": 0.4,
         "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.7,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.91,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -675,6 +1137,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.6,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.94,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.88,
+        "citation_correctness": 0.84,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.94,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.86,
+        "citation_correctness": 0.91,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -694,6 +1170,20 @@
         "answer_relevance": 0.7,
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.82,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.94,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -715,6 +1205,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.65,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.88,
+        "context_utilization": 0.85,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.94,
+        "citation_correctness": 0.97,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -734,6 +1238,20 @@
         "answer_relevance": 0.9,
         "context_utilization": 0.75,
         "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.9,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.82,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -755,6 +1273,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.94,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.99,
+        "context_utilization": 0.86,
+        "citation_correctness": 0.99,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -774,6 +1306,20 @@
         "answer_relevance": 0.5,
         "context_utilization": 0.5,
         "citation_correctness": 0.6,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.78,
+        "context_utilization": 0.42,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.93,
+        "answer_relevance": 0.86,
+        "context_utilization": 0.58,
+        "citation_correctness": 0.95,
         "answer_failure_mode": "none"
       }
     },
@@ -795,6 +1341,20 @@
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.76,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.82,
+        "citation_correctness": 0.99,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -814,6 +1374,20 @@
         "answer_relevance": 0.8,
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.86,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.78,
+        "citation_correctness": 0.98,
         "answer_failure_mode": "none"
       }
     },
@@ -835,6 +1409,20 @@
         "context_utilization": 0.8,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.78,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 0.99,
+        "context_utilization": 0.68,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -854,6 +1442,20 @@
         "answer_relevance": 0.85,
         "context_utilization": 0.75,
         "citation_correctness": 0.65,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.97,
+        "context_utilization": 0.86,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.99,
+        "answer_relevance": 0.99,
+        "context_utilization": 0.86,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -875,6 +1477,20 @@
         "context_utilization": 0.7,
         "citation_correctness": 0.6,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.92,
+        "context_utilization": 0.84,
+        "citation_correctness": 0.96,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.86,
+        "answer_relevance": 0.91,
+        "context_utilization": 0.84,
+        "citation_correctness": 0.9,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -894,6 +1510,20 @@
         "answer_relevance": 0.45,
         "context_utilization": 0.5,
         "citation_correctness": 0.8,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.94,
+        "answer_relevance": 0.76,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.8,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -915,6 +1545,20 @@
         "context_utilization": 0.5,
         "citation_correctness": 0.7,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.62,
+        "citation_correctness": 0.94,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -934,6 +1578,20 @@
         "answer_relevance": 0.6,
         "context_utilization": 0.7,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.72,
+        "citation_correctness": 0.95,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.72,
+        "citation_correctness": 0.99,
         "answer_failure_mode": "none"
       }
     },
@@ -955,6 +1613,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.5,
         "answer_failure_mode": "none"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.88,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.74,
+        "citation_correctness": 0.82,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.86,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -974,6 +1646,20 @@
         "answer_relevance": 0.45,
         "context_utilization": 0.35,
         "citation_correctness": 0.6,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.94,
+        "context_utilization": 0.55,
+        "citation_correctness": 0.85,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.93,
+        "context_utilization": 0.82,
+        "citation_correctness": 0.98,
         "answer_failure_mode": "refusal"
       }
     },
@@ -995,6 +1681,20 @@
         "context_utilization": 0.5,
         "citation_correctness": 0.9,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.4,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.7,
+        "context_utilization": 0.6,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1012,6 +1712,20 @@
       "claude-haiku-5-5": {
         "answer_faithfulness": 1.0,
         "answer_relevance": 0.1,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
         "context_utilization": 0.0,
         "citation_correctness": 1.0,
         "answer_failure_mode": "refusal"
@@ -1035,6 +1749,20 @@
         "context_utilization": 0.4,
         "citation_correctness": 0.5,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.97,
+        "answer_relevance": 0.42,
+        "context_utilization": 0.55,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.96,
+        "answer_relevance": 0.38,
+        "context_utilization": 0.22,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1053,6 +1781,20 @@
         "answer_faithfulness": 1.0,
         "answer_relevance": 0.1,
         "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 1.0,
         "citation_correctness": 1.0,
         "answer_failure_mode": "refusal"
       }
@@ -1075,6 +1817,20 @@
         "context_utilization": 0.0,
         "citation_correctness": 1.0,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 1.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 1.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1095,6 +1851,20 @@
         "context_utilization": 0.3,
         "citation_correctness": 0.6,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.55,
+        "citation_correctness": 0.95,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.68,
+        "citation_correctness": 0.98,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -1113,6 +1883,20 @@
         "answer_faithfulness": 1.0,
         "answer_relevance": 0.1,
         "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 1.0,
         "citation_correctness": 1.0,
         "answer_failure_mode": "refusal"
       }
@@ -1135,6 +1919,20 @@
         "context_utilization": 0.0,
         "citation_correctness": 1.0,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 0.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.0,
+        "context_utilization": 1.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1155,6 +1953,20 @@
         "context_utilization": 0.3,
         "citation_correctness": 0.6,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 1.0,
+        "context_utilization": 0.15,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.18,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1174,6 +1986,20 @@
         "answer_relevance": 0.5,
         "context_utilization": 0.5,
         "citation_correctness": 0.7,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.9,
+        "answer_relevance": 0.85,
+        "context_utilization": 0.35,
+        "citation_correctness": 0.8,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.85,
+        "citation_correctness": 0.9,
         "answer_failure_mode": "refusal"
       }
     },
@@ -1195,6 +2021,20 @@
         "context_utilization": 0.5,
         "citation_correctness": 0.7,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.65,
+        "context_utilization": 0.55,
+        "citation_correctness": 0.75,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.78,
+        "answer_relevance": 0.62,
+        "context_utilization": 0.95,
+        "citation_correctness": 0.72,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1215,6 +2055,20 @@
         "context_utilization": 0.5,
         "citation_correctness": 0.5,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.6,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.97,
+        "context_utilization": 0.68,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "none"
       }
     },
     {
@@ -1234,6 +2088,20 @@
         "answer_relevance": 0.45,
         "context_utilization": 0.5,
         "citation_correctness": 0.9,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.8,
+        "context_utilization": 0.4,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.65,
+        "citation_correctness": 1.0,
         "answer_failure_mode": "refusal"
       }
     },
@@ -1255,6 +2123,20 @@
         "context_utilization": 0.6,
         "citation_correctness": 0.6,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.62,
+        "context_utilization": 0.38,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.66,
+        "context_utilization": 0.48,
+        "citation_correctness": 0.99,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1274,6 +2156,20 @@
         "answer_relevance": 0.5,
         "context_utilization": 0.2,
         "citation_correctness": 0.5,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 0.85,
+        "answer_relevance": 0.95,
+        "context_utilization": 0.65,
+        "citation_correctness": 0.75,
+        "answer_failure_mode": "none"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.96,
+        "context_utilization": 0.67,
+        "citation_correctness": 0.88,
         "answer_failure_mode": "refusal"
       }
     },
@@ -1295,6 +2191,20 @@
         "context_utilization": 0.2,
         "citation_correctness": 0.4,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.2,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.14,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
       }
     },
     {
@@ -1314,6 +2224,20 @@
         "answer_relevance": 0.35,
         "context_utilization": 0.4,
         "citation_correctness": 0.9,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.75,
+        "context_utilization": 0.8,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.95,
+        "answer_relevance": 0.9,
+        "context_utilization": 0.9,
+        "citation_correctness": 0.95,
         "answer_failure_mode": "refusal"
       }
     },
@@ -1335,6 +2259,20 @@
         "context_utilization": 0.5,
         "citation_correctness": 0.8,
         "answer_failure_mode": "refusal"
+      },
+      "gpt-6-luna": {
+        "answer_faithfulness": 1.0,
+        "answer_relevance": 0.6,
+        "context_utilization": 1.0,
+        "citation_correctness": 1.0,
+        "answer_failure_mode": "refusal"
+      },
+      "gpt-5.6-luna": {
+        "answer_faithfulness": 0.98,
+        "answer_relevance": 0.98,
+        "context_utilization": 0.95,
+        "citation_correctness": 0.93,
+        "answer_failure_mode": "none"
       }
     }
   ]
