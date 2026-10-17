@@ -94,6 +94,9 @@ OPENAI_CODEX = SourceConfig(
         "https://learn.chatgpt.com/docs/configuration.md",
         "https://learn.chatgpt.com/docs/app-server.md",
         "https://learn.chatgpt.com/docs/developer-commands.md?surface=cli",
+        # Owner decision 2026-10-17: one long guide (one h1, ~63 KB), not a
+        # concatenation; the size check quarantined it.
+        "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md",
     ),
 )
 
