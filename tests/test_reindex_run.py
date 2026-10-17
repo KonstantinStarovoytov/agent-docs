@@ -5,6 +5,7 @@ from datetime import date
 from typing import Any
 
 from src import reindex
+from src.ingestion.decisions import Decision
 from src.ingestion.gate import PageReview
 from src.ingestion.loader import LoadResult
 from src.models import SourceDocument
@@ -289,6 +290,46 @@ def test_allowing_a_quarantined_page_indexes_it_on_the_next_run(
     assert added
     assert result.manifest.documents["https://x/q.md"].status == "indexed"
     assert not result.report.quarantined
+
+
+def test_an_allow_decision_from_the_issue_counts_as_allow_listed(
+    monkeypatch: Any,
+) -> None:
+    monkeypatch.setattr(
+        reindex,
+        "load_decisions",
+        lambda: {"https://x/q.md": Decision("allow", "2026-10-17")},
+    )
+
+    assert "https://x/q.md" in reindex.allowed_urls()
+
+
+def test_a_declined_page_that_changed_comes_back_for_review(
+    monkeypatch: Any,
+) -> None:
+    """The gate would keep the new version, but the owner said no once:
+    it waits for the owner again instead of being indexed."""
+    monkeypatch.setattr(
+        reindex,
+        "load_decisions",
+        lambda: {"https://x/q.md": Decision("decline", "2026-10-17", "old")},
+    )
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/q.md": reindex.ManifestEntry(
+                sha256="old", chunks=0, title="Q", status="quarantined"
+            )
+        },
+    )
+    deps, added, _ = _deps([_doc("https://x/q.md", "# Q\nnew text")], keep=True)
+
+    result = reindex.run(manifest, deps, today=DAY)
+
+    entry = result.manifest.documents["https://x/q.md"]
+    assert not added and entry.status == "quarantined"
+    assert "declined on 2026-10-17" in entry.reason
+    assert result.report.quarantined[0].url == "https://x/q.md"
 
 
 def test_snapshot_keeps_the_gate_summary_for_new_and_changed_pages() -> None:

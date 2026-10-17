@@ -1,0 +1,66 @@
+# Decide quarantined pages from the "Pages waiting for review" issue. Ticking
+# a box edits the issue; this run records the owner's decision in
+# data/page-decisions.json (src/ingestion/decisions.py), commits it, and
+# rewrites the list. Ticks by anyone but the repository owner are cleared.
+# Edits made with the workflow token do not trigger workflows, so rewriting
+# the issue here does not start another run.
+
+name: Page review
+on:
+  issues:
+    types: [edited]
+permissions:
+  contents: write
+  issues: write
+# Same queue as the reindex: both rewrite the issue and push to main.
+concurrency: reindex
+jobs:
+  decide:
+    if: github.event.issue.state == 'open' && contains(github.event.issue.labels.*.name, 'docs-review')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ISSUE: ${{ github.event.issue.number }}
+      ACTOR: ${{ github.event.sender.login }}
+      OWNER: ${{ github.repository_owner }}
+      QDRANT_HYBRID_COLLECTION: ${{ vars.QDRANT_HYBRID_COLLECTION || 'agent_docs_hybrid_v1' }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          # Pushes the decision past the `main` ruleset, like the reindex.
+          ssh-key: ${{ secrets.REINDEX_DEPLOY_KEY }}
+      - uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6
+      - run: uv sync --locked
+      - name: Read the ticks
+        run: |
+          # The current description, not the event's: a queued run sees every tick.
+          gh issue view "$ISSUE" --json body --jq .body > issue.md
+          uv run python -m src.ingestion.decisions --body-file issue.md \
+            --collection "$QDRANT_HYBRID_COLLECTION" \
+            --actor "$ACTOR" --owner "$OWNER" --out out
+      - name: Commit the decision
+        run: |
+          set -e
+          if git diff --quiet -- data/page-decisions.json; then
+            echo "no decision to commit"; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/page-decisions.json
+          git commit -m "chore(review): owner decision on quarantined pages [skip ci]"
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main && git push && exit 0
+            sleep 5
+          done
+          exit 1
+      - name: Update the issue
+        run: |
+          [ -f out/body.md ] || exit 0
+          if [ -f out/comment.md ]; then
+            gh issue comment "$ISSUE" --body-file out/comment.md
+          fi
+          if [ -s out/body.md ]; then
+            gh issue edit "$ISSUE" --body-file out/body.md
+          else
+            gh issue close "$ISSUE" --comment "Nothing is waiting for review."
+          fi

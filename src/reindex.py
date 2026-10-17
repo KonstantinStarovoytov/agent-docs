@@ -9,20 +9,27 @@ and every run writes a readable change report.
 
 import argparse
 import hashlib
-import json
 import statistics
 import sys
 from collections.abc import Callable
-from dataclasses import asdict, dataclass, field, replace
+from dataclasses import dataclass, replace
 from datetime import UTC, date, datetime
 from pathlib import Path
-from typing import Any, Literal, Protocol
+from typing import Any, Protocol
 
 from langchain_core.documents import Document
 from qdrant_client import QdrantClient, models
 
 from src.config import settings
 from src.ingestion.chunker import chunk_document
+from src.ingestion.decisions import load_decisions, render_issue
+from src.ingestion.manifest import (
+    Manifest,
+    ManifestEntry,
+    load_manifest,
+    manifest_path,
+    save_manifest,
+)
 from src.ingestion.ingest import (
     ensure_hybrid_collection,
     get_hybrid_vector_store,
@@ -36,31 +43,10 @@ from src.ingestion.sources import SOURCES
 from src.models import SourceDocument
 from src.service.core import META_COLLECTION, meta_point_id
 
-MANIFEST_DIR = Path("data/manifests")
 SMOKE_K = 10
 REMOVAL_GUARD = 0.10
 SHRINK_GUARD = 0.5
 FETCH_FAILURE_GUARD = 0.10
-
-
-def manifest_path(collection: str) -> Path:
-    return MANIFEST_DIR / f"{collection}.json"
-
-
-@dataclass(frozen=True, slots=True)
-class ManifestEntry:
-    sha256: str
-    chunks: int
-    title: str
-    status: Literal["indexed", "quarantined"] = "indexed"
-    reason: str = ""
-    summary: str = ""
-
-
-@dataclass(frozen=True, slots=True)
-class Manifest:
-    indexed_at: str | None
-    documents: dict[str, ManifestEntry] = field(default_factory=dict)
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,29 +76,6 @@ def fingerprint(content: str) -> str:
     lines = (line.rstrip() for line in content.replace("\r\n", "\n").split("\n"))
     normalized = CHUNKER_VERSION + "\n" + "\n".join(lines)
     return hashlib.sha256(normalized.encode()).hexdigest()
-
-
-def load_manifest(path: Path) -> Manifest:
-    if not path.exists():
-        return Manifest(indexed_at=None, documents={})
-    raw = json.loads(path.read_text())
-    return Manifest(
-        indexed_at=raw.get("indexed_at"),
-        documents={
-            url: ManifestEntry(**entry) for url, entry in raw["documents"].items()
-        },
-    )
-
-
-def save_manifest(manifest: Manifest, path: Path) -> None:
-    payload = {
-        "indexed_at": manifest.indexed_at,
-        "documents": {
-            url: asdict(entry) for url, entry in sorted(manifest.documents.items())
-        },
-    }
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
 
 
 def diff(manifest: Manifest, documents: list[SourceDocument]) -> Plan:
@@ -220,7 +183,9 @@ class RunResult:
 
 
 def allowed_urls() -> set[str]:
-    return {url for config in SOURCES for url in config.allow}
+    """`allow` in sources.py plus the pages the owner ticked "Index" for."""
+    ticked = {url for url, d in load_decisions().items() if d.decision == "allow"}
+    return {url for config in SOURCES for url in config.allow} | ticked
 
 
 def _medians(manifest: Manifest, product_of: dict[str, str]) -> dict[str, float]:
@@ -248,6 +213,9 @@ def run(
     medians = _medians(manifest, product_of)
     indexed_texts = deps.snapshots.all_texts() if plan.added else {}
     allowed = allowed_urls()
+    declined = {
+        url: d for url, d in load_decisions().items() if d.decision == "decline"
+    }
     report = rep.ChangeReport(
         day=today.isoformat(),
         added=[],
@@ -299,17 +267,23 @@ def run(
             )
             continue
         line.summary = verdict.summary
-        if verdict.keep or gate_report_only:
+        reasons = list(verdict.reasons)
+        decision = declined.get(document.url)
+        if decision is not None:
+            # Changed since the owner declined it: back to the owner, not the gate.
+            reasons.append(f"declined on {decision.date}; the page has changed since")
+        keep = verdict.keep and decision is None
+        if keep or gate_report_only:
             index(document, verdict.summary)
             report.added.append(line)
-        if not verdict.keep:
+        if not keep:
             report.quarantined.append(
                 rep.QuarantineLine(
                     document.url,
                     document.title,
                     document.product,
                     verdict.summary,
-                    verdict.reasons,
+                    reasons,
                 )
             )
             if not gate_report_only:
@@ -318,7 +292,7 @@ def run(
                     chunks=0,
                     title=document.title,
                     status="quarantined",
-                    reason="; ".join(verdict.reasons),
+                    reason="; ".join(reasons),
                     summary=verdict.summary,
                 )
 
@@ -749,6 +723,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         return result.exit_code
     save_manifest(result.manifest, path)
+    (out / "review-issue.md").write_text(
+        render_issue(result.manifest.documents, load_decisions())
+    )
     if not result.report.empty():
         daily = Path("reports/docs-changes") / f"{result.report.day}.md"
         daily.parent.mkdir(parents=True, exist_ok=True)
