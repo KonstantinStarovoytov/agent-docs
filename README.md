@@ -1,13 +1,15 @@
 # Agent Docs
 
-**Ask questions about Claude Code, Cursor, Codex and MCP — get answers grounded in their official docs, with citations.**
+**An MCP server that gives AI agents the current official documentation of Claude Code, Cursor, Codex and MCP.**
 
-A hybrid RAG service that AI agents call through two MCP tools (or over REST). It
-indexes ~600 pages of official documentation, refreshes itself daily, and every
-design choice is backed by an experiment.
+These tools change faster than a model's training data. Agent Docs keeps
+about 600 pages of their official docs in a search index, refreshes it every
+day, and gives your agent two tools: one finds the right passage, the other
+reads a whole section. The agent answers from the real docs and can link to
+them.
 
-> Why it is built this way, what was tested, and a glossary of every term:
-> **[ARCHITECTURE.md](ARCHITECTURE.md)**
+It runs as a remote MCP server (and over REST). You can try it with a free
+Cohere key.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/agent-docs-flow-dark.gif">
@@ -98,36 +100,117 @@ design choice is backed by an experiment.
 
 </details>
 
+How it was built and what was measured: [ARCHITECTURE.md](ARCHITECTURE.md).
+
+---
+
+## Connect
+
+Add the server to any MCP client (Claude Code, Cursor, OpenWebUI and others):
+
+```json
+{
+  "mcpServers": {
+    "agent-docs": {
+      "url": "https://agent-docs-mcp.onrender.com/mcp/",
+      "headers": { "X-Cohere-Api-Key": "<your Cohere key>" }
+    }
+  }
+}
+```
+
+Calling a tool needs one of two headers:
+
+- **Your own Cohere key:** `X-Cohere-Api-Key: <key>`. A free trial key is at
+  [dashboard.cohere.com](https://dashboard.cohere.com). The key pays for
+  reranking that one request; it is never stored or logged. Limit: 30 requests
+  a minute per IP.
+- **A token from the owner:** `Authorization: Bearer <API_TOKEN>`. For a guest
+  token, open an
+  [issue](https://github.com/KonstantinStarovoytov/agent-docs/issues/new?title=Guest%20token%20request)
+  titled "Guest token request".
+
+The server is on a free plan: after 15 idle minutes, the first request takes
+about a minute.
+
+| Tool | What it returns |
+|---|---|
+| `search_docs(query, limit=8, product=None, response_format="concise")` | The best passage from each matching page, ranked, with the page's one-line description and a relevance score. Ask about one topic per call. `product`: `claude-code`, `cursor`, `codex`, `mcp` |
+| `read_section(url, heading=None, offset=0, outline_depth=2)` | Without a heading: the page's description and outline (`outline_depth=3` adds subsections). With a heading: the whole section, up to 8,000 characters per call (`next_offset` gives the rest) |
+
+**Over REST:**
+
+```bash
+curl -X POST https://agent-docs-mcp.onrender.com/ask \
+  -H "Authorization: Bearer $API_TOKEN" -H 'content-type: application/json' \
+  -d '{"question": "How do I add an MCP server in Claude Code?"}'
+```
+
+With your own key, replace the `Authorization` line with
+`-H "X-Cohere-Api-Key: $COHERE_API_KEY"`.
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /health` | Liveness, no token |
+| `POST /ask` | A written answer with citations |
+| `POST /search` | Passages with page descriptions (`search_docs`) |
+| `POST /pages` | Page cards: description and outline |
+| `POST /section` | One section of a page (`read_section`) |
+| `POST /mcp/` | MCP (streamable HTTP) |
+| `GET /docs` | Interactive API docs (use **Authorize** with the token) |
+
+**Locally, without a server** (stdio, no token):
+
+```json
+{ "mcpServers": { "agent-docs": { "command": "uv",
+  "args": ["run", "--directory", "/path/to/agent-docs", "rag-mcp"] } } }
+```
+
+**For MCP directories:** connecting and listing the tools need no key (30
+requests a minute per IP); only `tools/call` does. The server keeps no session,
+so `GET /mcp` answers 405; send everything with POST. Listed in the
+[official MCP Registry](https://registry.modelcontextprotocol.io) as
+`io.github.KonstantinStarovoytov/agent-docs` ([server.json](server.json)).
+
+## What it covers
+
+| Product | Source |
+|---|---|
+| Claude Code (incl. Agent SDK, plugins) | `code.claude.com/docs/llms.txt` |
+| Cursor | `cursor.com/llms.txt` |
+| Codex | `developers.openai.com/codex/llms.txt` |
+| MCP (latest spec, registry, extensions) | `modelcontextprotocol.io/llms.txt` |
+
 ---
 
 ## How it works
 
-Your agent calls a **remote MCP server** with two tools: `search_docs`, then
-`read_section` when a passage is not enough. No model runs on this path; the
-agent writes the answer itself. The animation at the top walks through it.
+Your agent calls `search_docs`, then `read_section` when a passage is not
+enough. No language model runs on the server for this: the agent reads the
+passages and writes the answer itself.
 
-The `/ask` REST endpoint, for clients that are not agents, adds a few steps
-after the rerank:
+`search_docs` works in four steps:
 
-| Step | What happens | Why |
-|---|---|---|
-| **Translation** (`/ask` only) | Non-English questions get an English copy; both are searched. | The docs are in English. |
-| **Hybrid search** | Each query is searched by meaning (embedding) and by exact words (BM25) in Qdrant. It asks for 3x more results than needed. | Meaning finds concepts; BM25 finds exact names like `.cursorrules`. |
-| **RRF fusion** | The result lists are merged by rank; equal scores are ordered by chunk id. | Scores of the two searches are not comparable; ranks are. The tie-break makes the same question return the same results. |
-| **Rerank** | Cohere reads the question with each candidate and scores the match. | Search is fast but rough; the reranker is precise. |
-| **Threshold** (`/ask` only) | If even the best candidate scores below 0.55, the bot says the docs do not cover it, without calling the model. Otherwise candidates below 0.35 are dropped. | This is how it refuses to guess. |
-| **Context selection** (`/ask` only) | The 8 best chunks go to the model, at most 2 from one section. | One section must not fill the whole context. |
-| **Answer** (`/ask` only) | gpt-6-luna answers only from those 8 chunks and cites them. | Every claim can be checked. |
+1. It searches by meaning (embeddings) and by exact words (BM25) at the same
+   time, so both "connect a tool server" and `claude mcp add` find the right
+   page.
+2. It merges the two result lists by rank. Ties are kept in a fixed order, so
+   the same question always gets the same results.
+3. A reranker (Cohere) reads the top 20 together with the question and scores
+   how well each one matches.
+4. It keeps the best passage of each page and adds the page's one-line
+   description and the headings of its other matching sections.
 
-`search_docs` stops after the rerank and returns the best passage of each
-page, so one long page cannot fill the list. Each passage carries the page's
-one-line description and the headings of the page's other matching sections
-(`other_sections`). The agent reads the passages itself, which is cheaper;
-for a longer read, `read_section` returns a page's outline, then one section's
-text from the stored page (no model call). Searches are traced in Langfuse;
-`read_section`, which calls no model, is not.
+`read_section` reads from a stored copy of the page; no model is called.
+Searches are traced in Langfuse.
 
-## Fresh every day
+The REST endpoint `/ask` is for clients that are not agents. It also
+translates Russian and Polish questions into English, says "the documentation
+does not cover this" when even the best candidate scores below 0.55, picks 8
+chunks (at most 2 from one section), and has `gpt-6-luna` write an answer that
+cites them.
+
+## Updated every day
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/reindex-flow-dark.gif">
@@ -201,91 +284,36 @@ text from the stored page (no model call). Searches are traced in Langfuse;
 
 </details>
 
-New pages are indexed automatically; suspicious ones wait in an issue, where
-the owner ticks **Index** or **Decline** for each. Each run
-writes a short report of what changed in the products: [reports/docs-changes/](reports/docs-changes/).
+Every day at 06:00 UTC a GitHub Actions job reads each vendor's list of pages
+(`llms.txt`) and updates the index:
 
-## What it covers
+- Changed pages are embedded again; unchanged ones are skipped.
+- New pages are checked first. A suspicious one waits in a GitHub issue until
+  the owner ticks **Index** or **Decline**.
+- Pages that disappear from the list are deleted, unless too many disappear at
+  once.
+- A short report of what changed in the products goes to
+  [reports/docs-changes/](reports/docs-changes/).
 
-| Product | Source |
+## Measured results
+
+Each change was measured on labelled questions before it was kept. All
+experiments, including the ones that did not work:
+[ARCHITECTURE.md](ARCHITECTURE.md#experiments).
+
+| Change | Measured effect |
 |---|---|
-| Claude Code (incl. Agent SDK, plugins) | `code.claude.com/docs/llms.txt` |
-| Cursor | `cursor.com/llms.txt` |
-| Codex | `developers.openai.com/codex/llms.txt` |
-| MCP (latest spec, registry, extensions) | `modelcontextprotocol.io/llms.txt` |
+| 8 chunks instead of 5 for `/ask` | Multi-part questions fully covered: 25% → 75% |
+| English copy of non-English questions | Hit@5: 0.958 → 1.000 |
+| 10 candidates for the reranker, not 20 | Fully covered: 75% vs 50% (the extra candidates pushed out the second topic) |
+| `gpt-6-luna` instead of `gpt-5.6-luna` | Faithfulness: 0.975 → 0.994 |
+| Ties in a fixed order | The same question gets the same results (it did not before) |
+| One passage per page in `search_docs` | Distinct pages in the top 5: 3.1 → 5.0; page hit@5: 0.936 → 0.979 |
+| Headings of a page's other matching sections (`other_sections`) | Labelled section visible: 0.667 → 0.867; with real agents, the same correctness and fewer failed section reads (11 → 1) |
 
----
-
-## Connect
-
-Connecting and listing the tools needs nothing: every MCP message except
-`tools/call` answers without a key (30 requests/min per IP), so MCP directories
-can check the server. The server is stateless, so `GET /mcp` answers 405; send
-everything with POST. Calling a tool needs one header, either of:
-
-- **Your own Cohere key:** `X-Cohere-Api-Key: <key>`. A free trial key is at
-  [dashboard.cohere.com](https://dashboard.cohere.com). Reranking runs on your
-  key; the key is used for that request only and never stored or logged.
-  Limit: 30 requests/min per IP.
-- **A token from the owner:** `Authorization: Bearer <API_TOKEN>`.
-
-**As an MCP server** (Claude Code, Cursor, OpenWebUI, any MCP client):
-
-```json
-{
-  "mcpServers": {
-    "agent-docs": {
-      "url": "https://agent-docs-mcp.onrender.com/mcp/",
-      "headers": { "X-Cohere-Api-Key": "<your Cohere key>" }
-    }
-  }
-}
-```
-
-| Tool | Returns |
-|---|---|
-| `search_docs(query, limit=8, product=None, response_format="concise")` | Ranked passages, one per page, each with the page's one-line description and a Cohere relevance score. One call per part of a multi-part question. `product`: `claude-code`, `cursor`, `codex`, `mcp` |
-| `read_section(url, heading=None, offset=0, outline_depth=2)` | No heading: page description and a compact outline (top-level sections with subsection counts; `outline_depth=3` adds subsections). With a heading: the full section text, up to 8,000 characters (`next_offset` for the rest). No model call |
-
-REST also offers `/ask` (a written answer with citations) and `/pages` (page
-cards) for clients that are not agents.
-
-**Over REST:**
-
-```bash
-curl -X POST https://agent-docs-mcp.onrender.com/ask \
-  -H "Authorization: Bearer $API_TOKEN" -H 'content-type: application/json' \
-  -d '{"question": "How do I add an MCP server in Claude Code?"}'
-```
-
-| Endpoint | Purpose |
-|---|---|
-| `GET /health` | Liveness, no token |
-| `POST /ask` | Answer with citations |
-| `POST /search` | Passages with page descriptions |
-| `POST /pages` | Page cards: description and outline |
-| `POST /section` | One section of a page (`read_section`) |
-| `POST /mcp/` | MCP (streamable HTTP) |
-| `GET /docs` | Interactive API docs (use **Authorize** with the token) |
-
-With your own key, replace the `Authorization` line in the curl with
-`-H "X-Cohere-Api-Key: $COHERE_API_KEY"`.
-
-**Try it.** The quickest way is your own free Cohere trial key (above), limited
-to 30 requests a minute per IP. Or open an
-[issue](https://github.com/KonstantinStarovoytov/agent-docs/issues/new?title=Guest%20token%20request)
-titled "Guest token request" for a shared guest token. The first request after
-15 idle minutes takes about a minute while the free host wakes up.
-
-Listed in the [official MCP Registry](https://registry.modelcontextprotocol.io)
-as `io.github.KonstantinStarovoytov/agent-docs` ([server.json](server.json)).
-
-**Locally, without a server** (stdio, no token):
-
-```json
-{ "mcpServers": { "agent-docs": { "command": "uv",
-  "args": ["run", "--directory", "/path/to/agent-docs", "rag-mcp"] } } }
-```
+When an answer misses part of a question, the search has usually found the
+right text. It gets lost later, when the candidates are cut down to what the
+model sees.
 
 ---
 
@@ -323,23 +351,6 @@ by clearing `API_GUEST_TOKEN`.
 
 Limits of the free setup: Cohere trial allows 1,000 reranks/month per key
 (two keys) and 10/minute; the API is capped at 60 paid requests/minute.
-
----
-
-## Key results
-
-| Change | Measured effect |
-|---|---|
-| 8 chunks instead of 5 | Questions fully covered: 25% → 75% |
-| English translation of non-English questions | Hit@5: 0.958 → 1.000 |
-| Candidate pool 10, not 20 | Fully covered: 75% vs 50% (more recall pushed out the second topic) |
-| `gpt-6-luna` instead of `gpt-5.6-luna` | Faithfulness: 0.975 → 0.994 |
-| Stable tie-break in RRF | Same question → same results (was random) |
-| One passage per page in `search_docs` | Distinct pages in the top 5: 3.1 → 5.0; page hit@5: 0.936 → 0.979 |
-| Headings of a page's other matching sections (`other_sections`) | Labelled section visible: 0.667 → 0.867; with real agents, same correctness and failed section reads 11 → 1 |
-
-Main finding: **search finds the right page; the hard part is choosing what
-the model sees.** Details and every experiment: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ---
 
