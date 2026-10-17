@@ -270,3 +270,12 @@ def test_a_list_sent_as_a_json_string_is_read_as_a_list():
     assert assessment.unsupported_claims == []
     assert assessment.missing_aspects == ["Authorization"]
     assert assessment.citation_issues == ["[1] does not support the claim"]
+
+
+def test_the_judge_trace_records_which_judge_graded():
+    """The trace input takes the same arguments as the judge call."""
+    traced = answer_quality._assessment_trace_input(
+        "Question", "Answer", [], judge="gpt-6-luna"
+    )
+
+    assert traced["judge"] == "gpt-6-luna"

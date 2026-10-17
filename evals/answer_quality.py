@@ -104,12 +104,16 @@ class AnswerQualityResult:
 
 
 def _assessment_trace_input(
-    question: str, answer: str, contexts: list[dict[str, Any]]
+    question: str,
+    answer: str,
+    contexts: list[dict[str, Any]],
+    judge: str | None = None,
 ) -> dict[str, Any]:
     return {
         "question": question,
         "answer": answer,
         "contexts": contexts,
+        "judge": judge or judge_model(),
     }
 
 
