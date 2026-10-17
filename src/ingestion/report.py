@@ -167,9 +167,8 @@ def render_report(r: ChangeReport) -> str:
 
 def render_quarantine_issue(lines: list[QuarantineLine]) -> str:
     out = [
-        "These new pages were not indexed. For each: add a pattern to `exclude` "
-        "in `src/ingestion/sources.py` to drop it for good, or add the URL to "
-        "`allow` to index it.",
+        "This run did not index these pages. Decide each one with the boxes in "
+        "the issue description.",
         "",
     ]
     for q in lines:

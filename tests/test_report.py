@@ -83,7 +83,7 @@ def test_initial_build_reports_totals_only() -> None:
     assert "Initial build: 3 pages" in text and "u0" not in text
 
 
-def test_quarantine_issue_is_short_and_actionable() -> None:
+def test_quarantine_comment_lists_the_pages_and_points_to_the_list() -> None:
     body = report.render_quarantine_issue(
         [
             report.QuarantineLine(
@@ -98,7 +98,7 @@ def test_quarantine_issue_is_short_and_actionable() -> None:
 
     assert "https://x/blog.md" in body and "A launch post." in body
     assert "model: marketing" in body
-    assert "exclude" in body and "allow" in body
+    assert "issue description" in body
 
 
 def test_change_summaries_use_the_injected_model() -> None:

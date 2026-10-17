@@ -119,8 +119,13 @@ The same pipeline is served two ways from one process: an **MCP server**
   then nothing is deleted for that vendor and the run fails.
 - **Smoke check:** after the index changes, 8 known questions must still find
   their page in the top 10 of a hybrid search, or the run fails.
-- **Issues:** quarantined pages wait in one "Pages waiting for review" issue; a
-  failed run opens "Reindex needs attention" with the end of its log.
+- **Issues:** quarantined pages wait in one "Pages waiting for review" issue,
+  each with two boxes. **Index** puts the page on the allow list
+  (`data/page-decisions.json`, read with `allow` in `sources.py`); **Decline**
+  keeps it out until the page changes, then it comes back to the issue rather
+  than to the gate. Only the repository owner's ticks count; the issue closes
+  when nothing waits. A failed run opens "Reindex needs attention" with the end
+  of its log.
 - **Change report:** each run writes a readable list of added, removed and
   significantly changed pages to the run summary and `reports/docs-changes/`.
   Only our summaries and links go to git, never the vendors' text.

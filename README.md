@@ -201,7 +201,8 @@ text from the stored page (no model call). Searches are traced in Langfuse;
 
 </details>
 
-New pages are indexed automatically; suspicious ones wait for a human. Each run
+New pages are indexed automatically; suspicious ones wait in an issue, where
+the owner ticks **Index** or **Decline** for each. Each run
 writes a short report of what changed in the products: [reports/docs-changes/](reports/docs-changes/).
 
 ## What it covers

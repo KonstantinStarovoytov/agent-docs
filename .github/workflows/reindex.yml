@@ -1,7 +1,7 @@
 # Daily incremental re-index. Every markdown page in each vendor's llms.txt,
 # minus excludes, is indexed: new pages must pass a quality gate, and
 # suspicious ones are quarantined in the "Pages waiting for review" issue for
-# a human to decide. Pages that vanish from a vendor index are deleted,
+# the owner to decide with its boxes (review.yml). Pages that vanish from a vendor index are deleted,
 # unless the removal guard judges the drop too large to be safe, in which
 # case the run fails and an issue is opened so a human decides. Every run
 # writes a readable change report to the job summary and to
@@ -73,6 +73,7 @@ jobs:
         if: always()
         run: '[ -f out/report.md ] && cat out/report.md >> "$GITHUB_STEP_SUMMARY" || true'
       - name: Commit manifest
+        id: commit
         # Even after a failed smoke check: the index was already rewritten,
         # and the manifest must say so or the next run re-embeds it all again.
         if: always()
@@ -94,18 +95,28 @@ jobs:
             sleep 5
           done
           exit 1
-      - name: Quarantine issue
-        if: always()
+      - name: Review issue
+        # The issue lists the production index's waiting pages, from the
+        # manifest just pushed; a run on another collection leaves it alone.
+        if: always() && !inputs.collection && steps.commit.outcome == 'success'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          [ -f out/quarantine.md ] || exit 0
+          [ -f out/review-issue.md ] || exit 0
           existing=$(gh issue list --label docs-review --state open --json number --jq '.[0].number // empty')
-          if [ -n "$existing" ]; then
-            gh issue comment "$existing" --body-file out/quarantine.md
-          else
-            gh label create docs-review --description "New doc pages waiting for a decision" --force
-            gh issue create --title "Pages waiting for review" --label docs-review --body-file out/quarantine.md
+          if [ -s out/review-issue.md ]; then
+            if [ -n "$existing" ]; then
+              gh issue edit "$existing" --body-file out/review-issue.md
+              # A comment notifies the owner; editing the description does not.
+              if [ -f out/quarantine.md ]; then
+                gh issue comment "$existing" --body-file out/quarantine.md
+              fi
+            else
+              gh label create docs-review --description "New doc pages waiting for a decision" --force
+              gh issue create --title "Pages waiting for review" --label docs-review --body-file out/review-issue.md
+            fi
+          elif [ -n "$existing" ]; then
+            gh issue close "$existing" --comment "Nothing is waiting for review."
           fi
       - name: Open an issue on failure
         if: failure()
