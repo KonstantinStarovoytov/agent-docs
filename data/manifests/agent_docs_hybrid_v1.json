@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-10-17",
+  "indexed_at": "2026-10-18",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "61a0d79dee0ae1c3ac176a1ccca8a055c2b8e08ce1ef3f1eb9482e92612cf748",
@@ -474,8 +474,8 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "b5082353ea8a8bef47c9070b197cca5b678a68755265ea4a11a2bc585358a08b",
-      "chunks": 185,
+      "sha256": "06ed13c8825e0d307a5e45a9ffe89e2e33e021abeeb3974c702677c8b9470eb2",
+      "chunks": 186,
       "title": "Claude Tag",
       "status": "indexed",
       "reason": "",
@@ -3347,11 +3347,11 @@
     },
     "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md": {
       "sha256": "c99e7da6ccc5f23dde254fc868b1fec092ef62098889cf95744c0409b7963936",
-      "chunks": 0,
+      "chunks": 70,
       "title": "Codex security cookbook",
-      "status": "quarantined",
-      "reason": "possible concatenation: 70 chunks",
-      "summary": "A practical guide for enterprise administrators to configure, verify, and combine Codex security controls."
+      "status": "indexed",
+      "reason": "",
+      "summary": ""
     },
     "https://learn.chatgpt.com/docs/enterprise/service-accounts.md": {
       "sha256": "d993de3bde3989b28add795dac4d53eb61f8e9a3d7ec1db6c46f63951cf3e1e1",
