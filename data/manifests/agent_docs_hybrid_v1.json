@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-10-18",
+  "indexed_at": "2026-10-19",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "61a0d79dee0ae1c3ac176a1ccca8a055c2b8e08ce1ef3f1eb9482e92612cf748",
@@ -474,8 +474,8 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "06ed13c8825e0d307a5e45a9ffe89e2e33e021abeeb3974c702677c8b9470eb2",
-      "chunks": 186,
+      "sha256": "95735c76fa7c317cdff2b7863ad4f3f0e156bd7eadfa279d18cabe53081b1ab4",
+      "chunks": 185,
       "title": "Claude Tag",
       "status": "indexed",
       "reason": "",
@@ -1762,7 +1762,7 @@
       "summary": "Explains how Agent’s browser tools work and the browser controls available to enterprise customers."
     },
     "https://cursor.com/docs/agent/tools/canvas.md": {
-      "sha256": "9e7c6865fd764e284493be6454172048972696a076ff07fa8a999052b36aa3c1",
+      "sha256": "89cecd08ee58b49c5b2c6b710f48e63772629a985c098a73d870e4f645e8dcb1",
       "chunks": 8,
       "title": "Canvas",
       "status": "indexed",
@@ -1826,7 +1826,7 @@
       "summary": "Reference documentation for the Origin Migration API, including its scopes and repository mirror migration endpoints."
     },
     "https://cursor.com/docs/approval-agents.md": {
-      "sha256": "71d3996beb03f62c6bca4c720d3f981ce1b665553a10a8d7ac8f748f570eb39f",
+      "sha256": "97b4f04e009da668d7ceb0b667da2d35d140d3d093aee517830e0579a6cb5739",
       "chunks": 17,
       "title": "Approval Agents",
       "status": "indexed",
@@ -1834,8 +1834,8 @@
       "summary": "Explains how PR Routing & Approval assigns reviewers and approves low-risk pull requests using policies, risk settings, and review findings."
     },
     "https://cursor.com/docs/bugbot.md": {
-      "sha256": "bc26110d9df7ab4f75a1f36e8a9cd587ec7a40e4f085cf0872d5ae29dcaf5588",
-      "chunks": 73,
+      "sha256": "964a1581704220c4a3ceb2bc32c8f9fcebc02994c25851cb70413b144a8e2d2e",
+      "chunks": 74,
       "title": "Bugbot",
       "status": "indexed",
       "reason": "",
@@ -1962,7 +1962,7 @@
       "summary": "Explains how Cursor Cloud Agents work, their capabilities, and how to access and configure them."
     },
     "https://cursor.com/docs/cloud-agent/api/endpoints.md": {
-      "sha256": "1173bce6fe0dd1ec61d0b599ebbb14671274cafbd1eb92a0014c2ff5f7448364",
+      "sha256": "58a7d01b10c038ebcc47af32b0df4a02e272a099abc7219c675d62b5b8456a64",
       "chunks": 147,
       "title": "Endpoints",
       "status": "indexed",
@@ -2058,7 +2058,7 @@
       "summary": "Explains how Cursor Cloud Agents run and how their access, data, isolation, and security controls work."
     },
     "https://cursor.com/docs/cloud-agent/self-hosted.md": {
-      "sha256": "5cfcdc93935102e1e651785562fa6b4583a2189eecd12b49fb2bdbf9af6838e0",
+      "sha256": "f993ab4375985f7f64e2fb7363caafcd3a99cedff9d32079bd37679fff91a479",
       "chunks": 13,
       "title": "Self Hosted",
       "status": "indexed",
@@ -2082,7 +2082,7 @@
       "summary": "Explains how to enable and use computer control and desktop sharing on self-hosted Cursor workers."
     },
     "https://cursor.com/docs/cloud-agent/self-hosted/my-machines.md": {
-      "sha256": "88a8f1d9784249842243d90f36a1147b5ea83a57a5a345cdc6c7073e59f2addb",
+      "sha256": "8c0c3dfb8f5476fd0a12fbc4ad0c54d984148e98ca56e64ae27f15627545650f",
       "chunks": 22,
       "title": "My Machines",
       "status": "indexed",
@@ -2090,7 +2090,7 @@
       "summary": "Explains how to configure and use a personal machine as the execution environment for Cursor Cloud Agents."
     },
     "https://cursor.com/docs/cloud-agent/self-hosted/pool.md": {
-      "sha256": "c2849cc2df6518cd3510e0dc3647ffffb7f8bda44dd2306085f7c5b1e622c6da",
+      "sha256": "e1c407bb71f98fe85ab490b6fa130576181882c9a25ba8f3e692b9395416abd4",
       "chunks": 67,
       "title": "Pool",
       "status": "indexed",
@@ -2106,7 +2106,7 @@
       "summary": "Explains how workspace admins manage Cloud Agent environments, builds, and default settings."
     },
     "https://cursor.com/docs/cloud-agent/setup.md": {
-      "sha256": "448dff910c25e7a745cde29e82de83bcc4b6bb9d114789cb82471689a5e09108",
+      "sha256": "1b310266a8b20d2499782606d6777bc8a67876e42e55cdc7fb488bfb268c4228",
       "chunks": 35,
       "title": "Setup",
       "status": "indexed",
@@ -2138,7 +2138,7 @@
       "summary": "Explains how to use Cursor’s Customize page to manage plugins and other extensions across user, team, and workspace scopes."
     },
     "https://cursor.com/docs/enterprise/compliance-and-monitoring.md": {
-      "sha256": "ac107250f544898639f3a4333bec2958430961ea74aa7fc235c34f182168490f",
+      "sha256": "ab106d92a8d186a94868830c58683c9a54b164ede08b0986a2f257475b4a0f32",
       "chunks": 33,
       "title": "Compliance And Monitoring",
       "status": "indexed",
@@ -2162,7 +2162,7 @@
       "summary": "Explains which Cursor processes and paths to exclude from endpoint security software to avoid startup and feature issues."
     },
     "https://cursor.com/docs/enterprise/identity-and-access-management.md": {
-      "sha256": "40cd461937f2a2fc6e5db490be0d3379001fdd8a41e1b9778658e297dba69b83",
+      "sha256": "f67bb6ee5f606ae172192f837204db3d79f5bc5fb83d831bfa1ba724205e788b",
       "chunks": 12,
       "title": "Identity And Access Management",
       "status": "indexed",
@@ -2186,7 +2186,7 @@
       "summary": "Explains how enterprise admins control model access, MCP server trust, and integrations with external services."
     },
     "https://cursor.com/docs/enterprise/network-configuration.md": {
-      "sha256": "ea0e332380c99830905cb8b649e98c46699eb02a22a91642410c4b1ce8164518",
+      "sha256": "055373e81167f9fafe7082f7fd07920ebb8ae283a2ac173fabc7be120686f247",
       "chunks": 16,
       "title": "Network Configuration",
       "status": "indexed",
@@ -2241,6 +2241,14 @@
       "reason": "",
       "summary": "Explains Cursor’s data flows, privacy guarantees, and Cloud Agent data handling for security and compliance reviews."
     },
+    "https://cursor.com/docs/enterprise/tenancy-restriction.md": {
+      "sha256": "48249736076aa9841ee67a4ff4894c9071e39c87b9ac47ff558675f07c2aff4c",
+      "chunks": 17,
+      "title": "Tenancy Restriction",
+      "status": "indexed",
+      "reason": "",
+      "summary": "Explains how to restrict Cursor organization and team access by sending a network-level HTTP header."
+    },
     "https://cursor.com/docs/get-started/quickstart.md": {
       "sha256": "55cbb760429f9dd7cbcb9430f9e15dac5ec02d99b99ddde67291a827c25357cd",
       "chunks": 14,
@@ -2266,7 +2274,7 @@
       "summary": "Explains how organizations install and update Grok Bot across desktop and mobile devices."
     },
     "https://cursor.com/docs/grok-bot/get-started.md": {
-      "sha256": "58ffc76240d82ed36816368d8c1cf86d5428c793d58539cf82b367533c81d58f",
+      "sha256": "3271f284b584821c97e273fc36a464576f7c33b4245540d24e973514710b6043",
       "chunks": 11,
       "title": "Get Started",
       "status": "indexed",
@@ -2274,7 +2282,7 @@
       "summary": "A setup guide for installing Grok Bot, signing in, and completing a first task."
     },
     "https://cursor.com/docs/grok-bot/identity.md": {
-      "sha256": "606e9a3f4e3ebf185bb10415f00c4096934fc0273c3c364da833e2199f1d7e41",
+      "sha256": "13e81a13635b588954fcd1856933f2bf30140c9b6e64d3b58abd90e0f1be2108",
       "chunks": 16,
       "title": "Identity",
       "status": "indexed",
@@ -2298,7 +2306,7 @@
       "summary": "Explains how IT teams configure TLS-inspecting proxies so the Grok Bot desktop app can connect to hosted computers."
     },
     "https://cursor.com/docs/grok-bot/security-faq.md": {
-      "sha256": "19d44cf99260e03e42edd13041b6b6ca1c755e7467437ff64b6b8da7f61fe491",
+      "sha256": "1e0d23c2d151fd0648d04485ba1b79f428514cc80f1620382ecd3a1c272751a1",
       "chunks": 22,
       "title": "Security Faq",
       "status": "indexed",
@@ -2306,7 +2314,7 @@
       "summary": "A security FAQ explaining Grok Bot isolation, access controls, and related security behavior."
     },
     "https://cursor.com/docs/grok-bot/security.md": {
-      "sha256": "107350e697d1c3a41cdce108902f47b45c68cca652a1f0f7fb952c553ba7f949",
+      "sha256": "977fedac60f4413fccfe03801a597a9a20f4977e77d3709975d06ae141d4c1e0",
       "chunks": 18,
       "title": "Security",
       "status": "indexed",
@@ -2314,7 +2322,7 @@
       "summary": "Explains Grok Bot security architecture and the controls administrators can configure to restrict access, network activity, and data retention."
     },
     "https://cursor.com/docs/grok-bot/settings.md": {
-      "sha256": "36474a1b22f954b7f8f58ab9f8243738dff7c46c0d0a87e0a370948bb59eec7f",
+      "sha256": "923ce3d887c1ba27b34b03334c23d66d20f47df96d8b1fd89d87d470a70abd09",
       "chunks": 14,
       "title": "Settings",
       "status": "indexed",
@@ -2322,7 +2330,7 @@
       "summary": "Explains Grok Bot settings, including account, appearance, bot behavior, and approval rules."
     },
     "https://cursor.com/docs/grok-bot/teams.md": {
-      "sha256": "8322936597e8e9299e7ab51be91a1eb4f1a6fa6e3e25b540eb1dbae755975ac4",
+      "sha256": "0265b662a55d841aec9aa83fbeb150bf5613b724d67e8d413fce5391c49b0bcc",
       "chunks": 46,
       "title": "Teams",
       "status": "indexed",
@@ -2338,7 +2346,7 @@
       "summary": "Provides example Grok Bot roles and prompts for common workflows, with guidance to keep external actions behind review and approval."
     },
     "https://cursor.com/docs/grok-bot/work.md": {
-      "sha256": "874e869c1e5029f28d6225047a06d1fd7b392dc4106ef40452ac0569f24c9151",
+      "sha256": "a59b2caeadee025179f58966df93e1fa87b2cd9bc3070bb9b540f04b36c538ea",
       "chunks": 28,
       "title": "Work",
       "status": "indexed",
@@ -2386,7 +2394,7 @@
       "summary": "Explains how to connect GitHub.com or GitHub Enterprise Server to Cursor, including setup requirements and network configuration."
     },
     "https://cursor.com/docs/integrations/gitlab.md": {
-      "sha256": "4852e9752848b76cc16bc2a7ae64e16815e24a319e8e8c4192297d3ee20ff1dc",
+      "sha256": "a8c261b1c3c161664f81190c8d02261fc20d868c179e2615c1bd7182dc165bd5",
       "chunks": 14,
       "title": "Gitlab",
       "status": "indexed",
@@ -2690,7 +2698,7 @@
       "summary": "Explains how to open, review, and manage pull requests in Cursor Origin."
     },
     "https://cursor.com/docs/origin/settings.md": {
-      "sha256": "9afd94b12b64f3e6e845fc143ff77d40bd080274474832b738a5f105b8405893",
+      "sha256": "8264d1b4a1d026dbf31af3391342187cb6913778cd1feeab19b45e3b6c4e356f",
       "chunks": 12,
       "title": "Settings",
       "status": "indexed",
@@ -2698,8 +2706,8 @@
       "summary": "Explains repository and team-wide settings for managing repositories in Cursor Origin."
     },
     "https://cursor.com/docs/plugins.md": {
-      "sha256": "7ed57793dd3c68e2b851b54cddf044f18a2bcd1e529fd7b8c55eacbb085b983b",
-      "chunks": 36,
+      "sha256": "00686f871ff1c893d174cf6e97ac25cf4c5b47c690fa3340e7b56c190183bc98",
+      "chunks": 37,
       "title": "Plugins",
       "status": "indexed",
       "reason": "",
