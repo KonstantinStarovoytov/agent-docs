@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-10-31",
+  "indexed_at": "2026-11-01",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -474,7 +474,7 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "6814927f63ea899429694b0f7a42dbd3d15b212faace7954467283c624dfb416",
+      "sha256": "df587235a634e2d29bd855d0423aa1e2122d7dfba397cfbc6cfbcfab96c17048",
       "chunks": 187,
       "title": "Claude Tag",
       "status": "indexed",
@@ -4578,7 +4578,7 @@
       "summary": "Explains Codex support for WSL2 and how to launch VS Code from a WSL environment."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-client.md": {
-      "sha256": "a495a1308823157fa38a3a783222029eff31b22d9c8ab6bb1c1ed4e79a311b44",
+      "sha256": "2a69a68ae6b6c3217e52465649e8e34b78c5eb7fa2ee0acccf398854b4b94b08",
       "chunks": 36,
       "title": "Build an MCP client",
       "status": "indexed",
@@ -4586,7 +4586,7 @@
       "summary": "A hands-on tutorial for building an LLM-powered MCP client that connects to MCP servers."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server.md": {
-      "sha256": "882557d9c02adb1cb9b3de75991c6f45aca4cf2fa5ee8546c128ee943d99a0d5",
+      "sha256": "ace74a3c2aeffa1c20e5dde88c5b910d9aceb800c7987fbf29bcc172bbcce00b",
       "chunks": 38,
       "title": "Build an MCP server",
       "status": "indexed",
