@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-01",
+  "indexed_at": "2026-11-02",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -474,8 +474,8 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "df587235a634e2d29bd855d0423aa1e2122d7dfba397cfbc6cfbcfab96c17048",
-      "chunks": 187,
+      "sha256": "0b23cc8abcce6178bad1713599736cb0780872d0c212ecdfe1fad936eeb1a029",
+      "chunks": 192,
       "title": "Claude Tag",
       "status": "indexed",
       "reason": "",
@@ -666,8 +666,8 @@
       "summary": "Explains the requirements and steps for running Claude Code Desktop sessions inside a WSL 2 distribution."
     },
     "https://code.claude.com/docs/en/desktop.md": {
-      "sha256": "2334a3070ced841b5be3911308e65d4ed245d1b24a4784c549c686e1dc008dce",
-      "chunks": 156,
+      "sha256": "4c5b6af6feb6563d286302ae32c2749bb6555bdfe397f3fff1f469c0a54b4320",
+      "chunks": 159,
       "title": "Desktop application",
       "status": "indexed",
       "reason": "",
@@ -1434,7 +1434,7 @@
       "summary": "Explains Claude Code settings files, scopes, and precedence when the same key is set in multiple places."
     },
     "https://code.claude.com/docs/en/setup.md": {
-      "sha256": "6d25526145e62a1916f94b8f480e98da086dcf278d71e8460f5b24b56f04ad32",
+      "sha256": "7afe0ec46f0bd4675c23f221487ae0154563cfeba31c3c3e8d0661f0bfa4395a",
       "chunks": 33,
       "title": "Advanced setup",
       "status": "indexed",
@@ -3170,7 +3170,7 @@
       "summary": "Explains how Codex discovers and applies global and project-level AGENTS.md instructions."
     },
     "https://learn.chatgpt.com/docs/agent-configuration/rules.md": {
-      "sha256": "433fe0c69ecf14db0c28c963190fe1a13b5798ed33c0a5b5a1687234d410cf68",
+      "sha256": "514bc86f31f51b7d187c52012bd4e24604a16068cfb61b878f11ad9ad14ffc39",
       "chunks": 8,
       "title": "Rules",
       "status": "indexed",
@@ -3202,7 +3202,7 @@
       "summary": "Explains how to configure local ChatGPT Work and Codex clients to use OpenAI models through Amazon Bedrock."
     },
     "https://learn.chatgpt.com/docs/annotations-extensibility.md": {
-      "sha256": "373567b7f23ba373b3f8d76a63a4dbe6d02b477f5f4a4e19ebb7f2a4c2fd16eb",
+      "sha256": "bcb3589de15554b30c4837b68c6ae1913592642d63cdc62a3a0de51cfe2f86c6",
       "chunks": 23,
       "title": "Annotations Extensibility",
       "status": "indexed",
@@ -3210,8 +3210,8 @@
       "summary": "Introduces the Browser Annotation API and explains how developers can customize annotations on their websites."
     },
     "https://learn.chatgpt.com/docs/app-server.md": {
-      "sha256": "801cba580ed48dfabeacb5db28a62c381d60ded9a9970e9bd523e2dcd3b85ac3",
-      "chunks": 88,
+      "sha256": "c0b9ad1903c9b3b4d994c03f4c95591ba0907b7e9341d1e562fe1b4122592216",
+      "chunks": 92,
       "title": "Codex App Server",
       "status": "indexed",
       "reason": "",
@@ -3274,7 +3274,7 @@
       "summary": "A practical guide to creating, configuring, testing, and refining reusable ChatGPT plugins."
     },
     "https://learn.chatgpt.com/docs/build-skills.md": {
-      "sha256": "2e51de4daff11ecdb1e472e0fb33d2386f97a53a8faca3504cd6cb8261bb0671",
+      "sha256": "5b49faf88af57ad04a580c321568641bf96a710ab02d835c41286fc45a404064",
       "chunks": 9,
       "title": "Build skills",
       "status": "indexed",
@@ -3322,8 +3322,8 @@
       "summary": "Explains how to use ChatGPT or Codex to review pull requests and investigate code changes."
     },
     "https://learn.chatgpt.com/docs/codex-sdk.md": {
-      "sha256": "06305f3c464d26525740616f225afaccd015b6d17424cc2fb705aeb256342b21",
-      "chunks": 9,
+      "sha256": "0b4b75a6c85d08d6dcb97b8f187306c0004bb98622658338c51bed1554a2e0b7",
+      "chunks": 12,
       "title": "Codex SDK",
       "status": "indexed",
       "reason": "",
@@ -3354,15 +3354,15 @@
       "summary": "Explains how to install, enable, and use Computer Use in the ChatGPT desktop app."
     },
     "https://learn.chatgpt.com/docs/config-file/config-advanced.md": {
-      "sha256": "89feb14c6d334c7eda367fa276b4ee07865c30009f3450990916d7d6db177242",
-      "chunks": 57,
+      "sha256": "79649d00a9023cecc2cb2344bfa7d895ed83a3432b4b52423eec25ab867d0bb5",
+      "chunks": 58,
       "title": "Advanced Configuration",
       "status": "indexed",
       "reason": "",
       "summary": "A practical guide to advanced Codex configuration options for providers, policies, and integrations."
     },
     "https://learn.chatgpt.com/docs/config-file/config-basic.md": {
-      "sha256": "925afcc46808f0037599bf90838ee09a8358b9745f9d1fa65f7424f92c840593",
+      "sha256": "c4594b49c14adf2a40ba62a3172a32ebe1366b8169e70a7b7b96248030d39fd1",
       "chunks": 22,
       "title": "Config basics",
       "status": "indexed",
@@ -3370,16 +3370,16 @@
       "summary": "Explains Codex configuration files, settings, and precedence for user and project-level configuration."
     },
     "https://learn.chatgpt.com/docs/config-file/config-reference.md": {
-      "sha256": "b3da16afed9e3a05c197863bf43b42a700b1df6ac5a075ef671e042737d3fedc",
-      "chunks": 49,
+      "sha256": "9e7694af1c9b50ce747ff147eee81fb6f8186d19d32c07899bd310aa98e46cc1",
+      "chunks": 53,
       "title": "Configuration Reference",
       "status": "indexed",
       "reason": "",
       "summary": "A reference catalog of Codex configuration settings, scopes, and management guidance."
     },
     "https://learn.chatgpt.com/docs/config-file/config-sample.md": {
-      "sha256": "e609cf3be00f97dd83fcc32b11f68c72e6dc3bad7af0ed31d5dce1c96faabfce",
-      "chunks": 14,
+      "sha256": "0138d4d90982251ccd3ecac45031b5d517f8c476b78e9766804c67db4ee7c42e",
+      "chunks": 15,
       "title": "Sample Configuration",
       "status": "indexed",
       "reason": "",
@@ -3418,7 +3418,7 @@
       "summary": "Explains how Computer History works, its availability and requirements, and how users control the collection of activity for ChatGPT memories."
     },
     "https://learn.chatgpt.com/docs/customization/memories.md": {
-      "sha256": "8de84f0a1da1b44e51caae73445084a67f38898a6734bddf3477d2b4015d2642",
+      "sha256": "aefcd33fc6f712eabb261ac680c579b822bb650d989094021a4c9ff063dbd59f",
       "chunks": 6,
       "title": "Memories",
       "status": "indexed",
@@ -3442,7 +3442,7 @@
       "summary": "This page explains how to choose approved Daybreak models and use them safely for authorized cybersecurity work."
     },
     "https://learn.chatgpt.com/docs/cyber-safety/recommended-configuration.md": {
-      "sha256": "5650696a328b53f6f90f4a0983f93624896ec8a7ce5d3026a5da58d0d46b9d88",
+      "sha256": "3f56ffcbd0eb33efc1d35b53bcedbc972d06b1d264ee26771d697c9ab3505833",
       "chunks": 10,
       "title": "Recommended configuration",
       "status": "indexed",
@@ -3450,15 +3450,15 @@
       "summary": "This page recommends security controls for configuring higher-risk cybersecurity workflows."
     },
     "https://learn.chatgpt.com/docs/developer-commands.md?surface=cli": {
-      "sha256": "6f3b537cee7c6d161ddbe074c3bbe5d84046ab895ba9e12a8383cf96a9ebc8a7",
-      "chunks": 103,
+      "sha256": "c0faeb48d8c48c3aeb5c763dcef49386b0377af7851eaa64970c25c830c2c1c3",
+      "chunks": 108,
       "title": "Slash commands in Codex CLI",
       "status": "indexed",
       "reason": "",
       "summary": "A reference catalog of Codex CLI commands, flags, and their maturity levels."
     },
     "https://learn.chatgpt.com/docs/developer-commands.md?surface=ide": {
-      "sha256": "50a6368d51607262febd651d1cdf05e86b1e8e2ce5dfa0c3fcb8ef38af34b2ff",
+      "sha256": "07d3e19009a02b8a1137628e7753b49367301f7705a70740765d13f16e86fc5c",
       "chunks": 7,
       "title": "Codex IDE extension slash commands",
       "status": "indexed",
@@ -3722,8 +3722,8 @@
       "summary": "Explains how administrators disable automatic updates and deploy approved ChatGPT desktop app releases through device management."
     },
     "https://learn.chatgpt.com/docs/enterprise/managed-configuration.md": {
-      "sha256": "3d5bd5fbbf39cd66df99ba921d82b500836436859f2ef4092d2e7659cf161701",
-      "chunks": 65,
+      "sha256": "94742e0325325d6011503f8630a6c9aff70cd177d4fca98544fbdd60aab7d174",
+      "chunks": 67,
       "title": "Managed configuration",
       "status": "indexed",
       "reason": "",
@@ -3762,7 +3762,7 @@
       "summary": "This page explains how to deploy a gateway for Codex, including prerequisites, model routing, credentials, and configuration distribution."
     },
     "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md": {
-      "sha256": "bda283a4eed5f78c953fea37cbab2a6694132c71de292543036c69ca686aace2",
+      "sha256": "ecadf67b4978b559cd8e47baa1fde0d1fcb99053de273758c283a8e7cee33a94",
       "chunks": 70,
       "title": "Codex security cookbook",
       "status": "indexed",
@@ -3882,7 +3882,7 @@
       "summary": "Explains how to use Codex Cloud environments and create reusable setups for coding tasks."
     },
     "https://learn.chatgpt.com/docs/environments/git-worktrees.md": {
-      "sha256": "8838a8956d0f49f862d81a9ebe87cbf39d961254aaf89ce2ec5c30aa827b807d",
+      "sha256": "f4d131bc6511ca786ddefd8058b70a61fa9dab94e405b057e0135a793f0dc024",
       "chunks": 15,
       "title": "Worktrees",
       "status": "indexed",
@@ -3906,7 +3906,7 @@
       "summary": "Explains how to choose local, worktree, or cloud environments when starting a Codex task."
     },
     "https://learn.chatgpt.com/docs/extend/mcp.md": {
-      "sha256": "2d1912b4d842a33119465c50677eb7a6bcfc10e1d071e50cf140e48e295dc518",
+      "sha256": "c85f130ab7cdad041b159812980269aa720fecfeff8692785322d4b8c622f036",
       "chunks": 32,
       "title": "Model Context Protocol",
       "status": "indexed",
@@ -3978,8 +3978,8 @@
       "summary": "A reference glossary defining Codex terms across its products and integrations."
     },
     "https://learn.chatgpt.com/docs/hooks.md": {
-      "sha256": "9d4136f4682b15e457d02deccd515bdbe7c52a27ad7dfac95205a8f995522476",
-      "chunks": 36,
+      "sha256": "77b575d4f912b6c2587d83ad34cd012701676e040e15752a8eab99d791adf5f6",
+      "chunks": 40,
       "title": "Hooks",
       "status": "indexed",
       "reason": "",
@@ -4002,7 +4002,7 @@
       "summary": "Explains how to add images as context in ChatGPT and Codex across the app, web, CLI, and IDE."
     },
     "https://learn.chatgpt.com/docs/import.md": {
-      "sha256": "aff6ad3199595244838f3a4c4a733a2e2f7b3a6b4680de599598f9f048bd59eb",
+      "sha256": "9f3a2e1e4a1da2a1500d2344f1b97563044baaff1e3732457429aa90e42aa092",
       "chunks": 9,
       "title": "Import from another agent",
       "status": "indexed",
@@ -4290,7 +4290,7 @@
       "summary": "A quickstart for installing the Codex Security plugin and running a read-only security scan in the desktop app or CLI."
     },
     "https://learn.chatgpt.com/docs/security/plugin/code-changes.md": {
-      "sha256": "f2cabd39da87255e56e5bf0599deb178bc0005f460f8f850e3f5fc81937befda",
+      "sha256": "4030a4856b28983891d44cd2a2bfa21f538fa7d52219d7bf62ad4c45761cfd7e",
       "chunks": 9,
       "title": "Review code changes for security",
       "status": "indexed",
@@ -4362,8 +4362,8 @@
       "summary": "Explains how to open the Codex Security workbench and start codebase or changes scans."
     },
     "https://learn.chatgpt.com/docs/security/sdk.md": {
-      "sha256": "9422697679ef57c2d37e688c0812d7f9f241fc987bc39a9391fb068c6c67687e",
-      "chunks": 27,
+      "sha256": "a138849ed09cca1ce758755385aa29fbe90832479d86faa52b112986f48164fd",
+      "chunks": 28,
       "title": "Codex Security TypeScript SDK",
       "status": "indexed",
       "reason": "",
@@ -4546,7 +4546,7 @@
       "summary": "A getting-started guide to using ChatGPT on the web for research, analysis, and creating files."
     },
     "https://learn.chatgpt.com/docs/webmcp.md": {
-      "sha256": "8f4f7085053fe41422866757fcef703dce167c9ee36e2ada59b4345bf62a94a4",
+      "sha256": "9ccb334a5580293d2a3f639ac18f1b7182fc3135a21ca6947b2c9725b81c730c",
       "chunks": 7,
       "title": "Site tools",
       "status": "indexed",
