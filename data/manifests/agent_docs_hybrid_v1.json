@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-07",
+  "indexed_at": "2026-11-08",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -474,7 +474,7 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "c8388f7dda7d8211c683fe148b7d08e8ec4c16b0dd906c48c56c52226b59efa4",
+      "sha256": "19477f4cd7313c4d7c5408550c14a875978d3be8de522809885b19cc342b72e2",
       "chunks": 80,
       "title": "Claude Tag",
       "status": "indexed",
@@ -810,15 +810,15 @@
       "summary": "Provides IT administrators with instructions for configuring local Claude Code sessions for a HIPAA-ready organization."
     },
     "https://code.claude.com/docs/en/hooks-guide.md": {
-      "sha256": "e54ca016bc44210d37d67ae4990aeac76a8a14dddb73576452051eec2667abee",
-      "chunks": 46,
+      "sha256": "07acc4a75eeff854ad20377e24bc8eded2266718ac6de9d8aca8a8faf4c68179",
+      "chunks": 47,
       "title": "Automate actions with hooks",
       "status": "indexed",
       "reason": "",
       "summary": "A practical guide to configuring Claude Code hooks to automate actions during its lifecycle."
     },
     "https://code.claude.com/docs/en/hooks.md": {
-      "sha256": "e4c7aa489bd0d5b920b631be6480c1629c6b9d75d712f98ad3227d5b758adacd",
+      "sha256": "8b8e41523375d99a8d14d709152f24a3d54ac4544a1c3652343b7e370ab99771",
       "chunks": 205,
       "title": "Hooks reference",
       "status": "indexed",
@@ -922,7 +922,7 @@
       "summary": "A step-by-step guide to connecting, verifying, and troubleshooting an MCP server in Claude Code."
     },
     "https://code.claude.com/docs/en/mcp.md": {
-      "sha256": "cb3291e85afa08151e07cb81e5f1afb84e6ad5b652b8985296ec90a661386c70",
+      "sha256": "9d9eee2ca051dbbb9e4f6dc4e9fb2f54840269ef7115b70a2ba5368066fa53a6",
       "chunks": 115,
       "title": "Connect Claude Code to tools via MCP",
       "status": "indexed",
@@ -4786,8 +4786,8 @@
       "summary": "A walkthrough of the MCP Inspector web client, including how to launch it and use its session token."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/authorization.md": {
-      "sha256": "adaa61a9461f311d8c50e2e7b911fe51fe14e521b022479c4c0e22642c4a7c10",
-      "chunks": 23,
+      "sha256": "9eea5d0ab72cd6db4e1f3b2368d25e72d523a8037a8ce3e54c1c73f90245a6cd",
+      "chunks": 26,
       "title": "Understanding Authorization in MCP",
       "status": "indexed",
       "reason": "",
@@ -4858,7 +4858,7 @@
       "summary": "Defines MCP extensions and their identifier format, with guidance for choosing a vendor prefix and links to official extension repositories."
     },
     "https://modelcontextprotocol.io/extensions/skills/overview.md": {
-      "sha256": "d48e68d7fceb1040632cdbce4a7734781dc3a326a971d6c0224ad11088a85968",
+      "sha256": "d5ba730b896c00ce3f2bfb0085724807d566eb53853e757c8019b0b96deaea67",
       "chunks": 14,
       "title": "Skills",
       "status": "indexed",
