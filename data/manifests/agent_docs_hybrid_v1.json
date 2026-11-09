@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-08",
+  "indexed_at": "2026-11-09",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -58,7 +58,7 @@
       "summary": "Explains how to track Claude Agent SDK token usage, estimate costs, and configure prompt caching."
     },
     "https://code.claude.com/docs/en/agent-sdk/custom-tools.md": {
-      "sha256": "6e90d073e70bde2efbf7467cb5fe2e56a41d87c6bd0f1b882ffa43fda7c5dcfb",
+      "sha256": "14b8244e1b1456b05346c022dc0e598203f861a0cd69ea23ddd03dea9714658e",
       "chunks": 22,
       "title": "Give Claude custom tools",
       "status": "indexed",
@@ -90,7 +90,7 @@
       "summary": "Explains how to deploy and operate the Agent SDK in production, including subprocesses, persistence, scaling, observability, and tenant isolation."
     },
     "https://code.claude.com/docs/en/agent-sdk/mcp.md": {
-      "sha256": "aef3a6f7c488fc481f543c723625c3a02f517285a1f008861eab6e6330b52123",
+      "sha256": "437a48fafd2cbc48e9c3d6b65d40d687f5a6ddddc1805e4857fddba8306d3d12",
       "chunks": 32,
       "title": "Connect to external tools with MCP",
       "status": "indexed",
@@ -130,7 +130,7 @@
       "summary": "An overview of the Agent SDK, its capabilities, and how it compares with other Claude tools."
     },
     "https://code.claude.com/docs/en/agent-sdk/permissions.md": {
-      "sha256": "5629b9f5efb393eb06578998f2590f7d43d31ca4cdb2a1311171c1635ca9809f",
+      "sha256": "6966ae21b9fba924a7666df32d611112a130636fe42f24ec96730e90f9bbe649",
       "chunks": 19,
       "title": "Configure permissions",
       "status": "indexed",
@@ -474,7 +474,7 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "19477f4cd7313c4d7c5408550c14a875978d3be8de522809885b19cc342b72e2",
+      "sha256": "25a207079298855d76fc2423ad110680bd517f10a94a45ba1f8278fbbb0e49e0",
       "chunks": 80,
       "title": "Claude Tag",
       "status": "indexed",
@@ -666,8 +666,8 @@
       "summary": "Explains the requirements and steps for running Claude Code Desktop sessions inside a WSL 2 distribution."
     },
     "https://code.claude.com/docs/en/desktop.md": {
-      "sha256": "f3c3129da54c8d5b1aa7a7d97b988421c4cd215e3653d875c464f175dc29a4b0",
-      "chunks": 163,
+      "sha256": "6e4d519b779c3c2064717d6bb249953fff5614accb82f1bed2efb3ee2eb0fe61",
+      "chunks": 165,
       "title": "Desktop application",
       "status": "indexed",
       "reason": "",
@@ -1418,7 +1418,7 @@
       "summary": "Provides copyable example settings files for personal, team, and organization-wide Claude Code configuration."
     },
     "https://code.claude.com/docs/en/settings-reference.md": {
-      "sha256": "76075ba70507bbcd1b787fa45a4e598291397e525de144a5c4c19b3e237c70a3",
+      "sha256": "39c5527d2ce277a8cb560b0f157033f8a75818940d69d3b0bda79bdb76ad70ff",
       "chunks": 335,
       "title": "All settings",
       "status": "indexed",
@@ -3218,7 +3218,7 @@
       "summary": "Explains how to configure local ChatGPT Work and Codex clients to use OpenAI models through Amazon Bedrock."
     },
     "https://learn.chatgpt.com/docs/annotations-extensibility.md": {
-      "sha256": "692390881caf8079e64af82c91910eb79530fa040dbdb574031f5c9188943a2e",
+      "sha256": "0929e55175dc68fc49683267efc610fa87ff44b012ae6b8e1487aa9910e537cd",
       "chunks": 23,
       "title": "Annotations Extensibility",
       "status": "indexed",
@@ -4010,7 +4010,7 @@
       "summary": "Explains Codex hooks, when they run, and how they support custom scripts and tools during agent workflows."
     },
     "https://learn.chatgpt.com/docs/image-generation.md": {
-      "sha256": "75bf64624784d595a736aa4c79085cf402adf25ced61bf7404bac25e4015af2c",
+      "sha256": "9ed49a95e39a93f716646fdfa1ce8ad88352c71aa3451b0d5fdc4e2cf9f06602",
       "chunks": 10,
       "title": "Image generation",
       "status": "indexed",
@@ -4058,7 +4058,7 @@
       "summary": "Explains how to set up and manage long-running work in ChatGPT across the desktop app, web, and Codex CLI."
     },
     "https://learn.chatgpt.com/docs/migrate-custom-gpts.md": {
-      "sha256": "8837657b8464b9506388c77c6fa89a258e041314a6e3fc74c3f9c138ac847c9c",
+      "sha256": "7b7e62c3dab7e79257973e4924a19c859266458a66cf4400f72bf3e1674a8e83",
       "chunks": 26,
       "title": "Moving your custom GPT workflows to plugins",
       "status": "indexed",
@@ -4162,7 +4162,7 @@
       "summary": "Explains how to organize chats, files, and shared context in ChatGPT projects."
     },
     "https://learn.chatgpt.com/docs/prompting.md": {
-      "sha256": "0e0e972a3cb89b5b2d1eeba4455793c6348a2c39df76c06818f3bc662f1be35c",
+      "sha256": "d8e395f2234b3986b443ee1a08408a33be06ba2b69503c969caf27b7b0323d56",
       "chunks": 48,
       "title": "Prompting",
       "status": "indexed",
@@ -4170,7 +4170,7 @@
       "summary": "A practical guide to writing prompts and shaping ChatGPT’s responses."
     },
     "https://learn.chatgpt.com/docs/quickstart.md": {
-      "sha256": "341773d16c79a4068b4705758d6edb5969dc9a2b7f9ff50aeac4fcd9afb09f27",
+      "sha256": "5e5b796a24f8097ecbd5178250e142300a88e29f4ddb1b08af4fb747c332da67",
       "chunks": 5,
       "title": "Quickstart",
       "status": "indexed",
@@ -4298,7 +4298,7 @@
       "summary": "An FAQ explaining how Codex Security Cloud works, how to access it, and how it differs from local security scans."
     },
     "https://learn.chatgpt.com/docs/security/plugin.md": {
-      "sha256": "20d7f04994c91cee9dc678508f9225fb85616d0afa9aa08807b9cb92195f453a",
+      "sha256": "b82ff8bfd9c9e24a66df8879b5d5883855a1bd9b6dd8a7c5deae5e243638f6ad",
       "chunks": 7,
       "title": "Codex Security plugin quickstart",
       "status": "indexed",
@@ -4410,7 +4410,7 @@
       "summary": "Explains how to review and update a repository’s threat model in Codex Security Cloud."
     },
     "https://learn.chatgpt.com/docs/sites.md": {
-      "sha256": "82221e3b100adcf9da61bd0eb7c47f4542030164fd9f3e113f58408285c39dd7",
+      "sha256": "d462eaafe67a80e25b4fa69c296ffe24041f28b84993e2c5073b98e2f1f6b421",
       "chunks": 27,
       "title": "Sites",
       "status": "indexed",
@@ -4450,7 +4450,7 @@
       "summary": "Explains how to review a site before publishing and choose who can visit or edit it."
     },
     "https://learn.chatgpt.com/docs/skills-and-plugins.md": {
-      "sha256": "1035cb97e692ce13295da302aee517ab0a54b916572156da6e437a119b5ffcef",
+      "sha256": "9a6401553a601a1f23b47d86153278ed3331948a485a65142d038d421e2acd42",
       "chunks": 5,
       "title": "Skills & Plugins",
       "status": "indexed",
@@ -4530,7 +4530,7 @@
       "summary": "Explains how to use ChatGPT in Slack and connect an account for requests and Codex Cloud delegation."
     },
     "https://learn.chatgpt.com/docs/use-chatgpt.md": {
-      "sha256": "7dc1b450b4ab624d7c1f4fc638f614223180e1dccb80e85e04f7315883d54d22",
+      "sha256": "802d24152b1de7e14ce799345f01059dcdc1877c42bb2318554c1d2ebb32a959",
       "chunks": 14,
       "title": "Use ChatGPT",
       "status": "indexed",
@@ -4874,7 +4874,7 @@
       "summary": "An overview of MCP Tasks explaining asynchronous execution and its benefits."
     },
     "https://modelcontextprotocol.io/registry/about.md": {
-      "sha256": "d98cfcc8e00ebe89fb1f1f69491271a22a5af38b323ff0a0df0a2fc9957e90f4",
+      "sha256": "6d2085f12ce6c954f15d6e81a6d4fb01870b02a0f89ff99e01605c675c1502e1",
       "chunks": 10,
       "title": "The MCP Registry",
       "status": "indexed",
