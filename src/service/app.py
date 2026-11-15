@@ -88,6 +88,7 @@ class AskResponse(BaseModel):
 class SearchRequest(BaseModel):
     query: str = Field(min_length=1, max_length=settings.api_max_question_chars)
     limit: int | None = Field(default=None, ge=1, le=50)
+    product: Product | None = None
 
 
 class PassageResponse(BaseModel):
@@ -399,7 +400,11 @@ def create_app() -> FastAPI:
     def search(request: SearchRequest) -> SearchResponse:
         """Retrieval without generation, so a caller can inspect the evidence."""
         try:
-            passages = pages.search(request.query, limit=request.limit)
+            passages = pages.search(
+                request.query,
+                limit=request.limit,
+                vendor=PRODUCT_VENDOR[request.product] if request.product else None,
+            )
         except core.QuestionRejected as error:
             raise HTTPException(status_code=422, detail=str(error)) from error
         finally:
