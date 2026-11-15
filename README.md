@@ -153,7 +153,7 @@ With your own key, replace the `Authorization` line with
 |---|---|
 | `GET /health` | Liveness, no token |
 | `POST /ask` | A written answer with citations |
-| `POST /search` | Passages with page descriptions (`search_docs`) |
+| `POST /search` | Passages with page descriptions (`search_docs`). `product`: `claude-code`, `cursor`, `codex`, `mcp` |
 | `POST /pages` | Page cards: description and outline |
 | `POST /section` | One section of a page (`read_section`) |
 | `POST /mcp/` | MCP (streamable HTTP) |

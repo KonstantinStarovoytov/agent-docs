@@ -281,6 +281,76 @@ def test_pages_returns_cards(client: Any, monkeypatch: pytest.MonkeyPatch) -> No
     assert seen == {"question": "hooks", "limit": 3, "vendor": "cursor"}
 
 
+def test_search_passes_product_as_vendor(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.service import pages
+
+    seen: dict[str, Any] = {}
+
+    def search(question: str, **kwargs: Any) -> list[core.Passage]:
+        seen.update(question=question, **kwargs)
+        return []
+
+    monkeypatch.setattr(pages, "search", search)
+
+    response = client.post(
+        "/search",
+        json={"query": "hooks", "limit": 3, "product": "codex"},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 200
+    assert seen == {"question": "hooks", "limit": 3, "vendor": "openai"}
+
+
+def test_search_without_product_searches_every_product(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.service import pages
+
+    seen: dict[str, Any] = {}
+
+    def search(question: str, **kwargs: Any) -> list[core.Passage]:
+        seen.update(question=question, **kwargs)
+        return []
+
+    monkeypatch.setattr(pages, "search", search)
+
+    response = client.post(
+        "/search",
+        json={"query": "hooks"},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 200
+    assert seen == {"question": "hooks", "limit": None, "vendor": None}
+
+
+def test_search_rejects_unknown_product(
+    client: Any, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.service import pages
+
+    monkeypatch.setattr(pages, "search", lambda *_a, **_k: [])
+
+    response = client.post(
+        "/search",
+        json={"query": "q", "product": "copilot"},
+        headers={"Authorization": f"Bearer {TOKEN}"},
+    )
+
+    assert response.status_code == 422
+
+
+def test_openapi_declares_product_on_search(client: Any) -> None:
+    """Callers check this field before they limit /search to one product."""
+    schema = client.get("/openapi.json").json()
+
+    properties = schema["components"]["schemas"]["SearchRequest"]["properties"]
+    assert "product" in properties
+
+
 def test_section_maps_unknown_page_to_404_and_bad_heading_to_422(
     client: Any, monkeypatch: pytest.MonkeyPatch
 ) -> None:
