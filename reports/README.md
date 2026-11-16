@@ -4,6 +4,12 @@ Outputs of the experiments in [ARCHITECTURE.md → Experiments](../ARCHITECTURE.
 The number in brackets is the experiment's row there. Raw data sits next to
 the report that reads it.
 
+## November 2026
+
+| Report | What it decided |
+|---|---|
+| [rerank-v5-2026-11.md](rerank-v5-2026-11.md) | `rerank-v5.0-fast` instead of `rerank-v4.0-fast`, with new score thresholds (28); raw scores in [rerank-v5-2026-11-scores.json](rerank-v5-2026-11-scores.json) |
+
 ## October 2026: full index
 
 | Report | What it decided |

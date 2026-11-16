@@ -159,10 +159,9 @@ def one_per_page(reranked: list[RerankResult]) -> list[RerankResult]:
     return sorted(best.values(), key=lambda result: -result.rerank_score)
 
 
-# A page's other chunks are named by heading when they score at least this
-# much, at most this many (experiment 25: section hit 0.667 -> 0.867 on
-# retrieval-v3, no page lost, +8-10% tokens).
-OTHER_SECTIONS_MIN_SCORE = 0.35
+# A page's other chunks are named by heading when they score at least
+# settings.other_sections_min_score, at most this many (experiment 25: section
+# hit 0.667 -> 0.867 on retrieval-v3, no page lost, +8-10% tokens).
 OTHER_SECTIONS_MAX = 3
 
 
@@ -186,7 +185,7 @@ def other_sections(reranked: list[RerankResult], best: RerankResult) -> tuple[st
     own = _heading(best.document.metadata)
     found: list[str] = []
     for result in sorted(reranked, key=lambda r: -r.rerank_score):
-        if result.rerank_score < OTHER_SECTIONS_MIN_SCORE:
+        if result.rerank_score < settings.other_sections_min_score:
             break
         if result.document.metadata.get("source") != page:
             continue
