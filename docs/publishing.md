@@ -5,10 +5,12 @@ secret: `server.json` declares that a token is needed but does not contain one.
 
 ## Before you publish
 
-- Keep **`API_GUEST_TOKEN`** set on Render. That token is what people get when
-  they ask in an issue. To revoke it, clear the variable and redeploy.
-- Every public request spends the **Cohere trial quota** (1,000/month per key).
-  Hand out the guest token on request rather than publishing it.
+- Leave **`API_GUEST_TOKEN`** and **`COHERE_API_KEY_FALLBACK`** unset on Render.
+  Everyone but the owner calls with their own Cohere key in `X-Cohere-Api-Key`,
+  which pays for their own reranking.
+- **`COHERE_API_KEY`** on Render is a paid key, for the owner's own calls. A
+  Cohere trial key is meant for evaluation: the evals and the daily smoke check
+  use one, never the server.
 
 ## 1. Official MCP Registry
 

@@ -125,10 +125,8 @@ Calling a tool needs one of two headers:
   [dashboard.cohere.com](https://dashboard.cohere.com). The key pays for
   reranking that one request; it is never stored or logged. Limit: 30 requests
   a minute per IP.
-- **A token from the owner:** `Authorization: Bearer <API_TOKEN>`. For a guest
-  token, open an
-  [issue](https://github.com/KonstantinStarovoytov/agent-docs/issues/new?title=Guest%20token%20request)
-  titled "Guest token request".
+- **The owner's token:** `Authorization: Bearer <API_TOKEN>`, for the owner's own
+  use. There is no guest token: everyone else brings their own Cohere key.
 
 The server is on a free plan: after 15 idle minutes, the first request takes
 about a minute.
@@ -360,7 +358,7 @@ model sees.
 | Traces, eval datasets, prompts | Langfuse Cloud | Free Hobby |
 | Daily re-index, CI | GitHub Actions | Free |
 | Embeddings, answers | OpenAI (`text-embedding-3-small`, `gpt-6-luna`) | Pay per use |
-| Rerank | Cohere (`rerank-v5.0-fast`) | Trial key + fallback key |
+| Rerank | Cohere (`rerank-v5.0-fast`) | Paid key for the owner's calls; callers bring their own; a trial key for the evals and the daily smoke check |
 
 Deploys run only after CI passes. The whole service is defined in
 [render.yaml](render.yaml).
@@ -369,8 +367,8 @@ Deploys run only after CI passes. The whole service is defined in
 asks for (`OPENAI_API_KEY`, `COHERE_API_KEY`, optional `COHERE_API_KEY_FALLBACK`,
 `QDRANT_URL`, `QDRANT_API_KEY`, `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`);
 `API_TOKEN` is generated for you. If you change the host name, update
-`API_ALLOWED_HOSTS` (the MCP transport rejects unknown hosts). Revoke a guest
-by clearing `API_GUEST_TOKEN`.
+`API_ALLOWED_HOSTS` (the MCP transport rejects unknown hosts). `API_GUEST_TOKEN`
+is optional and is not set on this server.
 
 ## Cost
 
