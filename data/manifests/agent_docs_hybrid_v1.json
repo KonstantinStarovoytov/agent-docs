@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-15",
+  "indexed_at": "2026-11-16",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -482,7 +482,7 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "0aabe0750f18ffbb712320662e31fd584bf95ef91f12203f31a151cc4674bfe3",
+      "sha256": "dded5a712e49a6312526b31f112ff0dd325b95eb9a5bf11e8b7ac0e9a4fddca8",
       "chunks": 76,
       "title": "Claude Tag",
       "status": "indexed",
@@ -2170,7 +2170,7 @@
       "summary": "This page briefly summarizes the Grants API and links to its individual endpoint reference pages."
     },
     "https://cursor.com/docs/api/origin/mcp.md": {
-      "sha256": "bcd334f6b4742c7ca38a1c098b4a78d68a8800b652d7ed55f0b995f47bdb31fb",
+      "sha256": "e05b8ea418ae08abb2cb96fd1c5e1665f9dc9781b9b900548e6e36d0f75ae6ec",
       "chunks": 10,
       "title": "Mcp",
       "status": "indexed",
@@ -2178,7 +2178,7 @@
       "summary": "Describes the Origin MCP server, its supported capabilities, endpoints, and transport for accessing Origin repositories and pull requests."
     },
     "https://cursor.com/docs/api/origin/mcp/tools.md": {
-      "sha256": "43fcb76cff6e6991dece501debe57fcdbac2c65bf116b3cf98f4064369b85605",
+      "sha256": "0b8f5a6222cb1781ba42f7478ed749be92004e5be7dcc408c969de661611ad7e",
       "chunks": 159,
       "title": "Tools",
       "status": "indexed",
@@ -4634,7 +4634,7 @@
       "summary": "An introductory overview explaining what MCP is and what it enables."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture.md": {
-      "sha256": "d8fb5be467c53a3a6d1c20de0dbdc83f2b919688a28657f056c63a3a5d0de2bb",
+      "sha256": "f4001436d2b0237b54460f030941f7a73a65792ad461df09d97cf11cabc0f422",
       "chunks": 27,
       "title": "Architecture overview",
       "status": "indexed",
@@ -4642,16 +4642,16 @@
       "summary": "An overview of MCP’s architecture, scope, core concepts, and data-layer protocol."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/learn/client-concepts.md": {
-      "sha256": "86c1d28dea05eab9d0710295b2a17a1e81fd084960438229dabf72b3b1bbd1ca",
-      "chunks": 16,
+      "sha256": "4e173ec6c383c142262cfd4ebfba961ab45f8daae6cb94ebb20b2390963b86c8",
+      "chunks": 9,
       "title": "Understanding MCP clients",
       "status": "indexed",
       "reason": "",
       "summary": "Explains MCP clients, how they differ from host applications, and the features they can provide to servers."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts.md": {
-      "sha256": "ea8853a70672f56263eac3d44abac041c676d35f1747810e87f8aab46d8aef9d",
-      "chunks": 18,
+      "sha256": "f3c4f619057ed05eb12f7bd4417a9577a02a13381b4b6e79694c2c026c720336",
+      "chunks": 19,
       "title": "Understanding MCP servers",
       "status": "indexed",
       "reason": "",
@@ -4674,7 +4674,7 @@
       "summary": "This page is a directory of official MCP SDKs that links to their separate documentation sites."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging.md": {
-      "sha256": "e05fba02034b178338c6b85ff7000b87059edfa67e0f424088760282ba45cd7f",
+      "sha256": "8ac2f8ca8d5d9fd4d1597af25deddfc2ae85f1a3ec994cbe376b7afe9872a5f8",
       "chunks": 18,
       "title": "Debugging",
       "status": "indexed",
@@ -4682,7 +4682,7 @@
       "summary": "A practical guide to debugging MCP integrations with the Inspector, server logging, and client developer tools."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector.md": {
-      "sha256": "98cc50504e06f50409f720c60005e24527a4680f6a89870a1a68d4bdd07f2c3d",
+      "sha256": "ed2ca5421bcee9d3d0403483762ceccf0e3e84a6f666de92f404804a3f9422bd",
       "chunks": 5,
       "title": "MCP Inspector",
       "status": "indexed",
@@ -4762,8 +4762,8 @@
       "summary": "A walkthrough of the MCP Inspector web client, including how to launch it and use its session token."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/authorization.md": {
-      "sha256": "9eea5d0ab72cd6db4e1f3b2368d25e72d523a8037a8ce3e54c1c73f90245a6cd",
-      "chunks": 26,
+      "sha256": "7d972473579861d9d33f20554d2488e600fa912297a7bbb6a31b0debda9173d1",
+      "chunks": 25,
       "title": "Understanding Authorization in MCP",
       "status": "indexed",
       "reason": "",
@@ -4778,7 +4778,7 @@
       "summary": "A practical guide to safely configuring and running local MCP servers on a user’s machine."
     },
     "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices.md": {
-      "sha256": "5af3e595b12a7e1716511bb05155b02213e84d3eb7b3e0be55a3c8e9d89b2c45",
+      "sha256": "560b0b3000177c1024824a6ed3f9748abfe3b0e4d9f438c1d8d4433a9608cd4c",
       "chunks": 46,
       "title": "Security Best Practices",
       "status": "indexed",
@@ -4802,7 +4802,7 @@
       "summary": "An introductory overview of MCP Apps, explaining how interactive interfaces work inside MCP hosts and why they are useful."
     },
     "https://modelcontextprotocol.io/extensions/auth/enterprise-managed-authorization.md": {
-      "sha256": "4ed396b8a3d570d2a5e79deb9fb707c03e517f8d5dc82cbf400585d26b6deb4f",
+      "sha256": "01957705008ae7ef8796e7f3d77039d9cd459848d9db5eb1b565593c9bdcc181",
       "chunks": 11,
       "title": "Enterprise-Managed Authorization",
       "status": "indexed",
@@ -4810,7 +4810,7 @@
       "summary": "An overview of enterprise-managed authorization for MCP, describing centralized access control through an identity provider and linking to the technical specification."
     },
     "https://modelcontextprotocol.io/extensions/auth/oauth-client-credentials.md": {
-      "sha256": "fa37dcd723427d6644d0ddf3ced5f64c142a97b33a5538ae6f4b380720113273",
+      "sha256": "5ae3cd62fc952d2c731fcf03717187fb05324d97c70f9c7cf5ccd3511b0b219a",
       "chunks": 13,
       "title": "OAuth Client Credentials",
       "status": "indexed",
@@ -4818,7 +4818,7 @@
       "summary": "Explains the MCP OAuth Client Credentials extension for machine-to-machine authentication and when to use it."
     },
     "https://modelcontextprotocol.io/extensions/client-matrix.md": {
-      "sha256": "3eb5bbf3645d95162c3b4f5d5a011e1ae7f9aaa3dff7faed9085726a8276b503",
+      "sha256": "2a9575fe662f691280029f434e45578790f8020aba1caab44ce674fa426ce174",
       "chunks": 7,
       "title": "Extension Support Matrix",
       "status": "indexed",
@@ -4826,7 +4826,7 @@
       "summary": "A community-maintained compatibility matrix showing which MCP clients support each official extension."
     },
     "https://modelcontextprotocol.io/extensions/overview.md": {
-      "sha256": "bbee0552cbb48635aa1ef742e3ff5a77671fd7a57df9ea59844d9f65f0dc52ea",
+      "sha256": "9ab0690bcde94e62bbfdd1c695a343bb87db25d6b2b1cc2847a44098b535a4d3",
       "chunks": 21,
       "title": "Extensions Overview",
       "status": "indexed",
@@ -4946,7 +4946,7 @@
       "summary": "Specifies MCP client registration mechanisms and guidance for choosing among them."
     },
     "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/index.md": {
-      "sha256": "6ac48ec346ba98f76f9640a646fcb24c2a4834d102c6604b90da76bae9cfe2d9",
+      "sha256": "884f293be575083179496341ee3f2f1e7cadeae4e04c77b7690e9ea33a0d5e92",
       "chunks": 22,
       "title": "Authorization",
       "status": "indexed",
@@ -5074,7 +5074,7 @@
       "summary": "A derived registry aggregating deprecated specification features, their migration paths, and removal timelines."
     },
     "https://modelcontextprotocol.io/specification/2026-07-28/index.md": {
-      "sha256": "884b03b5b8cf36b6c0db4d45f38c07f7cbcd9b40c96f54e864a100dc2dfb4ea3",
+      "sha256": "011d3caeda4ac5ecac766cb6c975e03234b42ba0639026c17f4818a1f4eef4fb",
       "chunks": 10,
       "title": "Specification",
       "status": "indexed",
@@ -5082,7 +5082,7 @@
       "summary": "The authoritative MCP protocol specification, defining requirements for implementations."
     },
     "https://modelcontextprotocol.io/specification/2026-07-28/schema.md": {
-      "sha256": "d4618ad086466707dc8a5c4e2823ffe6df4f882919a540f840325543e1346f2a",
+      "sha256": "cdabfd429be4f2be6c4ccfdcf103b58efa0296ee62290a147da754262ee33de2",
       "chunks": 161,
       "title": "Schema Reference",
       "status": "indexed",

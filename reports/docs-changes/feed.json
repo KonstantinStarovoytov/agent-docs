@@ -1,0 +1,99 @@
+{
+  "checked": "2026-11-16",
+  "days": [
+    {
+      "added": [],
+      "changed": [
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-tag.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/api/origin/mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/api/origin/mcp/tools.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture.md"
+        },
+        {
+          "new_sections": [
+            "Deprecated Features"
+          ],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/client-concepts.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/server-concepts.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/authorization.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/extensions/auth/enterprise-managed-authorization.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/extensions/auth/oauth-client-credentials.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/extensions/client-matrix.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/extensions/overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/index.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/index.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/schema.md"
+        }
+      ],
+      "day": "2026-11-16",
+      "removed": []
+    }
+  ]
+}
