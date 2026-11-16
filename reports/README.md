@@ -46,15 +46,16 @@ go to git, never the vendors' text.
 removed and changed in the last 14 days, newest day first, for a program to
 read. It holds addresses, products and headings only: no summary (a model wrote
 it), no title and no page text. `new_sections` lists the headings a changed
-page gained, and is empty when it gained none; a page re-embedded with the same
-text is left out. `checked` is the day of the last run that reached the end,
+page gained outside its code blocks, and is empty when it gained none; a page
+re-embedded with the same text is left out. `checked` is the day of the last run that reached the end,
 also on a day with no change, so a reader can tell a quiet day from a stopped
 reindex. It moves on too when some pages failed to fetch (their indexed copy is
 kept) or the smoke test failed. So a long outage at one vendor reads as
 "nothing new" for that vendor; the workflow's "Open an issue on failure" step
 covers it (a vendor whose pages fail beyond the limit, or a failed smoke test,
 fails the run). A changed page lists at most 50 new headings, each cut to 200
-characters. Only the run on the production index writes it.
+characters, and the oldest days are dropped while the file is over 900 KB.
+Only the run on the production index writes it.
 
 ```json
 {"checked": "2026-11-14",

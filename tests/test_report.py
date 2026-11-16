@@ -457,8 +457,8 @@ def test_feed_day_cuts_a_long_heading_to_200_characters() -> None:
 
 
 def test_feed_day_keeps_the_first_50_new_headings_of_a_page() -> None:
-    # Comment lines in fenced code count as headings today: one page "gained"
-    # about 50 of them on 2026-11-02.
+    # A cap in case a page gains many headings at once (on 2026-11-02, before
+    # fenced code was skipped, one page "gained" about 50).
     headings = [f"# comment {n}" for n in range(80)]
     r = _feed_report(
         changed=[_changed("https://x/a.md", report.SectionDiff(headings, [], 90, 90))]
@@ -479,3 +479,59 @@ def test_two_runs_on_one_day_keep_at_most_50_new_headings_of_a_page() -> None:
 
     sections = feed["days"][0]["changed"][0]["new_sections"]
     assert sections == [f"a{n}" for n in range(40)] + [f"b{n}" for n in range(10)]
+
+
+def test_a_hash_line_inside_a_fenced_block_is_not_a_heading() -> None:
+    old = "# Config\n## Setup\ntext\n"
+    new = (
+        "# Config\n## Setup\ntext\n"
+        "```toml\n# model_post_turn_compact_threshold_percent = 80\n```\n"
+        "~~~bash\n# Install the CLI\n~~~\n"
+        "## Vertex AI provider\nmore\n"
+    )
+
+    d = report.section_diff(old, new)
+
+    assert d.added == ["Vertex AI provider"] and d.removed == []
+
+
+def test_a_fence_closes_only_on_its_own_kind_and_length() -> None:
+    new = (
+        "# Page\n"
+        "````md\n```\n# Inside, after a shorter fence\n~~~\n# Still inside\n````\n"
+        "## After the fence\n"
+    )
+
+    d = report.section_diff("# Page\n", new)
+
+    assert d.added == ["After the fence"]
+
+
+def test_an_unclosed_fence_runs_to_the_end_of_the_page() -> None:
+    # As in CommonMark: a fence that is never closed holds the rest of the page,
+    # so its `#` lines are code, not new sections.
+    new = "# Page\n## Before\n```sh\n# a comment\n## Not a heading\n"
+
+    d = report.section_diff("# Page\n", new)
+
+    assert d.added == ["Before"]
+    assert d.changed_lines == 4
+
+
+def test_a_feed_over_its_size_cap_drops_its_oldest_days() -> None:
+    feed: dict[str, Any] | None = None
+    for n in range(1, 15):
+        day = f"2026-11-{n:02d}"
+        pages = [
+            _section(f"https://x/{n}/{p}.md", *(f"{'h' * 60} {k}" for k in range(50)))
+            for p in range(30)
+        ]
+        feed = report.merge_feed(feed, _day(day, changed=pages), day)
+
+    assert feed is not None
+    size = len(json.dumps(feed, sort_keys=True, indent=2) + "\n")
+    assert size <= report.FEED_BYTES_MAX
+    kept = [d["day"] for d in feed["days"]]
+    assert kept[0] == "2026-11-14" and len(kept) < 14
+    assert kept == [f"2026-11-{n:02d}" for n in range(14, 14 - len(kept), -1)]
+    assert feed["checked"] == "2026-11-14"
