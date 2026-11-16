@@ -694,3 +694,29 @@ def test_a_failed_smoke_check_still_writes_the_feed_and_exits_1(
     assert written["days"][0]["added"] == [
         {"url": "https://x/new.md", "product": "codex"}
     ]
+
+
+def test_a_failed_feed_write_does_not_stop_the_rest_of_the_run(
+    fake_main: _Main,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    smoke: list[str] = []
+
+    def crash(path: Path, feed: dict[str, Any]) -> None:
+        raise OSError("disk full at /secret/path")
+
+    def smoke_check(*_: Any) -> list[str]:
+        smoke.append("ran")
+        return []
+
+    monkeypatch.setattr(reindex.rep, "write_feed", crash)
+    monkeypatch.setattr(reindex, "smoke_failures", smoke_check)
+
+    assert fake_main.run("--feed", str(fake_main.root / "feed.json")) == 0
+
+    assert (fake_main.root / "reports/docs-changes/2026-11-14.md").exists()
+    assert (fake_main.root / "out/review-issue.md").exists()
+    assert smoke == ["ran"]
+    out = capsys.readouterr().out
+    assert "feed: not written (OSError)" in out and "/secret/path" not in out

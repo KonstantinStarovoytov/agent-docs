@@ -746,8 +746,6 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         return result.exit_code
     save_manifest(result.manifest, path)
-    if args.feed is not None:
-        update_feed(args.feed, result)
     (out / "review-issue.md").write_text(
         render_issue(result.manifest.documents, load_decisions())
     )
@@ -755,6 +753,11 @@ def main(argv: list[str] | None = None) -> int:
         daily = Path("reports/docs-changes") / f"{result.report.day}.md"
         daily.parent.mkdir(parents=True, exist_ok=True)
         daily.write_text(text)
+    if args.feed is not None:
+        try:
+            update_feed(args.feed, result)
+        except Exception as error:  # the feed is extra; the run's own work goes on
+            print(f"feed: not written ({type(error).__name__})")
     if result.manifest.indexed_at != manifest.indexed_at:
         write_meta(result.manifest, collection)
         failures = smoke_failures(INTENTS, _search)

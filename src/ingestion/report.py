@@ -20,11 +20,15 @@ SIGNIFICANT_SHARE = 0.10
 MAX_CHANGE_SUMMARIES = 20
 DIFF_CHARS = 6000
 FEED_DAYS = 14
-# Headings are vendor text, and code comments in fenced blocks count as
-# headings today, so the feed keeps few and short ones.
+# Headings are vendor text (`headings()` already skips fenced code), so the
+# feed keeps few and short ones.
 FEED_HEADING_CHARS = 200
 FEED_HEADINGS_MAX = 50
+# The reader (kitden-sdlc's watcher) refuses a feed over 1 MB.
+FEED_BYTES_MAX = 900 * 1024
 HEADING = re.compile(r"^#{1,3}\s+(.+?)\s*$", re.MULTILINE)
+FENCE_OPEN = re.compile(r"^ {0,3}(`{3,}|~{3,})")
+FENCE_CLOSE = re.compile(r"^ {0,3}(`{3,}|~{3,})\s*$")
 
 CHANGE_PROMPT = """Here is a diff of one documentation page, "{title}".
 In one short plain sentence, say what changed for a reader of this product.
@@ -48,8 +52,31 @@ class SectionDiff:
         )
 
 
+def headings(markdown: str) -> list[str]:
+    """The page's headings, outside fenced code blocks (``` and ~~~).
+
+    A `#` line in a code block is a comment, not a section. A fence closes on
+    a line of the same character, at least as long. As in CommonMark, a fence
+    that is never closed runs to the end of the page.
+    """
+    outside: list[str] = []
+    fence = ""
+    for line in markdown.splitlines():
+        if fence:
+            close = FENCE_CLOSE.match(line)
+            if close and close[1][0] == fence[0] and len(close[1]) >= len(fence):
+                fence = ""
+            continue
+        opening = FENCE_OPEN.match(line)
+        if opening:
+            fence = opening[1]
+        else:
+            outside.append(line)
+    return HEADING.findall("\n".join(outside))
+
+
 def section_diff(old: str, new: str) -> SectionDiff:
-    before, after = HEADING.findall(old), HEADING.findall(new)
+    before, after = headings(old), headings(new)
     old_lines, new_lines = old.splitlines(), new.splitlines()
     opcodes = difflib.SequenceMatcher(
         None, old_lines, new_lines, autojunk=False
@@ -335,7 +362,16 @@ def merge_feed(
         days[day["day"]] = day if before is None else _merge_day(before, day)
     today = date.fromisoformat(checked)
     recent = [d for d in days if 0 <= (today - date.fromisoformat(d)).days < keep]
-    return {"checked": checked, "days": [days[d] for d in sorted(recent, reverse=True)]}
+    newest_first = [days[d] for d in sorted(recent, reverse=True)]
+    feed: dict[str, Any] = {"checked": checked, "days": newest_first}
+    while newest_first and len(feed_text(feed).encode()) > FEED_BYTES_MAX:
+        newest_first.pop()  # the oldest day
+    return feed
+
+
+def feed_text(feed: dict[str, Any]) -> str:
+    """The feed as written: sorted keys and a last newline keep the diff small."""
+    return json.dumps(feed, sort_keys=True, indent=2) + "\n"
 
 
 def read_feed(path: Path) -> object | None:
@@ -349,8 +385,8 @@ def read_feed(path: Path) -> object | None:
 
 def write_feed(path: Path, feed: dict[str, Any]) -> None:
     """Write the whole file or nothing: a temporary file in the same folder,
-    then a rename. Sorted keys and a last newline keep the daily diff small."""
-    text = json.dumps(feed, sort_keys=True, indent=2) + "\n"
+    then a rename."""
+    text = feed_text(feed)
     path.parent.mkdir(parents=True, exist_ok=True)
     fd, temp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
     try:
