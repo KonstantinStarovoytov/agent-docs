@@ -181,6 +181,14 @@ so `GET /mcp` answers 405; send everything with POST. Listed in the
 | Codex | `developers.openai.com/codex/llms.txt` |
 | MCP (latest spec, registry, extensions) | `modelcontextprotocol.io/llms.txt` |
 
+Agent Docs indexes pages of modelcontextprotocol.io. Per the
+[LICENSE file](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE)
+of `modelcontextprotocol/modelcontextprotocol` (checked 2026-11-16), its
+documentation is under CC-BY-4.0 and its specification under Apache-2.0;
+older contributions that were not relicensed stay under MIT. In git, Agent
+Docs keeps only the pages' addresses, titles, headings and short summaries,
+not their text.
+
 ---
 
 ## How it works
