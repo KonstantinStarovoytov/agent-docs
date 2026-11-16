@@ -206,7 +206,7 @@ Searches are traced in Langfuse.
 
 The REST endpoint `/ask` is for clients that are not agents. It also
 translates Russian and Polish questions into English, says "the documentation
-does not cover this" when even the best candidate scores below 0.55, picks 8
+does not cover this" when even the best candidate scores below 0.30, picks 8
 chunks (at most 2 from one section), and has `gpt-6-luna` write an answer that
 cites them.
 
@@ -326,7 +326,7 @@ model sees.
 | Traces, eval datasets, prompts | Langfuse Cloud | Free Hobby |
 | Daily re-index, CI | GitHub Actions | Free |
 | Embeddings, answers | OpenAI (`text-embedding-3-small`, `gpt-6-luna`) | Pay per use |
-| Rerank | Cohere (`rerank-v4.0-fast`) | Trial key + fallback key |
+| Rerank | Cohere (`rerank-v5.0-fast`) | Trial key + fallback key |
 
 Deploys run only after CI passes. The whole service is defined in
 [render.yaml](render.yaml).

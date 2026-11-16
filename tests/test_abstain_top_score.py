@@ -76,5 +76,6 @@ def test_default_threshold_is_the_measured_one(monkeypatch: pytest.MonkeyPatch) 
     from src.config import Settings
 
     monkeypatch.delenv("MIN_TOP_RERANK_SCORE", raising=False)
-    # reports/dedup-abstain-2026-10.md: lowest answerable top score 0.64.
-    assert Settings(_env_file=None).min_top_rerank_score == 0.55  # type: ignore[call-arg]
+    # reports/rerank-v5-2026-11.md: lowest answerable top score 0.375 on
+    # rerank-v5.0-fast.
+    assert Settings(_env_file=None).min_top_rerank_score == 0.30  # type: ignore[call-arg]

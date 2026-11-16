@@ -217,7 +217,7 @@ def run_cohere(dataset, name_suffix: str, pool_metadata: dict) -> None:
             "dense_embedding": ("text-embedding-3-small"),
             "sparse_embedding": ("Qdrant/bm25"),
             "fusion": "RRF",
-            "reranker": ("rerank-v4.0-fast"),
+            "reranker": settings.cohere_rerank_model,
             "per_query_k": (MULTI_QUERY_PER_QUERY_K),
             "final_k": (MULTI_QUERY_FINAL_K),
             "rerank_top_n": (RERANK_TOP_N),

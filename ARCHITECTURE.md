@@ -27,12 +27,12 @@ the two paths cannot drift apart.
    (embeddings) and by exact words (BM25). The two result lists are merged by
    rank (RRF). Ties are ordered by chunk id, so the same query always gives the
    same results.
-2. The top 20 candidates go to a reranker (Cohere `rerank-v4.0-fast`). It reads
+2. The top 20 candidates go to a reranker (Cohere `rerank-v5.0-fast`). It reads
    each one together with the question and scores the match from 0 to 1.
 3. Only the best passage of each page is kept, so one long page cannot fill
    the list. Each passage comes with its score, the page's one-line
    description, and the headings of up to three other sections of the same
-   page that scored at least 0.35 (`other_sections`).
+   page that scored at least 0.10 (`other_sections`).
 4. `read_section(url)` returns the page's outline. `read_section(url, heading)`
    returns that section in full, up to 8,000 characters per call, from the
    stored copy of the page. No model is called.
@@ -54,7 +54,7 @@ model runs on this path.
 | 1. Translation | Adds an English copy of Russian or Polish questions; both are searched. | The docs are in English. |
 | 2. Hybrid search | The same search as above, for each query. With two queries, their lists are merged by rank once more. | |
 | 3. Rerank | Cohere scores 10 candidates against the original question. | The search is fast but rough; the reranker is precise. |
-| 4. Threshold | If the best candidate scores below 0.55, the answer is "the documentation does not cover this", and no model is called. Otherwise candidates below 0.35 are dropped. | So the bot refuses instead of guessing. |
+| 4. Threshold | If the best candidate scores below 0.30, the answer is "the documentation does not cover this", and no model is called. Otherwise candidates below 0.10 are dropped. | So the bot refuses instead of guessing. |
 | 5. Context selection | Keeps the 8 best chunks, at most 2 from one section. | So one section cannot fill the whole context. |
 | 6. Answer | `gpt-6-luna` answers only from these 8 chunks and cites them as [1], [2]. | Every claim can be checked. |
 
@@ -146,8 +146,9 @@ Every day at 06:00 UTC a GitHub Actions job reads each vendor's `llms.txt`
 | 10 candidates for the reranker | More candidates pushed out the second topic of multi-part questions. | 20 | Complete coverage 0.750 vs 0.500 (experiment 7). |
 | 8 chunks to the model | Multi-part questions need room for every part. | 5 | Complete coverage 0.250 → 0.750, faithfulness 0.938 → 0.956 (experiment 6). |
 | At most 2 chunks per section | So one section cannot take every slot. | A per-page cap, MMR | Both broke questions where one page covers two topics (experiments 8, 9). |
-| Drop candidates below 0.35 | A cheap way to refuse. | Always answer | The weakest truly relevant chunk scored 0.35 among 128 labelled chunks. A floor of 0.40 would add one refusal with only 0.016 to spare. |
-| Refuse when the best candidate scores below 0.55 | Saves the model call when nothing fits. | A higher 0.35 floor | The lowest best score of 131 answerable questions is 0.64; 8 of 12 unanswerable ones fall below 0.55 (experiment 23). |
+| Drop candidates below 0.10 | A cheap way to refuse. | Always answer | `rerank-v5.0-fast`: every evidence group keeps its best chunk; 2 of 369 correct chunks fall below 0.10, 39 below v4's 0.35 (experiment 28). |
+| Refuse when the best candidate scores below 0.30 | Saves the model call when nothing fits. | A higher floor | `rerank-v5.0-fast`: the lowest best score of 83 answerable questions is 0.375; 9 of 12 unanswerable ones fall below 0.30 (experiment 28; 0.55 with v4, experiment 23). |
+| `rerank-v5.0-fast` as the reranker | The same or better ranking and answers, cleaner refusals, billed per token (about 10-30× cheaper here). | `rerank-v4.0-fast` | Answer relevance 0.844 → 0.887, citations 0.973 → 0.983, correct refusals 1.000 both (experiment 28). The three score thresholds move with the model. |
 | One search pass; two-hop search off | It did not help on average. | Iterative search | The same coverage with and without it (experiment 3). |
 | `gpt-6-luna` writes the answers | More faithful, equally relevant. | `gpt-5.6-luna` | Faithfulness 0.975 → 0.994, citations 0.980 → 0.994 (experiment 13). |
 
@@ -211,6 +212,7 @@ In short:
 | 25 | More than one passage per page helps agents find the right section | Same candidates and scores (83 questions); A: one per page, B: up to two, C: a second only if ≥ 0.8 × the best, D: one per page plus the headings of the page's other chunks scoring ≥ 0.35 | D: section hit 0.667 → 0.867, page hit unchanged, 8–10% more tokens. B and C lose pages (all-groups coverage @5 0.438 → 0.312) | **Kept** as `other_sections` ([report](reports/passages-per-page-2026-10.md)) |
 | 26 | Agents use `other_sections` and answer better with it | `gpt-6-luna` and `claude-haiku-5-5` with the real tools, with and without the field; `gpt-6-sol` grades against the labelled section; 12 Claude Code questions, two repeats (96 runs), plus a first run of 15 questions | The same correctness (luna 0.94 / 0.94, Haiku 0.92 / 0.94); 21–28% of reads open a heading from `other_sections`; failed reads of guessed headings 7 → 1 (luna) and 4 → 0 (Haiku) | **Partly confirmed:** used, fewer failed reads, no effect on correctness; field kept ([report](reports/agent-other-sections-2026-10.md)) |
 | 27 | A cheaper model can replace `gpt-6-sol` as the answer judge | The 67 answers sol graded on 2026-10-12, graded again with the same rubric by Claude Haiku 5.5, `gpt-6-luna` and `gpt-5.6-luna`; six Haiku disagreements read against the docs | Haiku: faithfulness 0.988 → 0.810, citations 0.987 → 0.689; sol was right in 5 of 6 cases read; Haiku's scores contradict its own issue lists. The lunas follow sol on faithfulness and citations, but label 1 (`gpt-6-luna`) or 3 (`gpt-5.6-luna`) of 19 correct refusals as `none`. One gate run: sol ≈ $0.32, `gpt-6-luna` ≈ $0.02 | **Rejected** for the gate; sol is the default judge. `gpt-6-luna` is fine for cheap trial runs, compared only with each other ([report](reports/judge-agreement-2026-10.md)) |
+| 28 | `rerank-v5.0-fast` can replace `rerank-v4.0-fast` | Both models on the same frozen pools: retrieval-v3, full-corpus-v1, evidence coverage, then the answer judge with each model's own floor; thresholds re-measured on stored scores | hit@1 0.787 → 0.745 on retrieval-v3 (4 of 8 losses are label gaps; 6 real wins), coverage 0.573 → 0.625; answers: relevance 0.844 → 0.887, faithfulness 0.982 → 0.986, refusals 1.000 both. Scores are calibrated and much lower: floor 0.35 → 0.10, refusal gate 0.55 → 0.30, `other_sections` 0.35 → 0.10 | **Kept** ([report](reports/rerank-v5-2026-11.md)) |
 
 ---
 
@@ -340,7 +342,7 @@ only affect `/ask` and needs a holdout set first.
 | **Tie order** | RRF often gives several chunks the same score. Ties are sorted by chunk id, so the same question always gets the same results. |
 | **Overfetch** | Asking the database for 3× more results than needed, so a group of tied results is never cut in the middle. |
 | **Prefetch depth** | How far down each list (dense and BM25) the database reads before merging. Today 3× the number of results asked for (30 for `/ask`). Setting: `HYBRID_PREFETCH_DEPTH`. |
-| **Reranker** | A second, slower model that reads the question and each candidate together and scores the match from 0 to 1. Here Cohere `rerank-v4.0-fast`. |
+| **Reranker** | A second, slower model that reads the question and each candidate together and scores the match from 0 to 1. Here Cohere `rerank-v5.0-fast`, whose score is a calibrated probability that the passage is useful. |
 | **Candidates** | The search results that go to the reranker: 10 for `/ask`, 20 for `search_docs`. Setting: `RERANK_POOL`. |
 | **Recall among candidates** | The share of questions with at least one correct chunk among the candidates: the most the reranker can find. |
 | **`generation_top_k`** | How many chunks the model sees when it writes an `/ask` answer (8). |

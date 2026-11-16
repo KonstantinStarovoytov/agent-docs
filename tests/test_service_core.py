@@ -360,7 +360,9 @@ def test_search_names_the_pages_other_matching_sections(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     # Experiment 25: one passage per page, plus the headings of the page's
-    # other chunks that score at least 0.35, best first, at most three.
+    # other chunks that score at least other_sections_min_score, best first,
+    # at most three.
+    monkeypatch.setattr(core.settings, "other_sections_min_score", 0.35)
     _sectioned_chunks(
         monkeypatch,
         [
@@ -381,6 +383,20 @@ def test_search_names_the_pages_other_matching_sections(
     assert [p.heading for p in passages] == ["A > Setup", "B > Intro"]
     assert passages[0].other_sections == ("A > Install", "A > Remove", "A > Share")
     assert passages[1].other_sections == ()
+
+
+def test_other_sections_skip_chunks_below_the_setting(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(core.settings, "other_sections_min_score", 0.2)
+    _sectioned_chunks(
+        monkeypatch,
+        [("a", "Setup", 0.9), ("a", "Install", 0.25), ("a", "Limits", 0.15)],
+    )
+
+    passages = core.search("q", limit=5)
+
+    assert passages[0].other_sections == ("A > Install",)
 
 
 def test_other_sections_never_cross_pages(monkeypatch: pytest.MonkeyPatch) -> None:

@@ -19,7 +19,12 @@ class Settings(BaseSettings):
     # key's monthly cap). Unset means no fallback: the original error
     # propagates as before.
     cohere_api_key_fallback: SecretStr | None = None
-    cohere_rerank_model: str = "rerank-v4.0-fast"
+    # The three score thresholds below are measured for this model: Rerank 5
+    # scores are calibrated probabilities, far lower than Rerank 4's. Switching
+    # back to rerank-v4.0-fast needs MIN_RERANK_SCORE=0.35,
+    # MIN_TOP_RERANK_SCORE=0.55 and OTHER_SECTIONS_MIN_SCORE=0.35 with it
+    # (reports/rerank-v5-2026-11.md).
+    cohere_rerank_model: str = "rerank-v5.0-fast"
 
     qdrant_url: str = "http://localhost:6333"
     # Qdrant Cloud requires a key; a local container does not.
@@ -56,14 +61,20 @@ class Settings(BaseSettings):
     # 5 -> 8 covered both aspects in half the multi-aspect set instead of a third.
     generation_top_k: int = Field(default=8, ge=1)
     # Below this Cohere rerank score, a candidate is dropped rather than
-    # padding the context. Measured on rag/evidence-coverage-v1: the
-    # weakest genuinely relevant chunk scored 0.35 (128 chunks, only 4
-    # below 0.4, none below 0.3). None disables the floor.
-    min_rerank_score: float | None = Field(default=0.35, ge=0.0, le=1.0)
+    # padding the context. rerank-v5.0-fast, 83 answerable questions: every
+    # evidence group keeps its best chunk at 0.10, 2 of 369 correct chunks fall
+    # below it (39 at v4's 0.35). None disables the floor.
+    min_rerank_score: float | None = Field(default=0.10, ge=0.0, le=1.0)
     # ask_docs answers "couldn't find relevant documentation" without calling
     # the LLM when even the best reranked candidate scores below this.
-    # None disables it. See reports/dedup-abstain-2026-10.md.
-    min_top_rerank_score: float | None = Field(default=0.55, ge=0.0, le=1.0)
+    # rerank-v5.0-fast: the lowest answerable best score is 0.375, and 9 of 12
+    # rag/negative-v1 questions fall below 0.30. None disables it.
+    # See reports/rerank-v5-2026-11.md.
+    min_top_rerank_score: float | None = Field(default=0.30, ge=0.0, le=1.0)
+    # search_docs names a page's other chunks scoring at least this
+    # (`other_sections`). 0.10 on rerank-v5.0-fast keeps as many as 0.35 did on
+    # rerank-v4.0-fast, where 0.35 passed nearly every candidate.
+    other_sections_min_score: float = Field(default=0.10, ge=0.0, le=1.0)
 
     @field_validator("min_top_rerank_score", mode="before")
     @classmethod
