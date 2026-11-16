@@ -6,7 +6,9 @@
 # case the run fails and an issue is opened so a human decides. Every run
 # writes a readable change report to the job summary and to
 # reports/docs-changes/, and commits the manifest so git history shows what
-# changed when.
+# changed when. A run on the production index also updates
+# reports/docs-changes/feed.json, the same changes for programs; its `checked`
+# day moves on every such run, so that run commits every day.
 #
 # The scheduled cron must not touch production (agent_docs_hybrid_v1) with
 # the new, ~560-page reindex until the owner opts in: set the repository
@@ -64,11 +66,14 @@ jobs:
       - name: Reindex changed pages
         id: reindex
         if: github.event_name != 'schedule' || vars.FULL_DOCS_LIVE == 'true'
+        # Only a run on the production index (no `collection` input) writes the
+        # feed for programs, reports/docs-changes/feed.json.
         run: |
           set -o pipefail
           uv run python -u -m src.reindex --out out \
             ${{ inputs.prune && '--prune' || '' }} \
-            ${{ inputs.gate_report_only && '--gate-report-only' || '' }} 2>&1 | tee reindex.log
+            ${{ inputs.gate_report_only && '--gate-report-only' || '' }} \
+            ${{ !inputs.collection && '--feed reports/docs-changes/feed.json' || '' }} 2>&1 | tee reindex.log
       - name: Job summary
         if: always()
         run: '[ -f out/report.md ] && cat out/report.md >> "$GITHUB_STEP_SUMMARY" || true'

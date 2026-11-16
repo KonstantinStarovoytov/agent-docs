@@ -180,6 +180,9 @@ class RunResult:
     manifest: Manifest
     report: rep.ChangeReport
     exit_code: int
+    # Address -> product of the pages indexed before the run; the feed takes
+    # the product of a removed page from it.
+    product_of: dict[str, str]
 
 
 def allowed_urls() -> set[str]:
@@ -338,7 +341,9 @@ def run(
         today.isoformat() if (plan.to_index or removals.delete) else manifest.indexed_at
     )
     code = 4 if broken else 3 if removals.blocked else 0
-    return RunResult(Manifest(indexed_at=indexed_at, documents=documents), report, code)
+    return RunResult(
+        Manifest(indexed_at=indexed_at, documents=documents), report, code, product_of
+    )
 
 
 def _matches_expected(hit: dict[str, str], expected: dict[str, str]) -> bool:
@@ -614,6 +619,16 @@ def _product_of() -> dict[str, str]:
         client.close()
 
 
+def update_feed(path: Path, result: RunResult) -> None:
+    """Add this run's day to the feed and move `checked` to it, also when
+    nothing changed, so a reader can tell a quiet day from a dead reindex."""
+    old = rep.read_feed(path)
+    if path.exists() and not rep.is_feed(old):
+        print(f"feed: {path} is not a feed; starting a new one")
+    day = rep.feed_day(result.report, result.product_of)
+    rep.write_feed(path, rep.merge_feed(old, day, result.report.day))
+
+
 def main(argv: list[str] | None = None) -> int:
     from evals.seed_query_transform_dataset import INTENTS
 
@@ -638,6 +653,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--out", default=".", help="Where report.md and quarantine.md go."
+    )
+    parser.add_argument(
+        "--feed",
+        type=Path,
+        help=(
+            "Also write the changes as a feed for programs to this JSON file "
+            "(the production index only). Never in a dry run."
+        ),
     )
     parser.add_argument(
         "--backfill-summaries",
@@ -723,6 +746,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.dry_run:
         return result.exit_code
     save_manifest(result.manifest, path)
+    if args.feed is not None:
+        update_feed(args.feed, result)
     (out / "review-issue.md").write_text(
         render_issue(result.manifest.documents, load_decisions())
     )
