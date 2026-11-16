@@ -10,3 +10,5 @@ __pycache__/
 qdrant_storage/
 .DS_Store
 .cursor/
+# A feed write interrupted between its temporary file and the rename.
+reports/docs-changes/.*.tmp

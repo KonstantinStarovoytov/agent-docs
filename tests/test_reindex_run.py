@@ -1,8 +1,12 @@
 """End-to-end reindex behaviour with every side effect faked."""
 
+import json
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
+from pathlib import Path
 from typing import Any
+
+import pytest
 
 from src import reindex
 from src.ingestion.decisions import Decision
@@ -488,3 +492,190 @@ def test_dry_run_does_not_fill_missing_snapshots() -> None:
     reindex.run(manifest, deps, today=DAY, dry_run=True)
 
     assert not deps.snapshots.texts
+
+
+# --- the feed for programs ---------------------------------------------------
+
+
+def test_the_feed_gets_the_product_of_a_removed_page_from_the_index() -> None:
+    entries = {
+        f"https://x/{i}.md": reindex.ManifestEntry(
+            sha256=reindex.fingerprint("c"), chunks=1, title="t"
+        )
+        for i in range(20)
+    }
+    docs = [_doc(u, "c") for u in list(entries)[1:]]
+    deps, _, _ = _deps(docs, product_of={u: "p" for u in entries})
+
+    result = reindex.run(
+        reindex.Manifest(indexed_at="d", documents=entries), deps, today=DAY
+    )
+
+    day = reindex.rep.feed_day(result.report, result.product_of)
+    assert day is not None
+    assert result.report.removed == ["https://x/0.md"]
+    assert day["removed"] == [{"url": "https://x/0.md", "product": "p"}]
+
+
+def test_a_quarantined_page_is_not_in_the_feed() -> None:
+    deps, _, _ = _deps([_doc("https://x/a.md", "# A\ntext")], keep=False)
+    manifest = reindex.Manifest(
+        indexed_at="d",
+        documents={
+            "https://x/old.md": reindex.ManifestEntry(
+                sha256=reindex.fingerprint("c"), chunks=1, title="t"
+            )
+        },
+    )
+    deps.load = lambda: LoadResult(
+        [_doc("https://x/a.md", "# A\ntext"), _doc("https://x/old.md", "c")],
+        {},
+        {"p": 2},
+        {},
+    )
+
+    result = reindex.run(manifest, deps, today=DAY)
+
+    assert result.report.quarantined
+    assert reindex.rep.feed_day(result.report, result.product_of) is None
+
+
+class _FixedClock(datetime):
+    @classmethod
+    def now(cls, tz: Any = None) -> "_FixedClock":
+        return cls(2026, 11, 14, 13, 0, tzinfo=tz)
+
+
+@dataclass
+class _Main:
+    root: Path
+    saved: list[reindex.Manifest] = field(default_factory=list)
+
+    def run(self, *argv: str) -> int:
+        return reindex.main(["--out", str(self.root / "out"), *argv])
+
+
+@pytest.fixture
+def fake_main(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> _Main:
+    """`main()` with Qdrant, the vendors' sites, the models and the clock faked.
+
+    One page is new (allow-listed, so no gate model runs) and one has vanished.
+    """
+    monkeypatch.chdir(tmp_path)
+    fake = _Main(tmp_path)
+    entries = {
+        f"https://x/{i}.md": reindex.ManifestEntry(
+            sha256=reindex.fingerprint("c"), chunks=1, title="t"
+        )
+        for i in range(20)
+    }
+    docs = [_doc(u, "c") for u in list(entries)[1:]]
+    docs.append(_doc("https://x/new.md", "# New\ntext", product="codex"))
+
+    class Client:
+        def close(self) -> None:
+            pass
+
+    monkeypatch.setattr(reindex, "datetime", _FixedClock)
+    monkeypatch.setattr(
+        reindex,
+        "load_manifest",
+        lambda _path: reindex.Manifest(indexed_at="d", documents=dict(entries)),
+    )
+    monkeypatch.setattr(
+        reindex, "save_manifest", lambda manifest, _path: fake.saved.append(manifest)
+    )
+    monkeypatch.setattr(reindex, "get_qdrant_client", Client)
+    monkeypatch.setattr(reindex, "ensure_hybrid_collection", lambda *_: False)
+    monkeypatch.setattr(reindex, "touch_index", lambda *_: 0)
+    monkeypatch.setattr(reindex, "ensure_payload_indexes", lambda *_: None)
+    monkeypatch.setattr(reindex, "_snapshot_store", lambda *_: FakeSnapshots())
+    monkeypatch.setattr(
+        reindex,
+        "load_all_sources",
+        lambda: LoadResult(docs, {}, {"p": len(docs) - 1, "codex": 1}, {}),
+    )
+    monkeypatch.setattr(reindex, "_product_of", lambda: {u: "p" for u in entries})
+    monkeypatch.setattr(reindex, "_delete_source", lambda _url: None)
+    monkeypatch.setattr(reindex, "_add_chunks", lambda _chunks: None)
+    monkeypatch.setattr(reindex, "load_decisions", lambda: {})
+    monkeypatch.setattr(reindex, "allowed_urls", lambda: {"https://x/new.md"})
+    monkeypatch.setattr(reindex, "write_meta", lambda *_: None)
+    monkeypatch.setattr(reindex, "smoke_failures", lambda *_: [])
+    return fake
+
+
+def test_main_writes_no_feed_without_the_flag(fake_main: _Main) -> None:
+    assert fake_main.run() == 0
+
+    assert fake_main.saved, "the run reached the manifest"
+    assert (fake_main.root / "reports/docs-changes/2026-11-14.md").exists()
+    assert not list(fake_main.root.rglob("*.json"))
+
+
+def test_main_writes_the_feed_when_asked(fake_main: _Main) -> None:
+    feed = fake_main.root / "reports/docs-changes/feed.json"
+
+    assert fake_main.run("--feed", str(feed)) == 0
+
+    assert json.loads(feed.read_text()) == {
+        "checked": "2026-11-14",
+        "days": [
+            {
+                "day": "2026-11-14",
+                "added": [{"url": "https://x/new.md", "product": "codex"}],
+                "removed": [{"url": "https://x/0.md", "product": "p"}],
+                "changed": [],
+            }
+        ],
+    }
+
+
+def test_main_moves_checked_on_a_day_with_no_change(
+    fake_main: _Main, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    feed = fake_main.root / "feed.json"
+    old = {
+        "checked": "2026-11-12",
+        "days": [
+            {
+                "day": "2026-11-12",
+                "added": [{"url": "https://x/a.md", "product": "codex"}],
+                "removed": [],
+                "changed": [],
+            }
+        ],
+    }
+    feed.write_text(json.dumps(old))
+    unchanged = [_doc(f"https://x/{i}.md", "c") for i in range(20)]
+    monkeypatch.setattr(
+        reindex, "load_all_sources", lambda: LoadResult(unchanged, {}, {"p": 20}, {})
+    )
+
+    assert fake_main.run("--feed", str(feed)) == 0
+
+    assert not (fake_main.root / "reports/docs-changes/2026-11-14.md").exists()
+
+    assert json.loads(feed.read_text()) == {**old, "checked": "2026-11-14"}
+
+
+def test_a_dry_run_writes_no_feed(fake_main: _Main) -> None:
+    feed = fake_main.root / "feed.json"
+
+    assert fake_main.run("--dry-run", "--feed", str(feed)) == 0
+
+    assert not feed.exists() and not fake_main.saved
+
+
+def test_a_broken_feed_file_is_replaced_by_a_new_feed(
+    fake_main: _Main, capsys: pytest.CaptureFixture[str]
+) -> None:
+    feed = fake_main.root / "feed.json"
+    feed.write_text('{"checked": "2026-11-13", "days": [')
+
+    assert fake_main.run("--feed", str(feed)) == 0
+
+    written = json.loads(feed.read_text())
+    assert written["checked"] == "2026-11-14"
+    assert [d["day"] for d in written["days"]] == ["2026-11-14"]
+    assert "is not a feed; starting a new one" in capsys.readouterr().out

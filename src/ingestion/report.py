@@ -1,13 +1,25 @@
-"""A readable account of what changed in the vendors' documentation."""
+"""A readable account of what changed in the vendors' documentation.
 
+Also a small feed of the same changes for programs (`feed.json`): addresses,
+products and headings only.
+"""
+
+import contextlib
 import difflib
+import json
+import os
 import re
-from collections.abc import Callable
+import tempfile
+from collections.abc import Callable, Iterable
 from dataclasses import dataclass, field
+from datetime import date
+from pathlib import Path
+from typing import Any, TypeGuard
 
 SIGNIFICANT_SHARE = 0.10
 MAX_CHANGE_SUMMARIES = 20
 DIFF_CHARS = 6000
+FEED_DAYS = 14
 HEADING = re.compile(r"^#{1,3}\s+(.+?)\s*$", re.MULTILINE)
 
 CHANGE_PROMPT = """Here is a diff of one documentation page, "{title}".
@@ -178,3 +190,166 @@ def render_quarantine_issue(lines: list[QuarantineLine]) -> str:
             f"  **Why flagged:** {'; '.join(q.reasons)}",
         ]
     return "\n".join(out) + "\n"
+
+
+# --- the feed for programs ---------------------------------------------------
+#
+# {"checked": "<day of the last run>",
+#  "days": [{"day": "<day>",
+#            "added":   [{"url", "product"}],
+#            "removed": [{"url", "product"}],
+#            "changed": [{"url", "product", "new_sections": [<headings>]}]}]}
+#
+# Days newest first, the last FEED_DAYS days only; each list sorted by address.
+# No summary (a model wrote it), no title and no page text.
+
+_PAGE_KEYS = frozenset({"url", "product"})
+_CHANGED_KEYS = _PAGE_KEYS | {"new_sections"}
+_DAY_KEYS = frozenset({"day", "added", "removed", "changed"})
+_LISTS = ("added", "removed", "changed")
+
+
+def _unique(items: Iterable[str]) -> list[str]:
+    return list(dict.fromkeys(items))
+
+
+def _by_url(entries: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+    """One entry per address, the later one winning, sorted by address."""
+    return sorted({e["url"]: e for e in entries}.values(), key=lambda e: e["url"])
+
+
+def feed_day(report: ChangeReport, product_of: dict[str, str]) -> dict[str, Any] | None:
+    """One day of the feed, or None when no page was added, removed or changed.
+
+    `product_of` gives the product of a removed page (the report has its
+    address only). A changed page whose text is the same as before (every page,
+    after a new chunker version) is not a change for a reader and is left out.
+    """
+    if report.initial_build:
+        return None
+    changed = [c for c in report.changed if c.diff is None or c.diff.changed_lines]
+    if not (report.added or report.removed or changed):
+        return None
+    return {
+        "day": report.day,
+        "added": _by_url({"url": p.url, "product": p.product} for p in report.added),
+        "removed": _by_url(
+            {"url": url, "product": product_of.get(url, "")} for url in report.removed
+        ),
+        "changed": _by_url(
+            {
+                "url": c.url,
+                "product": c.product,
+                "new_sections": _unique(c.diff.added if c.diff else []),
+            }
+            for c in changed
+        ),
+    }
+
+
+def _is_day(value: object) -> bool:
+    if not isinstance(value, str):
+        return False
+    try:
+        return date.fromisoformat(value).isoformat() == value
+    except ValueError:
+        return False
+
+
+def _is_entry(value: object, keys: frozenset[str]) -> bool:
+    if not isinstance(value, dict) or set(value) != keys:
+        return False
+    if not (isinstance(value["url"], str) and isinstance(value["product"], str)):
+        return False
+    sections = value.get("new_sections", [])
+    return isinstance(sections, list) and all(isinstance(s, str) for s in sections)
+
+
+def is_feed(value: object) -> TypeGuard[dict[str, Any]]:
+    """Whether `value` has exactly the feed's shape, with nothing else in it."""
+    if not isinstance(value, dict) or set(value) != {"checked", "days"}:
+        return False
+    days = value["days"]
+    if not (_is_day(value["checked"]) and isinstance(days, list)):
+        return False
+    seen: set[str] = set()
+    for day in days:
+        if not (isinstance(day, dict) and set(day) == _DAY_KEYS):
+            return False
+        if not _is_day(day["day"]) or day["day"] in seen:
+            return False
+        seen.add(day["day"])
+        for name in _LISTS:
+            keys = _CHANGED_KEYS if name == "changed" else _PAGE_KEYS
+            entries = day[name]
+            if not isinstance(entries, list):
+                return False
+            if not all(_is_entry(e, keys) for e in entries):
+                return False
+    return True
+
+
+def _merge_day(old: dict[str, Any], new: dict[str, Any]) -> dict[str, Any]:
+    """Two runs of one day: the pages of both, the later entry winning."""
+    sections = {e["url"]: e["new_sections"] for e in old["changed"]}
+    changed = [
+        {
+            **e,
+            "new_sections": _unique([*sections.get(e["url"], []), *e["new_sections"]]),
+        }
+        for e in new["changed"]
+    ]
+    return {
+        "day": new["day"],
+        "added": _by_url([*old["added"], *new["added"]]),
+        "removed": _by_url([*old["removed"], *new["removed"]]),
+        "changed": _by_url([*old["changed"], *changed]),
+    }
+
+
+def merge_feed(
+    old: object, day: dict[str, Any] | None, checked: str, keep: int = FEED_DAYS
+) -> dict[str, Any]:
+    """The feed after a run that reached its end on `checked`.
+
+    `day` is that run's `feed_day`, None when nothing changed. An old feed of
+    another shape (or none) starts a new one. Only days in the `keep` days up
+    to `checked` stay, newest first.
+    """
+    days: dict[str, dict[str, Any]] = {}
+    if is_feed(old):
+        days = {d["day"]: d for d in old["days"]}
+    if day is not None:
+        before = days.get(day["day"])
+        days[day["day"]] = day if before is None else _merge_day(before, day)
+    today = date.fromisoformat(checked)
+    recent = [d for d in days if 0 <= (today - date.fromisoformat(d)).days < keep]
+    return {"checked": checked, "days": [days[d] for d in sorted(recent, reverse=True)]}
+
+
+def read_feed(path: Path) -> object | None:
+    """The feed as last written, or None when there is none or it is not JSON."""
+    try:
+        value: object = json.loads(path.read_text(encoding="utf-8"))
+    except OSError, UnicodeDecodeError, ValueError:
+        return None
+    return value
+
+
+def write_feed(path: Path, feed: dict[str, Any]) -> None:
+    """Write the whole file or nothing: a temporary file in the same folder,
+    then a rename. Sorted keys and a last newline keep the daily diff small."""
+    text = json.dumps(feed, sort_keys=True, indent=2) + "\n"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, temp = tempfile.mkstemp(dir=path.parent, prefix=f".{path.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as file:
+            file.write(text)
+            file.flush()
+            os.fsync(file.fileno())
+        os.chmod(temp, 0o644)
+        os.replace(temp, path)
+    except BaseException:
+        with contextlib.suppress(FileNotFoundError):
+            os.unlink(temp)
+        raise

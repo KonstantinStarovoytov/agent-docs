@@ -295,6 +295,26 @@ Every day at 06:00 UTC a GitHub Actions job reads each vendor's list of pages
 - A short report of what changed in the products goes to
   [reports/docs-changes/](reports/docs-changes/).
 
+**For programs: `feed.json`.** The same run also keeps
+[reports/docs-changes/feed.json](reports/docs-changes/feed.json): the pages added,
+removed and changed in the last 14 days, newest day first, for a program to
+read. It holds addresses, products and headings only: no summary (a model wrote
+it), no title and no page text. `new_sections` lists the headings a changed
+page gained, and is empty when it gained none; a page re-embedded with the same
+text is left out. `checked` is the day of the last run that reached the end,
+also on a day with no change, so a reader can tell a quiet day from a stopped
+reindex. Only the run on the production index writes it.
+
+```json
+{"checked": "2026-11-14",
+ "days": [{"day": "2026-11-14",
+   "added": [{"url": "https://code.claude.com/docs/en/code-mode.md", "product": "claude-code"}],
+   "removed": [{"url": "https://cursor.com/docs/context/rules.md", "product": "cursor"}],
+   "changed": [{"url": "https://code.claude.com/docs/en/tools-reference.md",
+                "product": "claude-code",
+                "new_sections": ["Protect read-only files in Perforce"]}]}]}
+```
+
 ## Measured results
 
 Each change was measured on labelled questions before it was kept. All
