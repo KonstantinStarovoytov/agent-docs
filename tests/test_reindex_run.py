@@ -679,3 +679,18 @@ def test_a_broken_feed_file_is_replaced_by_a_new_feed(
     assert written["checked"] == "2026-11-14"
     assert [d["day"] for d in written["days"]] == ["2026-11-14"]
     assert "is not a feed; starting a new one" in capsys.readouterr().out
+
+
+def test_a_failed_smoke_check_still_writes_the_feed_and_exits_1(
+    fake_main: _Main, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    feed = fake_main.root / "feed.json"
+    monkeypatch.setattr(reindex, "smoke_failures", lambda *_: ["intent-1"])
+
+    assert fake_main.run("--feed", str(feed)) == 1
+
+    written = json.loads(feed.read_text())
+    assert written["checked"] == "2026-11-14"
+    assert written["days"][0]["added"] == [
+        {"url": "https://x/new.md", "product": "codex"}
+    ]

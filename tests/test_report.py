@@ -442,3 +442,40 @@ def test_read_feed_gives_none_for_a_missing_or_broken_file(tmp_path: Path) -> No
     assert report.read_feed(path) is None
     path.write_text('{"checked": "2026-11-13", "days": []}\n')
     assert report.read_feed(path) == {"checked": "2026-11-13", "days": []}
+
+
+def test_feed_day_cuts_a_long_heading_to_200_characters() -> None:
+    long = "x" * 250
+    r = _feed_report(
+        changed=[_changed("https://x/a.md", report.SectionDiff([long, "S"], [], 9, 9))]
+    )
+
+    day = report.feed_day(r, {})
+
+    assert day is not None
+    assert day["changed"][0]["new_sections"] == ["x" * 200, "S"]
+
+
+def test_feed_day_keeps_the_first_50_new_headings_of_a_page() -> None:
+    # Comment lines in fenced code count as headings today: one page "gained"
+    # about 50 of them on 2026-11-02.
+    headings = [f"# comment {n}" for n in range(80)]
+    r = _feed_report(
+        changed=[_changed("https://x/a.md", report.SectionDiff(headings, [], 90, 90))]
+    )
+
+    day = report.feed_day(r, {})
+
+    assert day is not None and day["changed"][0]["new_sections"] == headings[:50]
+
+
+def test_two_runs_on_one_day_keep_at_most_50_new_headings_of_a_page() -> None:
+    first = _day("2026-11-14", changed=[_section("u", *(f"a{n}" for n in range(40)))])
+    second = _day("2026-11-14", changed=[_section("u", *(f"b{n}" for n in range(40)))])
+
+    feed = report.merge_feed(
+        report.merge_feed(None, first, "2026-11-14"), second, "2026-11-14"
+    )
+
+    sections = feed["days"][0]["changed"][0]["new_sections"]
+    assert sections == [f"a{n}" for n in range(40)] + [f"b{n}" for n in range(10)]

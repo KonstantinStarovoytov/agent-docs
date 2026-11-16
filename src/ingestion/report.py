@@ -20,6 +20,10 @@ SIGNIFICANT_SHARE = 0.10
 MAX_CHANGE_SUMMARIES = 20
 DIFF_CHARS = 6000
 FEED_DAYS = 14
+# Headings are vendor text, and code comments in fenced blocks count as
+# headings today, so the feed keeps few and short ones.
+FEED_HEADING_CHARS = 200
+FEED_HEADINGS_MAX = 50
 HEADING = re.compile(r"^#{1,3}\s+(.+?)\s*$", re.MULTILINE)
 
 CHANGE_PROMPT = """Here is a diff of one documentation page, "{title}".
@@ -213,6 +217,11 @@ def _unique(items: Iterable[str]) -> list[str]:
     return list(dict.fromkeys(items))
 
 
+def _new_sections(headings: Iterable[str]) -> list[str]:
+    """Each heading once, cut to FEED_HEADING_CHARS, the first FEED_HEADINGS_MAX."""
+    return _unique(h[:FEED_HEADING_CHARS] for h in headings)[:FEED_HEADINGS_MAX]
+
+
 def _by_url(entries: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
     """One entry per address, the later one winning, sorted by address."""
     return sorted({e["url"]: e for e in entries}.values(), key=lambda e: e["url"])
@@ -240,7 +249,7 @@ def feed_day(report: ChangeReport, product_of: dict[str, str]) -> dict[str, Any]
             {
                 "url": c.url,
                 "product": c.product,
-                "new_sections": _unique(c.diff.added if c.diff else []),
+                "new_sections": _new_sections(c.diff.added if c.diff else []),
             }
             for c in changed
         ),
@@ -295,7 +304,9 @@ def _merge_day(old: dict[str, Any], new: dict[str, Any]) -> dict[str, Any]:
     changed = [
         {
             **e,
-            "new_sections": _unique([*sections.get(e["url"], []), *e["new_sections"]]),
+            "new_sections": _new_sections(
+                [*sections.get(e["url"], []), *e["new_sections"]]
+            ),
         }
         for e in new["changed"]
     ]
