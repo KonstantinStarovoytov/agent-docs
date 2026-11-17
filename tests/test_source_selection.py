@@ -134,6 +134,18 @@ def test_vendor_configs_keep_real_docs() -> None:
         assert _urls(loader.select_links([("t", url)], by_product[product])) == [url]
 
 
+def test_cursor_help_keeps_only_its_customization_part() -> None:
+    cursor = next(c for c in SOURCES if c.product == "cursor")
+    links = [
+        ("t", "https://cursor.com/help/customization/rules.md"),
+        ("t", "https://cursor.com/help/account-and-billing/refunds.md"),
+        ("t", "https://cursor.com/help/troubleshooting/login.md"),
+    ]
+    assert _urls(loader.select_links(links, cursor)) == [
+        "https://cursor.com/help/customization/rules.md"
+    ]
+
+
 def test_large_references_are_allowed_past_the_size_heuristic() -> None:
     allowed = {url for c in SOURCES for url in c.allow}
     for url in (

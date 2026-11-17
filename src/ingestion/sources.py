@@ -51,7 +51,9 @@ CURSOR = SourceConfig(
     product="cursor",
     index_url="https://cursor.com/llms.txt",
     exclude=(
-        r"^/help/",  # help center: billing and account, out of scope
+        # Help center: billing and account, out of scope. Its customization part (rules,
+        # skills, MCP) is about the product and stays in: Kitden's list cites it.
+        r"^/help/(?!customization/)",
         r"^/[a-z]{2}(-[a-z]{2,4})?/",  # translations: /es/, /ja/, /cn/ ...
         r"changelog",
         r"/release-notes",  # release feed, 242 chunks of changelog
