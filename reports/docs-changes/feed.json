@@ -1,6 +1,426 @@
 {
-  "checked": "2026-11-17",
+  "checked": "2026-11-18",
   "days": [
+    {
+      "added": [
+        {
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/connect-to-vertex-ai.md"
+        },
+        {
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/guides/best-practices.md"
+        },
+        {
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/guides/prompting-gpt-6-2-astra.md"
+        }
+      ],
+      "changed": [
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/admin-setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/python.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/typescript.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-teams.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/authentication.md"
+        },
+        {
+          "new_sections": [
+            "Fix `Destructive or Unwanted Actions` and other policy denials"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/auto-mode-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/best-practices.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/channels.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-tag.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/cli-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/common-workflows.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop-scheduled-tasks.md"
+        },
+        {
+          "new_sections": [
+            "Claude Code is \"newer than the maximum version allowed by your organization\""
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/env-vars.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/errors.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/glossary.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/headless.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/keybindings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/managed-mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/memory.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/monitoring-usage.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permission-modes.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permissions.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/cli-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/host-marketplace.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/manifest-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/marketplace-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/api.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/troubleshoot.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/org.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/publish.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/sub-agents.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/terminal-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/tools-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/web-quickstart.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/approval-agents.md"
+        },
+        {
+          "new_sections": [
+            "List Workers By ID"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/cloud-agent/api/endpoints.md"
+        },
+        {
+          "new_sections": [
+            "Check many workers at once"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/cloud-agent/self-hosted/pool.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/enterprise/compliance-and-monitoring.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/enterprise/model-and-integration-management.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/enterprise/opentelemetry-export.md"
+        },
+        {
+          "new_sections": [
+            "`cursor.cloud_agent.project_invite`"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/enterprise/opentelemetry-export/wire.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/integrations/bitbucket.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/integrations/slack.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/origin/git.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/vulnerability-remediation.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/agent-approvals-security.md"
+        },
+        {
+          "new_sections": [
+            "Fast and Ultrafast modes",
+            "Choose a speed in the composer",
+            "Codex CLI controls"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/agent-configuration/speed.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/agent-configuration/subagents.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/app-server.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/browser.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/codex-sdk.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/computer-use.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/config-file/config-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/developer-commands.md?surface=cli"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/dots.md"
+        },
+        {
+          "new_sections": [
+            "Slack"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/dots/channels.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/dots/tasks-and-memory.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/dots-admin-guide.md"
+        },
+        {
+          "new_sections": [
+            "Data residency and EKM"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/dots-security.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md"
+        },
+        {
+          "new_sections": [
+            "GPT-6.2 Astra and GPT-6.2 Sol in Enterprise and Edu"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/workspace-model-availability.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/get-started-with-work.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/model-selection.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/models.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/plugins.md"
+        },
+        {
+          "new_sections": [
+            "Pricing options",
+            "Included usage",
+            "Speed multipliers",
+            "Token rates"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/pricing.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/prompting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/extensions/overview.md"
+        }
+      ],
+      "day": "2026-11-18",
+      "removed": []
+    },
     {
       "added": [
         {

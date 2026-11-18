@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-17",
+  "indexed_at": "2026-11-18",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -10,7 +10,7 @@
       "summary": "Explains how to configure Claude Code for screen readers and other accessibility needs."
     },
     "https://code.claude.com/docs/en/admin-setup.md": {
-      "sha256": "c94df42c4beedbb6711b4d76dcf66fe8c499ab9f6cb5491ff18da73f60c4567f",
+      "sha256": "3544c4d8266af63f58752a83415a9e78a23ad92a830639e47435243c75959bf9",
       "chunks": 15,
       "title": "Set up Claude Code for your organization",
       "status": "indexed",
@@ -146,7 +146,7 @@
       "summary": "Explains how to load local plugins in the Agent SDK and extend sessions with skills, agents, hooks, and MCP servers."
     },
     "https://code.claude.com/docs/en/agent-sdk/python.md": {
-      "sha256": "e56fc6a861cc1a8265193ab97aa2e0525edcb1de0cb8b4b27c5c64f4400420b1",
+      "sha256": "9047b87d462f0fbfae78f7e6953662f2276e7c01348af4d5f2912a68203106db",
       "chunks": 179,
       "title": "Agent SDK reference - Python",
       "status": "indexed",
@@ -258,7 +258,7 @@
       "summary": "This page documents the removed TypeScript Agent SDK V2 session API for maintaining code that uses Agent SDK 0.2.x or earlier."
     },
     "https://code.claude.com/docs/en/agent-sdk/typescript.md": {
-      "sha256": "200afd95a715596cd62e1c945533c2328726eb02484dabbcd0265e76974c5f69",
+      "sha256": "68becb008b0b8fa69e0faefa3f9284660de9ee5595edf275b29f951b0eccacab",
       "chunks": 356,
       "title": "Agent SDK reference - TypeScript",
       "status": "indexed",
@@ -274,7 +274,7 @@
       "summary": "Explains how to handle tool approval requests and clarifying questions in the Claude Agent SDK."
     },
     "https://code.claude.com/docs/en/agent-teams.md": {
-      "sha256": "e79d85ec0c9f482c7f0985ee1a30f9234eb61350f7caf89d163fe9491946a9fa",
+      "sha256": "441885ab8f0d62362a9f028e96466ef08c1c318ec70a01dbe2bd5dd7a5ddcfa7",
       "chunks": 41,
       "title": "Orchestrate teams of Claude Code sessions",
       "status": "indexed",
@@ -322,8 +322,8 @@
       "summary": "Explains how to create, view, update, and share Claude Code session artifacts, including availability requirements."
     },
     "https://code.claude.com/docs/en/authentication.md": {
-      "sha256": "932609b3a2ba29fbe880d7628650fcf4d52f14dc86f07c0238448fd488a4477b",
-      "chunks": 22,
+      "sha256": "4253f4b189e77089eefee0261257cd1825dc653d998ecd8999b1653daa6cb618",
+      "chunks": 23,
       "title": "Authentication",
       "status": "indexed",
       "reason": "",
@@ -338,15 +338,15 @@
       "summary": "Explains why Claude Code auto mode classifier requests may be billed and how to make a session eligible for no-charge checks."
     },
     "https://code.claude.com/docs/en/auto-mode-config.md": {
-      "sha256": "166d12f2d9b3c71f114c6c31e8a7f0c5db3a52551d266a84b3821f1a05293027",
-      "chunks": 22,
+      "sha256": "e6ee9a6b274875faa25ef7cf9a808610d92eb21a37e0979392ba16b7ab6a135c",
+      "chunks": 23,
       "title": "Configure auto mode",
       "status": "indexed",
       "reason": "",
       "summary": "Configuration reference for setting trusted context and rules for Claude Code auto mode, and inspecting the effective configuration."
     },
     "https://code.claude.com/docs/en/best-practices.md": {
-      "sha256": "cce4426eb5a2809994a79462ce3e5895cc0be586dad27af46cb87f4aac18cc55",
+      "sha256": "1bd304431b5d8d85a9725a372197b836b4eedea9959f0e68caea6b6aec989d49",
       "chunks": 31,
       "title": "Best practices for Claude Code",
       "status": "indexed",
@@ -362,7 +362,7 @@
       "summary": "Reference documentation for building MCP channel servers that send events to Claude Code and optionally relay replies or permission prompts."
     },
     "https://code.claude.com/docs/en/channels.md": {
-      "sha256": "60a20e2c2b93e27d800ef39329370eb40c85f645c0d5fbf10e6c14a8ccaa0afd",
+      "sha256": "e5841ce8d72fc0da3013d836b3cd251c5c221c1f0ccf164eb8028a8568cc61a8",
       "chunks": 14,
       "title": "Push events into a running session with channels",
       "status": "indexed",
@@ -482,7 +482,7 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "2602d8fd530a0cb528558e90a2f372c2c6c0c78ae08255236f82b0f4167fb8e5",
+      "sha256": "77117e3b696140e6f6d7c097d5fad8f32bccbc54c46eb265345e67a1e8491359",
       "chunks": 76,
       "title": "Claude Tag",
       "status": "indexed",
@@ -490,7 +490,7 @@
       "summary": "This page documents Claude Tag, a Claude product or feature."
     },
     "https://code.claude.com/docs/en/cli-reference.md": {
-      "sha256": "b94726b4f6b5f103089e099af953cb038c3b65ae0193b75aa27f8b32666ee3ae",
+      "sha256": "3c6e151e66f2b7632d2f395a4fd2508699dfc64d45a635261b344c4e8f262958",
       "chunks": 27,
       "title": "CLI reference",
       "status": "indexed",
@@ -578,7 +578,7 @@
       "summary": "A reference guide to Claude Code commands and how to use them in a session."
     },
     "https://code.claude.com/docs/en/common-workflows.md": {
-      "sha256": "1376b5710b6979ce2f9ffa43af155ff9bc86f91be8896fdc530ce7e81a50db91",
+      "sha256": "40f11c22b7d0f702fb4090508a0b0c238991b2a02d694ce89605792c8dc9c825",
       "chunks": 22,
       "title": "Common workflows",
       "status": "indexed",
@@ -666,7 +666,7 @@
       "summary": "A quickstart explaining how to install the Claude desktop app and start a Claude Code session."
     },
     "https://code.claude.com/docs/en/desktop-scheduled-tasks.md": {
-      "sha256": "6fe1137f3333c841d3b5b4d461240c18f0f278b992ef573bd25d7358d3281099",
+      "sha256": "e522b4bcc720099e3e1e6feb64c74e997fc2fb1796ed10d9d2c9b1c368285a8b",
       "chunks": 13,
       "title": "Schedule recurring tasks in Claude Code Desktop",
       "status": "indexed",
@@ -682,8 +682,8 @@
       "summary": "Explains the requirements and steps for running Claude Code Desktop sessions inside a WSL 2 distribution."
     },
     "https://code.claude.com/docs/en/desktop.md": {
-      "sha256": "d7ceaf393dc4b818c6fa94fde254ec9efb9b2532d2a3e41ae5880bc6addcda92",
-      "chunks": 169,
+      "sha256": "492ab8b784b27a484e4ec135eb0f7ab0ea3e29c2f1de88db31bf1d8926377772",
+      "chunks": 170,
       "title": "Desktop application",
       "status": "indexed",
       "reason": "",
@@ -698,7 +698,7 @@
       "summary": "Explains how to install and configure Claude Code inside development containers, including authentication, policy, network restrictions, and permissions."
     },
     "https://code.claude.com/docs/en/env-vars.md": {
-      "sha256": "e4fa413aa44b310e2d42aa6da0554eb11d6425a57f59c95f0207cd3654260af1",
+      "sha256": "7ade1ce283bc50c4e2d4bdf0cc381840099462c40a8420d32dc9208ded5b219d",
       "chunks": 89,
       "title": "Environment variables",
       "status": "indexed",
@@ -706,7 +706,7 @@
       "summary": "Reference documentation explaining how to set Claude Code environment variables and what each variable controls."
     },
     "https://code.claude.com/docs/en/errors.md": {
-      "sha256": "6750d0ab3e36f37f93108d20fde185ac1b9acd7fa8c8ff7341ade62d64f1bea1",
+      "sha256": "ad573c96821f0750b87a18c32a936111bb384ef3df913f6eece0ac9679145684",
       "chunks": 404,
       "title": "Error reference",
       "status": "indexed",
@@ -786,7 +786,7 @@
       "summary": "Explains how to set up and use Claude Code in GitLab CI/CD workflows."
     },
     "https://code.claude.com/docs/en/glossary.md": {
-      "sha256": "d7735fca89b6b2ec7384f50838b9571fb9397c9aceb599558bc98324eb38b052",
+      "sha256": "698485f364c669fb21c359080c1e282f6ce21a048824cd7a39054e90ac4b2703",
       "chunks": 54,
       "title": "Glossary",
       "status": "indexed",
@@ -810,7 +810,7 @@
       "summary": "Explains how to configure Claude Code on Google Cloud’s Agent Platform, including setup, IAM, and troubleshooting."
     },
     "https://code.claude.com/docs/en/headless.md": {
-      "sha256": "922322ed2f4439a30344b19fe99ef12754d2f2f8bca3525a414636a630be419c",
+      "sha256": "cfa68cf55fa002012da6ca809f4de532e99b24b208a4f9067874658d7fd1cb91",
       "chunks": 27,
       "title": "Run Claude Code programmatically",
       "status": "indexed",
@@ -834,8 +834,8 @@
       "summary": "A practical guide to configuring Claude Code hooks to automate actions during its lifecycle."
     },
     "https://code.claude.com/docs/en/hooks.md": {
-      "sha256": "39ffaee4904b1b572d7cdba2d7b5f58748f57f849f586a96248dc3f84fd1a1e9",
-      "chunks": 208,
+      "sha256": "d2996fa68b225d08f987f24de8dded319b1faf0373caeabf63b0e7c5826dc9c6",
+      "chunks": 209,
       "title": "Hooks reference",
       "status": "indexed",
       "reason": "",
@@ -866,7 +866,7 @@
       "summary": "Explains how to use and configure Claude Code’s JetBrains IDE integration and its editor features."
     },
     "https://code.claude.com/docs/en/keybindings.md": {
-      "sha256": "fd365938354b852289b74cae70da3082b369596914279d4b43913e1578367f18",
+      "sha256": "4ae20717ff14edf3261cafdfaf4dcce79b98d3e37257d8987cf52daaf605f0b7",
       "chunks": 52,
       "title": "Customize keyboard shortcuts",
       "status": "indexed",
@@ -914,7 +914,7 @@
       "summary": "Explains how to use an organization’s existing LLM gateway with Claude Code and links to setup and rollout guidance."
     },
     "https://code.claude.com/docs/en/managed-mcp.md": {
-      "sha256": "754c9a26f9f46472eb544a6bc95360dada9af19fe8d93e9022214b2f021ce90a",
+      "sha256": "86f879966819f485ddfa2ddfc7806008a39bfca961367c5eea0faeab24c3f864",
       "chunks": 32,
       "title": "Control MCP server access for your organization",
       "status": "indexed",
@@ -938,7 +938,7 @@
       "summary": "A step-by-step guide to connecting, verifying, and troubleshooting an MCP server in Claude Code."
     },
     "https://code.claude.com/docs/en/mcp.md": {
-      "sha256": "755e68455a304bccb11ce63196ddddf795b53a8a17bde87c91363be6851d3f64",
+      "sha256": "61d8d80550a9d6ee4ea769937c16f313451b4853ff6d368ae77fd66a6e999569",
       "chunks": 115,
       "title": "Connect Claude Code to tools via MCP",
       "status": "indexed",
@@ -946,7 +946,7 @@
       "summary": "Reference guide for connecting and configuring MCP servers in Claude Code."
     },
     "https://code.claude.com/docs/en/memory.md": {
-      "sha256": "439a448a4fbc5502ce9cbaa67b02dab5015fcc95561d00587a46f15f05df7b18",
+      "sha256": "d12d25f074fb0ab3845d0bb86cee018688b316d538ffd1ac99041a15999cca67",
       "chunks": 43,
       "title": "How Claude remembers your project",
       "status": "indexed",
@@ -978,7 +978,7 @@
       "summary": "Explains how to configure Claude Code models, effort levels, context, and compaction settings."
     },
     "https://code.claude.com/docs/en/monitoring-usage.md": {
-      "sha256": "4b4da1c9ebae8d3358cd479ea886ae77813c59352a0a8c39a8c073a73c66ffb2",
+      "sha256": "2e8019ebb68e57b5bbe0488218a26f510c9538f5aee96624db52bcf82da7a7ba",
       "chunks": 122,
       "title": "Monitoring",
       "status": "indexed",
@@ -1010,7 +1010,7 @@
       "summary": "An introductory guide to Claude Code that describes its available surfaces and links users to setup instructions."
     },
     "https://code.claude.com/docs/en/permission-modes.md": {
-      "sha256": "e0120bedf0d7d4337f8e2ad325256f3fec83b64913f3dfb38a68427f4e59cec8",
+      "sha256": "56834138fbe557dc355bf8c1d6e1cdb7405264f1cc43c12c06f5bc471125f6fe",
       "chunks": 67,
       "title": "Choose a permission mode",
       "status": "indexed",
@@ -1018,7 +1018,7 @@
       "summary": "Explains Claude Code permission modes, what actions they allow, and how to switch or configure them."
     },
     "https://code.claude.com/docs/en/permissions.md": {
-      "sha256": "0cd52946f5678f47021d9ad500ed675a4bace80d6a356a830b1e4ef6e875a78e",
+      "sha256": "a03efe00b3eaa4efcf8ba01bd8b1be755cf4cdb5036a0afee09eeafcaa0af274",
       "chunks": 57,
       "title": "Configure permissions",
       "status": "indexed",
@@ -1050,7 +1050,7 @@
       "summary": "Explains how CLI and SDK maintainers can emit a hint that prompts Claude Code users to install their official-marketplace plugin."
     },
     "https://code.claude.com/docs/en/plugins/cli-reference.md": {
-      "sha256": "0087a7658c3a324c8c00fa60be071d777d1a9a1e010a568ebd5176becc729bab",
+      "sha256": "0d4a201f880ef78f07cdee821c9356f6b12078799a7bc1a29a571fb525ba24ab",
       "chunks": 52,
       "title": "Plugin commands reference",
       "status": "indexed",
@@ -1098,7 +1098,7 @@
       "summary": "Explains how plugin authors declare plugin dependencies and version constraints, and how marketplaces tag releases for dependency resolution."
     },
     "https://code.claude.com/docs/en/plugins/host-marketplace.md": {
-      "sha256": "024888cdce99e6f2521c5bfde4ad5cfdd38ac657bf11be6afecfee7a4adfa93f",
+      "sha256": "3360dff2eacf4c07d67ace65c0f92f47bf37f2b9985663b6e7386e92f4ace9e0",
       "chunks": 32,
       "title": "Host and maintain a marketplace",
       "status": "indexed",
@@ -1122,7 +1122,7 @@
       "summary": "Reference explaining how Claude Code discovers, enables, and loads plugins and how updates affect them."
     },
     "https://code.claude.com/docs/en/plugins/manifest-reference.md": {
-      "sha256": "dcfa568d4f59766d469d76fb4670de981aba2c03798ec58927b0ee90028acf9a",
+      "sha256": "f27d75bf0228e41cefe626e2cf23fc67a3b9ad8196696de9c631e5f956f70c7f",
       "chunks": 43,
       "title": "Plugin manifest reference",
       "status": "indexed",
@@ -1130,8 +1130,8 @@
       "summary": "A technical reference for plugin.json fields, component paths, user configuration, channels, and environment variables."
     },
     "https://code.claude.com/docs/en/plugins/marketplace-reference.md": {
-      "sha256": "dcab041cd66890973fbb1ba41c88b38b432686184b2c2703b6f90539a25e3c44",
-      "chunks": 40,
+      "sha256": "da76d9084e3af8d0e28b6223e2ae61b172922ac812a7016bbda405e34885e80e",
+      "chunks": 41,
       "title": "Marketplace reference",
       "status": "indexed",
       "reason": "",
@@ -1154,8 +1154,8 @@
       "summary": "Explains how administrators use managed settings to control which Claude Code mods can run for their organization."
     },
     "https://code.claude.com/docs/en/plugins/mods/api.md": {
-      "sha256": "c2ff2d5a42d577ceefa48b268d830cbd1f2fdfe8b945d1a308405b4a313fd5e5",
-      "chunks": 26,
+      "sha256": "54974299daf0b027f00282db88a60fe15d07a1c31385fb4f023db10bfe65de3f",
+      "chunks": 27,
       "title": "Use the mods API",
       "status": "indexed",
       "reason": "",
@@ -1218,7 +1218,7 @@
       "summary": "A how-to guide for writing and running automated tests for Claude Code mods."
     },
     "https://code.claude.com/docs/en/plugins/mods/troubleshoot.md": {
-      "sha256": "94d7163153d00bc80d0d281adee9b8c08f17110ddc0c2d7e7e9db4431ac10c8d",
+      "sha256": "37f611f67fb0ee348c6efe13b075b2a97f23c79e57e6565ce61d017ede68ba2e",
       "chunks": 51,
       "title": "Troubleshoot a mod",
       "status": "indexed",
@@ -1226,7 +1226,7 @@
       "summary": "Troubleshooting guide for diagnosing why Claude Code mods fail to load or run."
     },
     "https://code.claude.com/docs/en/plugins/org.md": {
-      "sha256": "4c7aed7214585f044b9effc0e13cdffe61a41f94ae27eb591b8b1196a33cc428",
+      "sha256": "1c5b7aae04abf00d60f418ddab4470c0b792511b60d9ad94b8279ffa3a58e879",
       "chunks": 35,
       "title": "Manage Claude Code plugins for your organization",
       "status": "indexed",
@@ -1242,7 +1242,7 @@
       "summary": "An overview of Claude Code plugins that explains what they bundle, when to use them, and where to find installation or creation instructions."
     },
     "https://code.claude.com/docs/en/plugins/publish.md": {
-      "sha256": "6e8baa850661aa9d76cf0794cdd320099f69c37b37ae59949a305ece4eabc62f",
+      "sha256": "4d8e391532d9e3fb827caf193855917879e4880299566f0376a3e4446ce513fe",
       "chunks": 18,
       "title": "Publish and distribute a plugin",
       "status": "indexed",
@@ -1266,7 +1266,7 @@
       "summary": "Explains plugin permissions, trust considerations, and how to review and remove Claude Code plugins."
     },
     "https://code.claude.com/docs/en/plugins/troubleshooting.md": {
-      "sha256": "109fe9c81de314546d97ac40557fe57615cbec03d53f399c7fa2dba3024dd9e9",
+      "sha256": "c3de926169927f1ebebfb3341ac8f38d45b0900fbee26733401debe6e281b0d1",
       "chunks": 99,
       "title": "Troubleshoot plugins",
       "status": "indexed",
@@ -1434,7 +1434,7 @@
       "summary": "Provides copyable example settings files for personal, team, and organization-wide Claude Code configuration."
     },
     "https://code.claude.com/docs/en/settings-reference.md": {
-      "sha256": "bdc5e4353763ee7d67a5fbbe46f18f5e946ea547d9f818bfc19c69404ff8c553",
+      "sha256": "fecc1fc30a40d43982533f279dd2ea6722bd098ff08eda749b451d6035de221c",
       "chunks": 338,
       "title": "All settings",
       "status": "indexed",
@@ -1450,7 +1450,7 @@
       "summary": "Explains Claude Code settings files, scopes, and precedence when the same key is set in multiple places."
     },
     "https://code.claude.com/docs/en/setup.md": {
-      "sha256": "a1616a174bd052a2b871ad52ff9d1f8088b3975daf93a1f4ca55347e91896ada",
+      "sha256": "13a6c1e33fef6799cc41d46321a10b2bb9db30f473a8264e21b9ed4120ac0aba",
       "chunks": 34,
       "title": "Advanced setup",
       "status": "indexed",
@@ -1482,7 +1482,7 @@
       "summary": "Explains how to configure a custom Claude Code status line, including the session data it receives and examples of what it can display."
     },
     "https://code.claude.com/docs/en/sub-agents.md": {
-      "sha256": "7b3122e1eb61e0ee39810e9342faa5d1982d7de2719f880eba3abe0c8fc1df66",
+      "sha256": "c69ed117747e0e36ab34c9909a8d709305a8358835ba00ccfb84c77321488e84",
       "chunks": 76,
       "title": "Create custom subagents",
       "status": "indexed",
@@ -1490,7 +1490,7 @@
       "summary": "Explains how to create and use custom Claude Code subagents, including their workflows, context, tools, and permissions."
     },
     "https://code.claude.com/docs/en/terminal-config.md": {
-      "sha256": "36550d30fea633937897e3cba0f9ad0dbf9b3edd6d1f3eced72b10eb7a1f7902",
+      "sha256": "ede0aee0b4fe0804aad5a5bdb5862606726c2762503fb2b89e14146904bcde66",
       "chunks": 20,
       "title": "Configure your terminal for Claude Code",
       "status": "indexed",
@@ -1498,7 +1498,7 @@
       "summary": "Explains how to configure terminal behavior and settings for Claude Code, including multiline input, notifications, tmux, rendering, and Vim keybindings."
     },
     "https://code.claude.com/docs/en/tools-reference.md": {
-      "sha256": "afaaa1790adb3bacec52953fa8623e056fa5c880996347fd07d0ef447d921009",
+      "sha256": "c09dd96863e894cd03599e3ae2b66d54be0d3ffe226a606e573f6a1cf239b10e",
       "chunks": 65,
       "title": "Tools reference",
       "status": "indexed",
@@ -1514,8 +1514,8 @@
       "summary": "Troubleshooting guide for installation, PATH, permissions, network, and login errors in Claude Code."
     },
     "https://code.claude.com/docs/en/troubleshooting.md": {
-      "sha256": "e484ed8a3d7545142d2bcfd31830a58fe6e97e42dfbbc013eec295cf061e1a79",
-      "chunks": 18,
+      "sha256": "f0b79e675d037b2ef6c7a8048fa991cd53fc96c972c11c9f4cbc6a4ca269ea8f",
+      "chunks": 17,
       "title": "Troubleshooting",
       "status": "indexed",
       "reason": "",
@@ -1546,7 +1546,7 @@
       "summary": "Explains how to install, configure, and use the Claude Code extension in VS Code."
     },
     "https://code.claude.com/docs/en/web-quickstart.md": {
-      "sha256": "75410ebe10e4804ce731c455c6bfbddfaa278a0bfe7047bf2d27715700b01314",
+      "sha256": "c720e9d46ec741de8b83ebc081ca28c9704b7e4ede5b1eff83280d442a64a865",
       "chunks": 21,
       "title": "Get started with Claude Code in the cloud",
       "status": "indexed",
@@ -2194,7 +2194,7 @@
       "summary": "Reference documentation for the Origin Migration API, including its scopes and repository mirror migration endpoints."
     },
     "https://cursor.com/docs/approval-agents.md": {
-      "sha256": "a68fff0763e58f3693a8f9939f5b80a9883632507e4f4147a56ac82d08213b36",
+      "sha256": "af92d268795a213dba6e787a1dc04914e0abc133479387e87506cc06765b4a7a",
       "chunks": 17,
       "title": "Approval Agents",
       "status": "indexed",
@@ -2330,8 +2330,8 @@
       "summary": "Explains how Cursor Cloud Agents work, their capabilities, and how to access and configure them."
     },
     "https://cursor.com/docs/cloud-agent/api/endpoints.md": {
-      "sha256": "aad835584de9921ffc9995a4bff61579c6396f3386f2497c8663592e7679d013",
-      "chunks": 207,
+      "sha256": "a3f1a7e6b6d3b36fd0ea7ef1d1d18244010351926ad58f02a6ba7e35d9e6ce22",
+      "chunks": 211,
       "title": "Endpoints",
       "status": "indexed",
       "reason": "",
@@ -2474,8 +2474,8 @@
       "summary": "Explains how to configure and use a personal machine as the execution environment for Cursor Cloud Agents."
     },
     "https://cursor.com/docs/cloud-agent/self-hosted/pool.md": {
-      "sha256": "708e4eed9f75ad9547be6c15e2e5d981532a15c642e1790faccc491be7e214fd",
-      "chunks": 69,
+      "sha256": "dacfe543dcbc4a9dc52d79efd228ce7249c40cd182dfb59025d84fdebf5bdde6",
+      "chunks": 70,
       "title": "Pool",
       "status": "indexed",
       "reason": "",
@@ -2522,8 +2522,8 @@
       "summary": "Explains how to use Cursor’s Customize page to manage plugins and other extensions across user, team, and workspace scopes."
     },
     "https://cursor.com/docs/enterprise/compliance-and-monitoring.md": {
-      "sha256": "72ce21099057ff41f0a27fb01a7ba2744ed27edfccdc43c3983f549834166396",
-      "chunks": 35,
+      "sha256": "dc02b3c756a80a93fe527e8ca210fd37e0d15b59eb88060dca36be495e124be2",
+      "chunks": 36,
       "title": "Compliance And Monitoring",
       "status": "indexed",
       "reason": "",
@@ -2562,7 +2562,7 @@
       "summary": "Explains Cursor’s security controls and steering mechanisms for managing LLM agent behavior."
     },
     "https://cursor.com/docs/enterprise/model-and-integration-management.md": {
-      "sha256": "ebdecca9e06ae43df32c43b7f748d5c345d2cf18b65669511318fba06b80b223",
+      "sha256": "044ee77ae90bf163c0dcaba032d2a150362bd999430345a3e3572b341e5d5bdb",
       "chunks": 21,
       "title": "Model And Integration Management",
       "status": "indexed",
@@ -2578,7 +2578,7 @@
       "summary": "Explains how to configure Cursor for enterprise proxies, firewalls, and SSL inspection."
     },
     "https://cursor.com/docs/enterprise/opentelemetry-export.md": {
-      "sha256": "de69bbbc0979a4c09cae04182dc6e0163c3c9954e784d57cc527b03496da5483",
+      "sha256": "cd6174b382c19de2f307226b7e72a826ae38ebf86b518a7f08ad5dd64eede768",
       "chunks": 33,
       "title": "Opentelemetry Export",
       "status": "indexed",
@@ -2586,8 +2586,8 @@
       "summary": "Explains how admins configure OpenTelemetry Export to send team usage data to an external collector."
     },
     "https://cursor.com/docs/enterprise/opentelemetry-export/wire.md": {
-      "sha256": "338279817af5158d259c95922cac9e3fa5d872165cee6d41912410d08a9212ca",
-      "chunks": 57,
+      "sha256": "c1a227a1a19adb33c52bddd1a269756f95c1a0ce07e9e0b770d962b22e597152",
+      "chunks": 59,
       "title": "Wire",
       "status": "indexed",
       "reason": "",
@@ -2658,7 +2658,7 @@
       "summary": "Explains Azure DevOps integration capabilities, limitations, and setup steps for Cursor Cloud Agents and Bugbot."
     },
     "https://cursor.com/docs/integrations/bitbucket.md": {
-      "sha256": "d13437de055b0440243f99477d45a79c9e206c1cbcbf567dd6e4992e01f1cc88",
+      "sha256": "2467239b986bbfa494f795b300a157eae217693cc3decf9cdf8ec9b9df3d265a",
       "chunks": 25,
       "title": "Bitbucket",
       "status": "indexed",
@@ -2730,8 +2730,8 @@
       "summary": "Explains how to connect and set up Cursor agents in Notion, including requirements and installation steps."
     },
     "https://cursor.com/docs/integrations/slack.md": {
-      "sha256": "709190b32a99420dcc8db2ad959607fdc0b34b9a6c27dc1fc5fbb5e1af2b49ed",
-      "chunks": 36,
+      "sha256": "61174c5eefbc273f00009ac1cfba256a98ec9923d4872e605a6a169b30cc629c",
+      "chunks": 37,
       "title": "Slack",
       "status": "indexed",
       "reason": "",
@@ -3002,7 +3002,7 @@
       "summary": "Explains how to create an Origin repository in the UI, sync it from GitHub, or have a Cursor agent create it."
     },
     "https://cursor.com/docs/origin/git.md": {
-      "sha256": "dc25224572b765d20139ecbc84fd325fd561df8efbd4fbe0dcd223e0dba81e04",
+      "sha256": "0e03399f3e5af8c2acaa8b16ec325c15fc35ba7f6d180fd0df21ed1da9735cfb",
       "chunks": 17,
       "title": "Git",
       "status": "indexed",
@@ -3114,7 +3114,7 @@
       "summary": "Explains how Cursor subagents work and how to use and configure them."
     },
     "https://cursor.com/docs/vulnerability-remediation.md": {
-      "sha256": "f0d650191b12276fc223142e75249d2c9d12d8fb162d20950294b6a1238696a3",
+      "sha256": "777cababfdb8f5f0690dc656e0406247b32fec567c84b91d38d43ccf51a549bd",
       "chunks": 28,
       "title": "Vulnerability Remediation",
       "status": "indexed",
@@ -3194,7 +3194,7 @@
       "summary": "Explains how to change Cursor’s appearance, select or install themes, and configure related editor settings."
     },
     "https://learn.chatgpt.com/docs/agent-approvals-security.md": {
-      "sha256": "2627d40b2f7947701e00c80cc02d57e47cd76d3160b726bb4bacef00e299eb66",
+      "sha256": "8f3538f7cf8895dd8987d28bd90e926b2a3ecf3b9cb4f7a84f480a671f8bbfba",
       "chunks": 29,
       "title": "Agent approvals & security",
       "status": "indexed",
@@ -3218,15 +3218,15 @@
       "summary": "Explains how to create and configure command rules that control which commands Codex can run outside the sandbox."
     },
     "https://learn.chatgpt.com/docs/agent-configuration/speed.md": {
-      "sha256": "dc3d2336b1adfa5ca72d131237be69828c76727689fcdbe6878c4f0a6f0fdbd9",
-      "chunks": 7,
-      "title": "Speed",
+      "sha256": "b53b79d126302c67fcf600686b2ae5d2561cc1a1b32ca34fb8d5c02960bebefb",
+      "chunks": 8,
+      "title": "Fast and Ultrafast modes",
       "status": "indexed",
       "reason": "",
       "summary": "Explains how to enable Fast and Ultrafast modes in Codex and describes supported models, availability, and usage rates."
     },
     "https://learn.chatgpt.com/docs/agent-configuration/subagents.md": {
-      "sha256": "d265bacf5f106ad85a04d49db7c5c9264b8c9c6fc682d1b6beae675f6849a401",
+      "sha256": "0610f231eea3c8099396401f12cefbbfbd2c60fe33dd96efe1f5661a6153bbd9",
       "chunks": 17,
       "title": "Subagents",
       "status": "indexed",
@@ -3250,8 +3250,8 @@
       "summary": "Introduces the Browser Annotation API and explains how developers can customize annotations on their websites."
     },
     "https://learn.chatgpt.com/docs/app-server.md": {
-      "sha256": "558a5f49a0d6b3d05bce694e7504ecc6462ccc25ebb3447df6be057cad3dbf0b",
-      "chunks": 93,
+      "sha256": "c77369443c926896a02c9d07d24a4ccfe420963cbf031ca1b7eac6e605672bfc",
+      "chunks": 94,
       "title": "Codex App Server",
       "status": "indexed",
       "reason": "",
@@ -3298,7 +3298,7 @@
       "summary": "Explains how to schedule and manage recurring or event-triggered tasks in ChatGPT."
     },
     "https://learn.chatgpt.com/docs/browser.md": {
-      "sha256": "48379b3722ca43fb4f8cbd5c1a724901fd9975b8f670aa31903c7b518b443300",
+      "sha256": "875d6b1474626e99e624f2d42ca4dc81c86a8f1334c9d180f93c4233b3691dd2",
       "chunks": 21,
       "title": "Browser",
       "status": "indexed",
@@ -3362,7 +3362,7 @@
       "summary": "Explains how to use ChatGPT or Codex to review pull requests and investigate code changes."
     },
     "https://learn.chatgpt.com/docs/codex-sdk.md": {
-      "sha256": "2f7dea5cda95e0b6a6b3f393af62f33802a2b5ab687cedc0b767c554592728c5",
+      "sha256": "6141b8aef95b60cf78590739a5e0b08d68afb21becf687821ff2cebe37786fc3",
       "chunks": 12,
       "title": "Codex SDK",
       "status": "indexed",
@@ -3386,7 +3386,7 @@
       "summary": "A guide to installing and using the Codex IDE extension, including editor context and reviewing code changes."
     },
     "https://learn.chatgpt.com/docs/computer-use.md": {
-      "sha256": "8fde50d20e5f95494ee2d2978f0a5c0220c0cb7ac9fa327b22bd30c2e4b848ee",
+      "sha256": "8f34be7528fa2103327b017a738f6e51acfd0f03b8134747379f435c37c9f7b7",
       "chunks": 8,
       "title": "Computer Use",
       "status": "indexed",
@@ -3410,7 +3410,7 @@
       "summary": "Explains Codex configuration files, settings, and precedence for user and project-level configuration."
     },
     "https://learn.chatgpt.com/docs/config-file/config-reference.md": {
-      "sha256": "0fdb6ad1dda7214ad08719bcffec24155a5753c4668ce489990e1095056fd7ba",
+      "sha256": "292782d03ddf0c5ce11315e4cc669e30e1219c035e43d9f62a781a513cf9403a",
       "chunks": 55,
       "title": "Configuration Reference",
       "status": "indexed",
@@ -3490,7 +3490,7 @@
       "summary": "This page recommends security controls for configuring higher-risk cybersecurity workflows."
     },
     "https://learn.chatgpt.com/docs/developer-commands.md?surface=cli": {
-      "sha256": "f89aa1e6c0deef2cd98ee592798f4bcfd0d208d8f690a3dfb90411786fb5ecf6",
+      "sha256": "30ea79fe662a228c08566d80d9c7351b93a8d05ff14759bc14bf3727206b6df3",
       "chunks": 108,
       "title": "Slash commands in Codex CLI",
       "status": "indexed",
@@ -3514,7 +3514,7 @@
       "summary": "Documents how to change Codex IDE settings and lists the extension’s editor settings."
     },
     "https://learn.chatgpt.com/docs/dots.md": {
-      "sha256": "558d88b38e4c784663f3f228c768cb0ed1f798f3ff2515cf9d25ae6a311a687e",
+      "sha256": "94e687b3deeb3f532f5920a5159d7c00d6fb48c8dcb62f36865f5bb31d1c80d6",
       "chunks": 17,
       "title": "Meet dots",
       "status": "indexed",
@@ -3522,7 +3522,7 @@
       "summary": "An overview of ChatGPT dots, their capabilities, availability, and setup options."
     },
     "https://learn.chatgpt.com/docs/dots/channels.md": {
-      "sha256": "f9a98c460f59b800f31f68a992b0cf1d42e9f383084e145fff23103fe878f1fb",
+      "sha256": "2f6784ff4b47e46a631e0f7e51a45de0aa7215e0bbca32a33441045623c3b752",
       "chunks": 9,
       "title": "Message your dot",
       "status": "indexed",
@@ -3554,7 +3554,7 @@
       "summary": "Instructions for creating a dot, customizing it, connecting plugins, and setting it up across devices."
     },
     "https://learn.chatgpt.com/docs/dots/tasks-and-memory.md": {
-      "sha256": "210f3bc84bd9d63988d749e37c757fc872d9e07ce636ae593aa5188b923e82f8",
+      "sha256": "c659de3f5ad854fbdc238195428841adbf88e5502b7e7df9c0b19945c785b010",
       "chunks": 9,
       "title": "Tasks and memory",
       "status": "indexed",
@@ -3689,6 +3689,14 @@
       "reason": "",
       "summary": "Explains how to configure Codex to use an organization’s LLM gateway and credentials."
     },
+    "https://learn.chatgpt.com/docs/enterprise/connect-to-vertex-ai.md": {
+      "sha256": "c11847bcb8672925c88688560b298e7ec904a96275284c5d2e246046557d1065",
+      "chunks": 6,
+      "title": "Connect Codex to Google Cloud Vertex AI",
+      "status": "indexed",
+      "reason": "",
+      "summary": "A setup guide for connecting Codex to Google Cloud Vertex AI, including authentication and prerequisites."
+    },
     "https://learn.chatgpt.com/docs/enterprise/desktop-browser-policies.md": {
       "sha256": "883d949f60ecd9acf4fed05919569e7495f9604da0b4650110afa0b1f0a0cef5",
       "chunks": 14,
@@ -3698,7 +3706,7 @@
       "summary": "Explains how to deploy supported browser policies for the ChatGPT desktop app on each platform."
     },
     "https://learn.chatgpt.com/docs/enterprise/dots-admin-guide.md": {
-      "sha256": "a7434b901aec52bc9c7147f95b2accdc181f3a8020e427993e869a753c6baf0c",
+      "sha256": "4b4521b5acd3770effbbeee4d3deeac730eb6807ca2cc3ed7e7f2095f4031c37",
       "chunks": 21,
       "title": "Manage dots permissions and capabilities",
       "status": "indexed",
@@ -3706,7 +3714,7 @@
       "summary": "An admin guide for configuring workspace access to dots and controlling their app and computer capabilities."
     },
     "https://learn.chatgpt.com/docs/enterprise/dots-security.md": {
-      "sha256": "77ff4cc4cc5164a59b84756b16d8e9cae09444d26c95f9a13362a6d05e018adf",
+      "sha256": "66bde9e25b6ef476264e05a16a1458d045cac12cc62bf219a25817f18efeb487",
       "chunks": 38,
       "title": "Safety and security in dots",
       "status": "indexed",
@@ -3810,8 +3818,8 @@
       "summary": "This page explains how to deploy a gateway for Codex, including prerequisites, model routing, credentials, and configuration distribution."
     },
     "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md": {
-      "sha256": "ecadf67b4978b559cd8e47baa1fde0d1fcb99053de273758c283a8e7cee33a94",
-      "chunks": 70,
+      "sha256": "523831747ffa314d8485e9c6e4f3382d17608104cda5acd13a1ae60517066875",
+      "chunks": 71,
       "title": "Codex security cookbook",
       "status": "indexed",
       "reason": "",
@@ -3906,8 +3914,8 @@
       "summary": "Explains workspace analytics reporting surfaces and how to choose among them for adoption and engagement reporting."
     },
     "https://learn.chatgpt.com/docs/enterprise/workspace-model-availability.md": {
-      "sha256": "2c75cdb3eeb5cbb093a7b33c6a4fbc01b6f9148cfb909bc2bd09c2dd1e078cf7",
-      "chunks": 14,
+      "sha256": "5a1cefb73c3f41ec999262397e370be6633ab629ebb89fda979a8f82f8beef78",
+      "chunks": 15,
       "title": "Workspace model availability",
       "status": "indexed",
       "reason": "",
@@ -4010,7 +4018,7 @@
       "summary": "Explains ChatGPT Voice availability and how to start and use a voice chat."
     },
     "https://learn.chatgpt.com/docs/get-started-with-work.md": {
-      "sha256": "325f8207bc63e64252aedecb989e057df420cb6951414e89690afb02baaaa748",
+      "sha256": "eb37a5ee0982147186fd3d8e8717696dc9abb0a46ca60427b6796cfcfc5d0cb4",
       "chunks": 11,
       "title": "Get started with ChatGPT Work",
       "status": "indexed",
@@ -4106,16 +4114,16 @@
       "summary": "A practical guide to starting, monitoring, approving, and reviewing Codex tasks from the ChatGPT mobile app."
     },
     "https://learn.chatgpt.com/docs/model-selection.md": {
-      "sha256": "a1389a0e9c28913ed850d8797409cbf6b0b6597d2dac13defb2924611bad6239",
-      "chunks": 7,
+      "sha256": "cc9d17408554293e01662e492c888bbaaaae5d8f1f9f0ac73d73eeba25635cc3",
+      "chunks": 5,
       "title": "Model selection",
       "status": "indexed",
       "reason": "",
       "summary": "Guidance for choosing ChatGPT models and reasoning settings for different workflows."
     },
     "https://learn.chatgpt.com/docs/models.md": {
-      "sha256": "1b5c4175deb8411a6fca039191b7dbbd1278fdcab2f44b328dbb5dc54f7258ac",
-      "chunks": 14,
+      "sha256": "b053e81eda0489e5d6c0401a6173448842cae90201a5b7286159e4f18f430a84",
+      "chunks": 15,
       "title": "Models",
       "status": "indexed",
       "reason": "",
@@ -4170,7 +4178,7 @@
       "summary": "Explains how to choose, show, and customize floating pets in the ChatGPT desktop app."
     },
     "https://learn.chatgpt.com/docs/plugins.md": {
-      "sha256": "2a17d963e2d6bb3aed4b4987642e0f54f4602e49646555adf0e4a757f4b0a8e5",
+      "sha256": "0f0baa3b560f9fa6aae0af4583ccc8bc40fd51383eaa99bb9ec7f4bac167b6b4",
       "chunks": 17,
       "title": "Plugins",
       "status": "indexed",
@@ -4178,8 +4186,8 @@
       "summary": "Explains plugin availability and use across ChatGPT and Codex, including workspace administration considerations."
     },
     "https://learn.chatgpt.com/docs/pricing.md": {
-      "sha256": "ca6042fb861bc80ad19da36f6a6ba70d7c0369a077dbd2b47bd6ac734f1e3df0",
-      "chunks": 21,
+      "sha256": "3ad15b9af7540292eb7ad51690aafbbeee171f19286955b1a180fab6604d2cf7",
+      "chunks": 23,
       "title": "Pricing",
       "status": "indexed",
       "reason": "",
@@ -4194,7 +4202,7 @@
       "summary": "Explains how to organize chats, files, and shared context in ChatGPT projects."
     },
     "https://learn.chatgpt.com/docs/prompting.md": {
-      "sha256": "d8e395f2234b3986b443ee1a08408a33be06ba2b69503c969caf27b7b0323d56",
+      "sha256": "9d248651a111a55df374fa3d1527ecadba41146a409d71961def0aa209d5dcbd",
       "chunks": 48,
       "title": "Prompting",
       "status": "indexed",
@@ -4657,6 +4665,38 @@
       "reason": "",
       "summary": "A guide to setting goals and boundaries, reviewing progress, and working effectively with agents."
     },
+    "https://learn.chatgpt.com/guides/best-practices.md": {
+      "sha256": "595168b295a47b57837899446cb853fa0651bc5a02e2fc8b991df3c7e08a89bd",
+      "chunks": 11,
+      "title": "Best practices",
+      "status": "indexed",
+      "reason": "",
+      "summary": "A practical guide to getting better results from Codex through prompting, planning, configuration, and workflow automation."
+    },
+    "https://learn.chatgpt.com/guides/build-ai-native-engineering-team.md": {
+      "sha256": "6b35aafb3ddf968abfd0def3c20301dad3f1c097c5c253394503a01ae9e42457",
+      "chunks": 0,
+      "title": "Building an AI-Native Engineering Team",
+      "status": "quarantined",
+      "reason": "model: marketing",
+      "summary": "This is a leadership guide to adopting AI agents in engineering teams, not product documentation for configuring or using a specific tool."
+    },
+    "https://learn.chatgpt.com/guides/prompting-gpt-6-2-astra.md": {
+      "sha256": "6a783d993f73fd03674cfaf3b7df9d30d0d087f882316774ff127555c239d4b9",
+      "chunks": 5,
+      "title": "Prompting GPT-6.2 in Codex",
+      "status": "indexed",
+      "reason": "",
+      "summary": "A guide to prompting GPT-6.2 models in Codex, with advice on reasoning effort and how to describe tasks and review criteria."
+    },
+    "https://learn.chatgpt.com/guides/svg-3d-design.md": {
+      "sha256": "3ce3f1500ec379d1f6d4901bf6ef748ca29be0743b926de9c1503c6ebbdc93bd",
+      "chunks": 0,
+      "title": "From concept art to editable SVGs and 3D scenes",
+      "status": "quarantined",
+      "reason": "model: marketing",
+      "summary": "A promotional showcase of a Codex plugin for creating editable SVG graphics and 3D scenes from prompts."
+    },
     "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-client.md": {
       "sha256": "caa0d8ddb3c794622547e08fd270654581913a8c36b5f5251d4a9c98b3d51e7b",
       "chunks": 40,
@@ -4906,7 +4946,7 @@
       "summary": "A community-maintained compatibility matrix showing which MCP clients support each official extension."
     },
     "https://modelcontextprotocol.io/extensions/overview.md": {
-      "sha256": "52c4c3e93e8583e9035708e8298dcb6f9657b1a722425edfb89d98ce8f0f554e",
+      "sha256": "40e4c58f59a4cfc2508d827b7aad9790476fad5844099378c126cad11eac56d1",
       "chunks": 21,
       "title": "Extensions Overview",
       "status": "indexed",
