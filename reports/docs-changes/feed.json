@@ -1,6 +1,471 @@
 {
-  "checked": "2026-11-20",
+  "checked": "2026-11-21",
   "days": [
+    {
+      "added": [
+        {
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/teams.md"
+        },
+        {
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/workload-identity.md"
+        },
+        {
+          "product": "cursor",
+          "url": "https://cursor.com/docs/origin/access-policies.md"
+        }
+      ],
+      "changed": [
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/admin-setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/typescript.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-teams.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-view.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/artifacts.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/authentication.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/best-practices.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-code-on-the-web.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-directory.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-platform-on-aws.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-projects.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-tag.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/cloud-environments.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-mode.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/commands.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/devcontainer.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/env-vars.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/errors.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/feature-availability.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/github-enterprise-server.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/glossary.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/goal.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/hooks-guide.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/how-claude-code-works.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/interactive-mode.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/managed-mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/managed-settings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/memory.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/microsoft-foundry.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/mobile.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/network-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permissions.md"
+        },
+        {
+          "new_sections": [
+            "plugin restore-set-aside"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/cli-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/install.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/loading.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/manifest-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/api.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/events.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/interface.md"
+        },
+        {
+          "new_sections": [
+            "Check the charts mod requirements"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/reference.md"
+        },
+        {
+          "new_sections": [
+            "`Marketplace \"<name>\", which managed settings declare, stands from another source and cannot be taken back while its declared source is unreachable`",
+            "`The list of installed plugins (installed_plugins.json) could not be read, so marketplace \"<name>\", which managed settings declare, cannot be taken back from another source`"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/prompt-caching.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/quickstart.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/remote-control.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/routines.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/sandboxing.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/security-guidance.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/self-hosted-environments-configuration.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/server-managed-settings.md"
+        },
+        {
+          "new_sections": [
+            "`enforceAnthropicSignIn`"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/skills.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/statusline.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/sub-agents.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/troubleshoot-install.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/vs-code.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/workflows.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/worktrees.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/building-with-agents.md"
+        },
+        {
+          "new_sections": [
+            "How egress works",
+            "Startup runs before secrets are available"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/deployment.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/agent-to-agent.md"
+        },
+        {
+          "new_sections": [
+            "Read a result from your code"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/cloud-agents.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/github.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/mcp-oauth.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/migrate.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/guides/slack.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/hillclimbing.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/reference/agent-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/reference/channels.md"
+        },
+        {
+          "new_sections": [
+            "Configure Microsoft Teams"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/reference/cli.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/reference/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/reference/limits.md"
+        },
+        {
+          "new_sections": [
+            "Steer the agent's own running turn"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/reference/sessions.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/reference/tools.md"
+        },
+        {
+          "new_sections": [
+            "Teams does not respond"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent-sdk/troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/origin/settings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/codex-sdk.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/config-file/config-advanced.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/connect-to-a-gateway.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md"
+        }
+      ],
+      "day": "2026-11-21",
+      "removed": []
+    },
     {
       "added": [
         {
