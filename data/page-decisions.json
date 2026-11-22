@@ -3,5 +3,15 @@
     "decision": "allow",
     "date": "2026-10-17",
     "sha256": ""
+  },
+  "https://learn.chatgpt.com/guides/build-ai-native-engineering-team.md": {
+    "decision": "allow",
+    "date": "2026-11-22",
+    "sha256": ""
+  },
+  "https://learn.chatgpt.com/guides/svg-3d-design.md": {
+    "decision": "allow",
+    "date": "2026-11-22",
+    "sha256": ""
   }
 }
