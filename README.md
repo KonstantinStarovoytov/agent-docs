@@ -10,8 +10,10 @@ day, and gives your agent two tools: one finds the right passage, the other
 reads a whole section. The agent answers from the real docs and can link to
 them.
 
-It runs as a remote MCP server (and over REST). You can try it with a free
-Cohere key.
+It runs as a remote MCP server (and over REST). **It needs your own Cohere API
+key** in the `X-Cohere-Api-Key` header: a free trial key is at
+[dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys) (sign
+up, then copy the Trial key). See [Connect](#connect).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/flow/agent-docs-flow-dark.gif">
@@ -124,7 +126,7 @@ Add the server to any MCP client (Claude Code, Cursor, OpenWebUI and others):
 Calling a tool needs one of two headers:
 
 - **Your own Cohere key:** `X-Cohere-Api-Key: <key>`. A free trial key is at
-  [dashboard.cohere.com](https://dashboard.cohere.com). The key pays for
+  [dashboard.cohere.com/api-keys](https://dashboard.cohere.com/api-keys). The key pays for
   reranking that one request; it is never stored or logged. Limit: 30 requests
   a minute per IP.
 - **The owner's token:** `Authorization: Bearer <API_TOKEN>`, for the owner's own
