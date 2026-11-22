@@ -87,7 +87,8 @@ _REJECTED_STATUSES = frozenset({401, 403, 498})
 class CallerKeyRejected(Exception):
     def __init__(self) -> None:
         super().__init__(
-            "Your Cohere API key was rejected. Check the X-Cohere-Api-Key header."
+            "Your Cohere API key was rejected. Check the X-Cohere-Api-Key header; "
+            "get a key at https://dashboard.cohere.com/api-keys."
         )
 
 

@@ -100,7 +100,8 @@ def test_rejected_caller_key_is_reported_without_the_key(
         CohereReranker().rerank("q", _candidates())
 
     assert str(raised.value) == (
-        "Your Cohere API key was rejected. Check the X-Cohere-Api-Key header."
+        "Your Cohere API key was rejected. Check the X-Cohere-Api-Key header; "
+        "get a key at https://dashboard.cohere.com/api-keys."
     )
     assert CALLER_KEY not in repr(raised.value)
     assert raised.value.__cause__ is None

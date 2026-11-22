@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.KonstantinStarovoytov/agent-docs",
   "title": "Agent Docs",
-  "description": "Search the official docs of Claude Code, Cursor, OpenAI Codex and MCP, refreshed daily.",
-  "version": "0.1.1",
+  "description": "Claude Code, Cursor, Codex, MCP docs. Needs X-Cohere-Api-Key header, free at dashboard.cohere.com",
+  "version": "0.1.2",
   "websiteUrl": "https://github.com/KonstantinStarovoytov/agent-docs",
   "repository": {
     "url": "https://github.com/KonstantinStarovoytov/agent-docs",
@@ -17,13 +17,13 @@
       "headers": [
         {
           "name": "X-Cohere-Api-Key",
-          "description": "Your own Cohere API key (free trial at dashboard.cohere.com). Provide this or Authorization.",
-          "isRequired": false,
+          "description": "Required: your own Cohere API key, sent as the X-Cohere-Api-Key header. Get a free trial key at https://dashboard.cohere.com/api-keys (sign up, then copy the Trial key).",
+          "isRequired": true,
           "isSecret": true
         },
         {
           "name": "Authorization",
-          "description": "Bearer token from the owner. Provide this or X-Cohere-Api-Key.",
+          "description": "Owner only: Authorization: Bearer <token>. Everyone else leaves this empty and uses X-Cohere-Api-Key.",
           "isRequired": false,
           "isSecret": true,
           "value": "Bearer {token}",

@@ -143,3 +143,9 @@ def test_a_spoofed_first_forwarded_hop_does_not_dodge_the_ip_limit(
         for i in range(3)
     ]
     assert statuses[-1] == 429
+
+
+def test_missing_key_401_names_the_header_and_where_to_get_a_key(client: Any) -> None:
+    detail = _post(client, {}).json()["detail"]
+    assert "X-Cohere-Api-Key" in detail
+    assert "https://dashboard.cohere.com/api-keys" in detail

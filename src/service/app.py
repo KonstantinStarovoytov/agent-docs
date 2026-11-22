@@ -28,6 +28,11 @@ from src.service import auth, core, pages
 from src.service.mcp_server import PRODUCT_VENDOR, Product, build_mcp_server
 
 COHERE_KEY_HEADER = "x-cohere-api-key"
+MISSING_KEY_DETAIL = (
+    "Missing API key. Send your own Cohere API key in the X-Cohere-Api-Key "
+    "header; get a free trial key at https://dashboard.cohere.com/api-keys. "
+    "(The owner sends Authorization: Bearer <token> instead.)"
+)
 
 GLAMA_CLAIM_PATH = "/.well-known/glama.json"
 PUBLIC_PATHS = frozenset({"/health", "/docs", "/openapi.json", "/redoc"})
@@ -319,7 +324,7 @@ def create_app() -> FastAPI:
             and not await is_free_mcp_request(request)
         ):
             return JSONResponse(
-                {"detail": "Missing or invalid bearer token"},
+                {"detail": MISSING_KEY_DETAIL},
                 status_code=401,
                 headers={"WWW-Authenticate": "Bearer"},
             )
