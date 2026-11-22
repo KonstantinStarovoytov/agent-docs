@@ -1,6 +1,86 @@
 {
-  "checked": "2026-11-21",
+  "checked": "2026-11-22",
   "days": [
+    {
+      "added": [],
+      "changed": [
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/python.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-tag.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/env-vars.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permission-modes.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/sub-agents.md"
+        },
+        {
+          "new_sections": [
+            "Allow a domain",
+            "Block a site or turn WebFetch off",
+            "When a fetch prompts, fails, or WebFetch is missing",
+            "The web-fetch subagent",
+            "Identify WebFetch requests to your site"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/tools-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/vs-code.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/agent/security/run-modes.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/cli/shell-mode.md"
+        },
+        {
+          "new_sections": [
+            "Findings from other sources"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/vulnerability-remediation.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/extensions/client-matrix.md"
+        }
+      ],
+      "day": "2026-11-22",
+      "removed": []
+    },
     {
       "added": [
         {

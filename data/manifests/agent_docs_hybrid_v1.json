@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-21",
+  "indexed_at": "2026-11-22",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -74,7 +74,7 @@
       "summary": "Explains how to enable file checkpointing in the Agent SDK and rewind tracked file changes to earlier states."
     },
     "https://code.claude.com/docs/en/agent-sdk/hooks.md": {
-      "sha256": "78a15c00c88094c0600e46d78e9f262cb608238985eee24c5beb1ec6e1201341",
+      "sha256": "90be8df066957c9793343ed42c3efc45ee1f24b5b423811f516f990e02f89c63",
       "chunks": 36,
       "title": "Intercept and control agent behavior with hooks",
       "status": "indexed",
@@ -146,7 +146,7 @@
       "summary": "Explains how to load local plugins in the Agent SDK and extend sessions with skills, agents, hooks, and MCP servers."
     },
     "https://code.claude.com/docs/en/agent-sdk/python.md": {
-      "sha256": "9da82aa2c439509a93f25b5c41c917ccc6d659eb6d5e1bb46e78963aba1e807a",
+      "sha256": "e1a73cabcff1b20a9da7381a3edfc599ae1043bca0f863d0efe50d522e27a122",
       "chunks": 179,
       "title": "Agent SDK reference - Python",
       "status": "indexed",
@@ -482,8 +482,8 @@
       "summary": "Explains how to install and use the Claude Security plugin to scan code for vulnerabilities and review patches."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "d8c79df89ca9fb6ff4b25a673ca89225f9421c5894a60c7bca7e33446c7dcc4b",
-      "chunks": 76,
+      "sha256": "6672f3443aed7c1dbd172ba627c8ea972e7d2ad1da722d253964a6178d500393",
+      "chunks": 74,
       "title": "Claude Tag",
       "status": "indexed",
       "reason": "",
@@ -698,7 +698,7 @@
       "summary": "Explains how to install and configure Claude Code inside development containers, including authentication, policy, network restrictions, and permissions."
     },
     "https://code.claude.com/docs/en/env-vars.md": {
-      "sha256": "d49176c849b503fe29ab0f6182680e8a3587bfa9060cf950c71a24a89c481140",
+      "sha256": "2b83bde2409e6ebd69c3b98637101c8c76898d624719eee70514d2048762264a",
       "chunks": 91,
       "title": "Environment variables",
       "status": "indexed",
@@ -834,8 +834,8 @@
       "summary": "A practical guide to configuring Claude Code hooks to automate actions during its lifecycle."
     },
     "https://code.claude.com/docs/en/hooks.md": {
-      "sha256": "818430e7253a50ad21cca6a2deaf75428b394d65ece2d82c810a6fd0f4ee3ea2",
-      "chunks": 209,
+      "sha256": "467f530c5c7ed6685e7cd007f722e981f0cb7d4b1e55bc28ae6243c92aa830f7",
+      "chunks": 208,
       "title": "Hooks reference",
       "status": "indexed",
       "reason": "",
@@ -1010,7 +1010,7 @@
       "summary": "An introductory guide to Claude Code that describes its available surfaces and links users to setup instructions."
     },
     "https://code.claude.com/docs/en/permission-modes.md": {
-      "sha256": "0e22cb47a1b6e8caa0422c13a962bb4beb801f2d71cfc04c8b74eb5d6d303a4f",
+      "sha256": "a966d23d6cba45772850c59a92b3d048be5dac63c984b2be475f9e8468969655",
       "chunks": 68,
       "title": "Choose a permission mode",
       "status": "indexed",
@@ -1482,7 +1482,7 @@
       "summary": "Explains how to configure a custom Claude Code status line, including the session data it receives and examples of what it can display."
     },
     "https://code.claude.com/docs/en/sub-agents.md": {
-      "sha256": "dc2c2a36f241c5bcfd7b9da1c043ab6df56a6caf4685397e86f824c982d46fd2",
+      "sha256": "20394c1bf14cf0b6086cb1c9a47dbc2aed1a9b6941ea511e9fd163c04f116bd9",
       "chunks": 76,
       "title": "Create custom subagents",
       "status": "indexed",
@@ -1498,8 +1498,8 @@
       "summary": "Explains how to configure terminal behavior and settings for Claude Code, including multiline input, notifications, tmux, rendering, and Vim keybindings."
     },
     "https://code.claude.com/docs/en/tools-reference.md": {
-      "sha256": "84daaf614c46b8ec80a16cd782d1a5043973c604b98345c36bcf43c40951982b",
-      "chunks": 66,
+      "sha256": "93722ee4a9790708c926ad11adb3bfb318c8f88a6503cf3cab56a450125cc84d",
+      "chunks": 75,
       "title": "Tools reference",
       "status": "indexed",
       "reason": "",
@@ -1538,7 +1538,7 @@
       "summary": "Explains how to enable and use voice dictation in the Claude Code CLI, including requirements and recording modes."
     },
     "https://code.claude.com/docs/en/vs-code.md": {
-      "sha256": "fa879ed8c5ffdaf20b0b4ac9867590d964db917a63aefd35e2af65e9f063db6e",
+      "sha256": "6ba4b9ec2c643344bee58c96f49ac217e3c206e17d3b85993bce9bafac04c270",
       "chunks": 89,
       "title": "Use Claude Code in VS Code",
       "status": "indexed",
@@ -2122,7 +2122,7 @@
       "summary": "Explains Cursor Agent’s security guardrails, approval requirements, and controls for first- and third-party tool calls."
     },
     "https://cursor.com/docs/agent/security/run-modes.md": {
-      "sha256": "bd54369cfabd58733f8917b08379489b1726489ac1bc6dee72e4d7c501aa9f21",
+      "sha256": "71fcebcf5cbb9a5b8f1518939a148a20946521964f381a5320c300c4afb50a29",
       "chunks": 27,
       "title": "Run Modes",
       "status": "indexed",
@@ -2322,7 +2322,7 @@
       "summary": "A practical guide to configuring terminal keybindings and theme synchronization for Cursor CLI."
     },
     "https://cursor.com/docs/cli/shell-mode.md": {
-      "sha256": "5fbae20ce3c76bbc3805b4f1a3e5fbf8c4522864b4a483abb15a4a4b3835dcba",
+      "sha256": "3fab3c7c180534fb8935e555f72d154ec500f2299e54ed7ccf756113fba3f75b",
       "chunks": 12,
       "title": "Shell Mode",
       "status": "indexed",
@@ -3146,8 +3146,8 @@
       "summary": "Explains how Cursor subagents work and how to use and configure them."
     },
     "https://cursor.com/docs/vulnerability-remediation.md": {
-      "sha256": "32b11b3a25280148f425ff367f5f342d16192775749c8215ddbaad3395520be4",
-      "chunks": 28,
+      "sha256": "1b5bfb403bbcbf6acfa1d66837f535bafa87ac2c2d60fb415f4fc59b9a3a6a4a",
+      "chunks": 29,
       "title": "Vulnerability Remediation",
       "status": "indexed",
       "reason": "",
@@ -4986,7 +4986,7 @@
       "summary": "Explains the MCP OAuth Client Credentials extension for machine-to-machine authentication and when to use it."
     },
     "https://modelcontextprotocol.io/extensions/client-matrix.md": {
-      "sha256": "c3d813ffe7f3c14611e5dc501b809ab6da4bfa8d1b3584c6f93e1116b92f6128",
+      "sha256": "539418cf4d10a56a178f8561f9f2d86894709982b8c9496deb9a7686fe20b5a8",
       "chunks": 7,
       "title": "Extension Support Matrix",
       "status": "indexed",
