@@ -1,6 +1,622 @@
 {
-  "checked": "2026-11-23",
+  "checked": "2026-11-24",
   "days": [
+    {
+      "added": [
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-classifiers.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-github-rules.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-policy.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-pull-requests.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-setup.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-troubleshooting.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-ship.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward-pull-requests.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward-security.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward-setup.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward-troubleshooting.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/share-sessions.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/ship-command-troubleshooting.md"
+        },
+        {
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/ship-command.md"
+        },
+        {
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/sites/usage-and-cost.md"
+        }
+      ],
+      "changed": [
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/python.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/user-input.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-teams.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-view.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/analytics.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/artifacts.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/auto-mode-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/channels-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/chrome.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-apps-gateway-deploy.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-apps-gateway.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-code-on-the-web.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-directory.md"
+        },
+        {
+          "new_sections": [
+            "Claude's replies aren't getting through"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-projects.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-tag.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/cli-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/cloud-environments.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-mode.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review-costs.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review-pull-requests.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review-setup.md"
+        },
+        {
+          "new_sections": [
+            "Code review not run: no policy rule uses it"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review-troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/commands.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/costs.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/deep-links.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop-linux.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop-quickstart.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/env-vars.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/errors.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/feature-availability.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/features-overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/fullscreen.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/github-enterprise-server.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/glossary.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/how-claude-code-works.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/interactive-mode.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/large-codebases.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/llm-gateway-protocol.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/managed-mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/memory.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/model-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/output-styles.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permission-modes.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permissions.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/install.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/loading.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/manifest-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/marketplace-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/admin.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/events.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/gallery.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/troubleshoot.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/prompt-caching.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/remote-control.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/routines.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/security-guidance.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/self-hosted-environments-configuration.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/self-hosted-environments-quickstart.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/self-hosted-environments-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/server-managed-settings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/skills.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/statusline.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/sub-agents.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/terminal-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/tools-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/vs-code.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/workflows.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/worktrees.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/bugbot.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/cloud-agent/self-hosted/my-machines.md"
+        },
+        {
+          "new_sections": [
+            "Home folder config",
+            "How do I get skills onto self-hosted workers?"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/cloud-agent/self-hosted/pool.md"
+        },
+        {
+          "new_sections": [
+            "What each surface reads from your home folder"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/customize-cursor.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/plugins.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/skills.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/subagents.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/help/customization/skills.md"
+        },
+        {
+          "new_sections": [
+            "Select Amazon Bedrock Runtime"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/app-server.md"
+        },
+        {
+          "new_sections": [
+            "Use the cloud browser or computer",
+            "Run Playwright tests"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/browser.md"
+        },
+        {
+          "new_sections": [
+            "Refresh collector credentials"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/config-file/config-advanced.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/config-file/config-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/config-file/config-sample.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/developer-commands.md?surface=cli"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/dots.md"
+        },
+        {
+          "new_sections": [
+            "Managed collector credentials"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/managed-configuration.md"
+        },
+        {
+          "new_sections": [
+            "Reuse settings from a running task",
+            "Preview an app or connect over SSH"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/environments/cloud-environments.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/extend/mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/non-interactive-mode.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/pricing.md"
+        },
+        {
+          "new_sections": [
+            "Get started"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/sites.md"
+        },
+        {
+          "new_sections": [
+            "Guided projects"
+          ],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/sites/creating-a-site.md"
+        }
+      ],
+      "day": "2026-11-24",
+      "removed": []
+    },
     {
       "added": [
         {
