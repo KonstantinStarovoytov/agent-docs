@@ -1,6 +1,794 @@
 {
-  "checked": "2026-11-24",
+  "checked": "2026-11-25",
   "days": [
+    {
+      "added": [],
+      "changed": [
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/admin-setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/advisor.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/configuration.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/observability.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/python.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-sdk/typescript.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-teams.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/agent-view.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/amazon-bedrock.md"
+        },
+        {
+          "new_sections": [
+            "Rules for the whole file"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-policy.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-pull-requests.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-setup.md"
+        },
+        {
+          "new_sections": [
+            "Check for a GitHub IP allow list"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals-troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/approvals.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/artifacts.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/authentication.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/best-practices.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/channels.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/checkpointing.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-apps-gateway-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-apps-gateway-deploy.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-code-on-the-web.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-directory.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-platform-on-aws.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-projects.md"
+        },
+        {
+          "new_sections": [
+            "Watch a running scan",
+            "Continue a stopped scan",
+            "Run a more thorough change scan",
+            "Tell a scan about your system",
+            "Patch from an older report",
+            "Triage findings you already have",
+            "Create a threat model",
+            "Analyze your attack surface",
+            "Scan from your shell",
+            "Scan pull requests in GitHub Actions"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-security.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-tag.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/cli-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/cloud-environments.md"
+        },
+        {
+          "new_sections": [
+            "Use Code Mode in subagents",
+            "Tool call ran after a hook failed"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-mode.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review-local.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review-setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/code-review.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/commands.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/costs.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/debug-your-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop-ios-simulator.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop-quickstart.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/env-vars.md"
+        },
+        {
+          "new_sections": [
+            "Claude Code needs a recent sign-in"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/errors.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/fast-mode.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/feature-availability.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/features-overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/google-vertex-ai.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/headless.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/hooks-guide.md"
+        },
+        {
+          "new_sections": [
+            "PreSkillShellCommand"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/hooks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/how-claude-code-works.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/large-codebases.md"
+        },
+        {
+          "new_sections": [
+            "Cloud sessions, Claude Tag, and Remote Control"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/llm-gateway-connect.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/managed-settings.md"
+        },
+        {
+          "new_sections": [
+            "Use skills from MCP servers",
+            "Find and call MCP skills by name",
+            "Approvals for MCP skills",
+            "Security scanning for MCP skills",
+            "MCP skill availability",
+            "MCP skill limitations",
+            "Turn on MCP skills for organizations",
+            "Troubleshoot MCP skills"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/mcp.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/memory.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/microsoft-foundry.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/mobile.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/model-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/monitoring-usage.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/network-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permission-modes.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/permissions.md"
+        },
+        {
+          "new_sections": [
+            "Remove a built-in tool from runs"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugin-evals.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/cli-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/create.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/host-marketplace.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/loading.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/admin.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/create.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/events.md"
+        },
+        {
+          "new_sections": [
+            "Animate a backdrop with a shader",
+            "Style messages in the Desktop app",
+            "Add sound to a theme"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/interface.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/test.md"
+        },
+        {
+          "new_sections": [
+            "`call refused` or `result withheld`"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/mods/troubleshoot.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/overview.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/publish.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/plugins/troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward-pull-requests.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward-setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward-troubleshooting.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/pr-steward.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/prompt-caching.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/quickstart.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/remote-control.md"
+        },
+        {
+          "new_sections": [
+            "Warnings under History"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/routines.md"
+        },
+        {
+          "new_sections": [
+            "Recurring task expiry"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/scheduled-tasks.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/self-hosted-environments-configuration.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/server-managed-settings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings-example.md"
+        },
+        {
+          "new_sections": [
+            "`disableDirectMcpSkills`"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/setup.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/share-sessions.md"
+        },
+        {
+          "new_sections": [
+            "Your pull request is already open",
+            "Keep a custom /ship or /steward without renaming"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/ship-command-troubleshooting.md"
+        },
+        {
+          "new_sections": [
+            "Watch a branch on another host"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/ship-command.md"
+        },
+        {
+          "new_sections": [
+            "Skills from MCP servers"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/skills.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/slack.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/sub-agents.md"
+        },
+        {
+          "new_sections": [
+            "Working directory and variables in PowerShell commands",
+            "Fix unexpected WebFetch prompts and denials",
+            "Fix a failed WebFetch request",
+            "Fix missing or outdated page content",
+            "Find out why WebFetch is unavailable"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/tools-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/troubleshoot-install.md"
+        },
+        {
+          "new_sections": [
+            "Resume a recording that stopped by itself"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/voice-dictation.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/vs-code.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/web-quickstart.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/workflows.md"
+        },
+        {
+          "new_sections": [
+            "Resume without `--worktree`",
+            "Transcript location"
+          ],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/worktrees.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/cloud-agent.md"
+        },
+        {
+          "new_sections": [
+            "Secret exposure on personal agents"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/cloud-agent/settings.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/integrations/jira.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/integrations/microsoft-teams.md"
+        },
+        {
+          "new_sections": [
+            "Unlinking Slack"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/integrations/slack.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/config-file/config-reference.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/dots.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/dots/channels.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/managed-configuration.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/pricing.md"
+        },
+        {
+          "new_sections": [],
+          "product": "codex",
+          "url": "https://learn.chatgpt.com/docs/sites/usage-and-cost.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-client.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/build-server.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/clients/client-best-practices.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-remote-servers.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/getting-started/intro.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/learn/architecture.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tools/debugging.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/authorization.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tools/inspector/tui.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/docs/2026-07-28/tutorials/security/security_best_practices.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/client-registration.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/index.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/progress.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/basic/versioning.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/client/elicitation.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/client/sampling.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/index.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/schema.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/server/prompts.md"
+        },
+        {
+          "new_sections": [
+            "Resource Template"
+          ],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/server/resources.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/server/tools.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/server/utilities/caching.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/specification/2026-07-28/server/utilities/completion.md"
+        }
+      ],
+      "day": "2026-11-25",
+      "removed": []
+    },
     {
       "added": [
         {
