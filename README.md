@@ -2,8 +2,6 @@
 
 **An MCP server that gives AI agents the current official documentation of Claude Code, Cursor, Codex and MCP.**
 
-[![Agent Docs MCP on mcprush](https://mcprush.com/badge/agent-docs-mcp/score.svg)](https://mcprush.com/to/agent-docs-mcp?ref=badge) [![M8ven Score](https://m8ven.ai/badge/mcp/konstantinstarovoytov-agent-docs-ed2bdo)](https://m8ven.ai/mcp/konstantinstarovoytov-agent-docs-ed2bdo?s=readme)
-
 These tools change faster than a model's training data. Agent Docs keeps
 about 600 pages of their official docs in a search index, refreshes it every
 day, and gives your agent two tools: one finds the right passage, the other
@@ -418,6 +416,10 @@ Re-index locally: `uv run python -m src.reindex --dry-run --out /tmp/r`
 Diagrams: edit `docs/diagrams/*.mmd`, then `uv run python scripts/render_diagrams.py`.
 Animations: edit `docs/flow/flows/ask.js` (a question) or `docs/flow/flows/reindex.js`
 (the daily reindex), then `docs/flow/render.sh`.
+
+## Listed on
+
+[![Agent Docs MCP on mcprush](https://mcprush.com/badge/agent-docs-mcp/score.svg)](https://mcprush.com/to/agent-docs-mcp?ref=badge) [![M8ven Score](https://m8ven.ai/badge/mcp/konstantinstarovoytov-agent-docs-ed2bdo)](https://m8ven.ai/mcp/konstantinstarovoytov-agent-docs-ed2bdo?s=readme)
 
 ## License
 
