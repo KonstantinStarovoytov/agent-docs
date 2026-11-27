@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-25",
+  "indexed_at": "2026-11-27",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -530,8 +530,8 @@
       "summary": "Explains how to use Claude Projects to coordinate related tasks across cloud or local sessions."
     },
     "https://code.claude.com/docs/en/claude-security.md": {
-      "sha256": "0a80fbaab5b2d80e3c9cd50d19e8c726c294d35888dd601a3ecf8d25d3461873",
-      "chunks": 26,
+      "sha256": "07ea487ea02f776e5c4efd52db0ecaac7f5417b84f23352bd5be6ee116398056",
+      "chunks": 27,
       "title": "Scan your codebase for vulnerabilities",
       "status": "indexed",
       "reason": "",
@@ -546,7 +546,7 @@
       "summary": "An overview of Claude Ship’s pull-request agents with instructions for enabling them and details about availability."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "c3d4df3c4df78c58b5b01f9e06076ee642c7ada96d4cc92552a88215497781a6",
+      "sha256": "bbefc81ff716536ca36b076e1447733d0e16ca0981d1dfcd111b024015aeb4b2",
       "chunks": 74,
       "title": "Claude Tag",
       "status": "indexed",
@@ -986,7 +986,7 @@
       "summary": "Explains how administrators configure and restrict MCP server access across an organization."
     },
     "https://code.claude.com/docs/en/managed-settings.md": {
-      "sha256": "0004e04560a60a183552bbfbcc036e2f6473a0bbd4ff0c440c40b2fa352c8609",
+      "sha256": "40c19ac982a87aa22c10e061dba25ab8430da4f79803d6823657b714d834a97c",
       "chunks": 37,
       "title": "Deploy managed settings",
       "status": "indexed",
@@ -1722,7 +1722,7 @@
       "summary": "Explains how enterprise organization groups apply for Anthropic’s Cyber Verification Program and enable Cyber settings for eligible Opus models."
     },
     "https://cursor.com/docs/account/enterprise/service-accounts.md": {
-      "sha256": "6092765bf2f648c970c237fd8e867567894c11571150a089aefc95f2c33d35e3",
+      "sha256": "254383a000301bbcb9b57f1c95a222a29cf9d1d8c8d10111c2bca470de556587",
       "chunks": 18,
       "title": "Service Accounts",
       "status": "indexed",
@@ -1730,8 +1730,8 @@
       "summary": "Explains Enterprise service accounts, their capabilities, and how they support automated Cursor workflows."
     },
     "https://cursor.com/docs/account/organizations/organization-admin-api.md": {
-      "sha256": "c606f4429adda4f1f49eff174cad33207ae4c46ff30a3a6393338b5e984d39fc",
-      "chunks": 104,
+      "sha256": "5e7d78badd65f829079c86eef69aea82b08714e6b4e56f73f8edd01612b871cd",
+      "chunks": 113,
       "title": "Organization Admin Api",
       "status": "indexed",
       "reason": "",
@@ -1746,8 +1746,8 @@
       "summary": "Reference for legacy Cursor plans, their prices, and how they compare with current subscriptions."
     },
     "https://cursor.com/docs/account/teams/admin-api.md": {
-      "sha256": "f038dee280fd972ea97d245181ee405b4158d725812540a6af61ab4989e35662",
-      "chunks": 138,
+      "sha256": "f63a0c215c0a3d5330bbe06afe34c4968ebd04a85f8981fa1e9184d7bcb5f219",
+      "chunks": 147,
       "title": "Admin Api",
       "status": "indexed",
       "reason": "",
@@ -1778,7 +1778,7 @@
       "summary": "Explains team usage analytics, including data visibility, downloads, filters, and tracking AI-generated code in Git commits."
     },
     "https://cursor.com/docs/account/teams/dashboard.md": {
-      "sha256": "7040ee6416dacfbd9d0ee0d0dad9b0bc3a9f7136499caf658a27daa2a80d1ed4",
+      "sha256": "eb0e83f7d263f9d93756a81d55b2f56fc53643efec066d0adc2707a177e19eb1",
       "chunks": 35,
       "title": "Dashboard",
       "status": "indexed",
@@ -1786,7 +1786,7 @@
       "summary": "Explains how to use the team dashboard and configure team-wide settings."
     },
     "https://cursor.com/docs/account/teams/members.md": {
-      "sha256": "2c253f450b8362bcbdd3102065827a69cafac882b7856c517a8dd3e2da8fd886",
+      "sha256": "0a7d08f99839c581be3f3052ca22f0f7cd9a612d004eabe3e0db6daa3123099e",
       "chunks": 17,
       "title": "Members",
       "status": "indexed",
@@ -2250,7 +2250,7 @@
       "summary": "Explains how to prompt Cursor Agent using context mentions and Custom Modes."
     },
     "https://cursor.com/docs/agent/security.md": {
-      "sha256": "64b9b5c264452687491b5eefaea321849acff9e9f57e3ee54c4cada33cb1757b",
+      "sha256": "82df62da93eff26f9ba5991d0b18bcd7b74cb948f40fc99fbd0936d99f0d52eb",
       "chunks": 7,
       "title": "Security",
       "status": "indexed",
@@ -2482,7 +2482,7 @@
       "summary": "Explains how Cursor Cloud Agents work, their capabilities, and how to access and configure them."
     },
     "https://cursor.com/docs/cloud-agent/api/endpoints.md": {
-      "sha256": "ac8dcd2d16dc447b6f023a4da58ee3c23d75a7f5b5b673be6123c5cbb3fed004",
+      "sha256": "27941822ce60967c2e82064b69ddbeccbb6b77567899353c77c12f57d57eeda7",
       "chunks": 211,
       "title": "Endpoints",
       "status": "indexed",
@@ -2554,7 +2554,7 @@
       "summary": "Documents how Cloud Agents and their hooks read run metadata from the agent VM’s local Unix socket."
     },
     "https://cursor.com/docs/cloud-agent/mobile.md": {
-      "sha256": "284c3df942b30f3e6a4d8085cc1c2ffc03f543d570db3dce4b840a220b2ae3af",
+      "sha256": "25e7a2d8f3332fd41cf4005be7654aadb5908b15a6e2ae212a2c71c841c9a147",
       "chunks": 21,
       "title": "Mobile",
       "status": "indexed",
@@ -2562,7 +2562,7 @@
       "summary": "A getting-started guide to using Cursor for iOS to launch and supervise agents and review pull requests."
     },
     "https://cursor.com/docs/cloud-agent/private-connectivity.md": {
-      "sha256": "e8ac76177c4a34c7b93100ad89fdc7873100b4692620d4260ae50c1c51dbdc5a",
+      "sha256": "bbc0139d927fa40344becdcd21e0d27132773e668ca9e3b2f263e2d5f9b7dd22",
       "chunks": 23,
       "title": "Private Connectivity",
       "status": "indexed",
@@ -2578,7 +2578,7 @@
       "summary": "Explains how Cursor Projects request, receive, and retain access to additional repositories and cloud environments."
     },
     "https://cursor.com/docs/cloud-agent/security-network.md": {
-      "sha256": "adc8baebc8c78fb32f43942d87234d88e019a8b6d8f2f68508ac8a368d140772",
+      "sha256": "73513294bd985d57a442856a4f95a7c1d76bb20e4825a2eeb7904add66649cb9",
       "chunks": 28,
       "title": "Security Network",
       "status": "indexed",
@@ -2586,7 +2586,7 @@
       "summary": "Configuration reference for Cloud Agent secret protection and network security controls."
     },
     "https://cursor.com/docs/cloud-agent/security.md": {
-      "sha256": "c7d570d1596b6360c292ed098c706e3774a21c780fc046b6e0a7855de5214419",
+      "sha256": "c850b17e6de8c71d6c3e13c0dc67a9e01c069e4fcad541691fdad01a1891b950",
       "chunks": 20,
       "title": "Security",
       "status": "indexed",
@@ -2674,7 +2674,7 @@
       "summary": "Explains how to use Cursor’s Customize page to manage plugins and other extensions across user, team, and workspace scopes."
     },
     "https://cursor.com/docs/enterprise/compliance-and-monitoring.md": {
-      "sha256": "da731ea47477a478ff93b724b1824f35fa68b7d78986cfa63d934a65f657c577",
+      "sha256": "48a3a70974a1e31a9dedfe4e771a27a3158ec6e1d8cb32df978966bbc8797021",
       "chunks": 36,
       "title": "Compliance And Monitoring",
       "status": "indexed",
@@ -2690,7 +2690,7 @@
       "summary": "A guide to deploying the Cursor editor and CLI across an organization, including MDM configuration and policy controls."
     },
     "https://cursor.com/docs/enterprise/endpoint-security.md": {
-      "sha256": "1befad92addb7222e5c2992abb9ac19b04703112d33981bcf9ccd4ee5aaf7491",
+      "sha256": "3a62753b7ba8bcf09fdb49398225564f7b275cad143d7ecb972cbd7888c7a77a",
       "chunks": 9,
       "title": "Endpoint Security",
       "status": "indexed",
@@ -2698,7 +2698,7 @@
       "summary": "Explains which Cursor processes and paths to exclude from endpoint security software to avoid startup and feature issues."
     },
     "https://cursor.com/docs/enterprise/identity-and-access-management.md": {
-      "sha256": "f67bb6ee5f606ae172192f837204db3d79f5bc5fb83d831bfa1ba724205e788b",
+      "sha256": "f9c98c3bf359c7c7a141f86f0a3e433afb744a7c176a01e2075194ee7a79dca5",
       "chunks": 12,
       "title": "Identity And Access Management",
       "status": "indexed",
@@ -2706,7 +2706,7 @@
       "summary": "An overview of Cursor’s enterprise identity controls, setup order, and prerequisites for SSO, SCIM, device policies, and roles."
     },
     "https://cursor.com/docs/enterprise/llm-safety-and-controls.md": {
-      "sha256": "e4e867b4d2c584a2f5bf5fc43a2d06360a2ff581600815103a6ac1ead5a1d9af",
+      "sha256": "a898e99963a23273dfd3318a8374b5f24e8182c0f4d21780e32a8da84bf737cd",
       "chunks": 29,
       "title": "Llm Safety And Controls",
       "status": "indexed",
@@ -2714,7 +2714,7 @@
       "summary": "Explains Cursor’s security controls and steering mechanisms for managing LLM agent behavior."
     },
     "https://cursor.com/docs/enterprise/model-and-integration-management.md": {
-      "sha256": "4cd7c4fe8c3a9e7b0a7e251a6d684333b44de50c8f8faa0ec8de29d740f8a3ee",
+      "sha256": "9b56dc0d2a835cddc1c39632314c7c4045e29f2d383b4620057bb6fd560bc35f",
       "chunks": 21,
       "title": "Model And Integration Management",
       "status": "indexed",
@@ -2722,7 +2722,7 @@
       "summary": "Explains how enterprise admins control model access, MCP server trust, and integrations with external services."
     },
     "https://cursor.com/docs/enterprise/network-configuration.md": {
-      "sha256": "5ad1d69c256a5191f1ebb698c9455d0d109358b2feed5dbc79fb54916e85d735",
+      "sha256": "472eb8d05acb3781f1e8094b7380311c4659fd6323fa7c633b447af5d6b3541a",
       "chunks": 17,
       "title": "Network Configuration",
       "status": "indexed",
@@ -2770,7 +2770,7 @@
       "summary": "Explains how Cursor Enterprise pooled usage shares a committed usage budget across team members and how admins can govern it."
     },
     "https://cursor.com/docs/enterprise/privacy-and-data-governance.md": {
-      "sha256": "8041256642f96782d4c3587b1783aa27b6e8eacd454296aab0463234eee713a8",
+      "sha256": "cc8a23f953b9da8435742feecc49c6edc7edfe0b2c9f923935f029bf26999532",
       "chunks": 23,
       "title": "Privacy And Data Governance",
       "status": "indexed",
@@ -2778,7 +2778,7 @@
       "summary": "Explains Cursor’s data flows, privacy guarantees, and Cloud Agent data handling for security and compliance reviews."
     },
     "https://cursor.com/docs/enterprise/tenancy-restriction.md": {
-      "sha256": "48249736076aa9841ee67a4ff4894c9071e39c87b9ac47ff558675f07c2aff4c",
+      "sha256": "dff9c03d1808090d85ae43b69754a730c0e8142a3439d96916c064aae1c53ba3",
       "chunks": 17,
       "title": "Tenancy Restriction",
       "status": "indexed",
@@ -3265,6 +3265,46 @@
       "reason": "",
       "summary": "Explains how to set up and use Cursor Security Review to scan pull requests for security issues."
     },
+    "https://cursor.com/docs/security.md": {
+      "sha256": "d4e46daea732a2656e52c95a60912650d75d2281d50d66ad0f0943f50e7195aa",
+      "chunks": 10,
+      "title": "Security",
+      "status": "indexed",
+      "reason": "",
+      "summary": "An overview of Cursor’s team and organization security controls and where admins manage them."
+    },
+    "https://cursor.com/docs/security/api-keys.md": {
+      "sha256": "c433e17d5c43a8bc39b72ca9efe87db3093bd76c668e54e27e81330675b94ef0",
+      "chunks": 19,
+      "title": "Api Keys",
+      "status": "indexed",
+      "reason": "",
+      "summary": "Explains Cursor API key owners, permissions, and expiry for configuring scripts, services, and integrations."
+    },
+    "https://cursor.com/docs/security/network-controls.md": {
+      "sha256": "6cd519513276ecbdd7e019074cc2f88f57f66ab7a6cbb00377cc27626a5aff2f",
+      "chunks": 18,
+      "title": "Network Controls",
+      "status": "indexed",
+      "reason": "",
+      "summary": "Explains how to configure Cursor’s enterprise IP allowlist and agent network access controls."
+    },
+    "https://cursor.com/docs/security/oauth-applications.md": {
+      "sha256": "74cad1ba6ee736099c06f1bd48f444616a29275d961c1b2062f577df4ca540aa",
+      "chunks": 18,
+      "title": "Oauth Applications",
+      "status": "indexed",
+      "reason": "",
+      "summary": "Explains how to register and configure a Cursor OAuth application, including scopes, redirect URIs, and credential handling."
+    },
+    "https://cursor.com/docs/security/sessions.md": {
+      "sha256": "81572c6d9326ccbe800bf80971ca1b726edbe2f971df3ebe4f1ddd75e7dc8d64",
+      "chunks": 16,
+      "title": "Sessions",
+      "status": "indexed",
+      "reason": "",
+      "summary": "Explains how to view and revoke Cursor sign-in sessions, sign out everywhere, and optionally revoke personal API keys."
+    },
     "https://cursor.com/docs/skills.md": {
       "sha256": "c4052634b543c5b9b7b917e996e65843fac20db05d6ab65cef741bd25745e389",
       "chunks": 30,
@@ -3562,8 +3602,8 @@
       "summary": "Explains how to install, enable, and use Computer Use in the ChatGPT desktop app."
     },
     "https://learn.chatgpt.com/docs/config-file/config-advanced.md": {
-      "sha256": "e93a25178f650efe78efeeda5caf364cf1e1230751d7fee95791bef2b17c6aa3",
-      "chunks": 59,
+      "sha256": "e4d8e1e563b7721675c85ea879da9e0aa5149873b1ccb685782b26990cd545d8",
+      "chunks": 61,
       "title": "Advanced Configuration",
       "status": "indexed",
       "reason": "",
@@ -3994,8 +4034,8 @@
       "summary": "This page explains how to deploy a gateway for Codex, including prerequisites, model routing, credentials, and configuration distribution."
     },
     "https://learn.chatgpt.com/docs/enterprise/security-cookbook.md": {
-      "sha256": "f41d4478ac151122bc93f1e6f4437a01d25753e1baa38e26f66cc18d086a319d",
-      "chunks": 71,
+      "sha256": "383d0c4c70a6823a3ebaf0231d2cf2f092eee317df3172baa2bcab3393b54df0",
+      "chunks": 72,
       "title": "Codex security cookbook",
       "status": "indexed",
       "reason": "",
