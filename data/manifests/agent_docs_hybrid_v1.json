@@ -1,5 +1,5 @@
 {
-  "indexed_at": "2026-11-27",
+  "indexed_at": "2026-11-28",
   "documents": {
     "https://code.claude.com/docs/en/accessibility.md": {
       "sha256": "1b82308e4dd1017747b450fb81d8f4c4e03df59302449806617988c41fb5c16d",
@@ -546,7 +546,7 @@
       "summary": "An overview of Claude Ship’s pull-request agents with instructions for enabling them and details about availability."
     },
     "https://code.claude.com/docs/en/claude-tag.md": {
-      "sha256": "bbefc81ff716536ca36b076e1447733d0e16ca0981d1dfcd111b024015aeb4b2",
+      "sha256": "bb6de974c5cd2856d6b538823fe9633ac0c5096148b2db098caddf4def593b8c",
       "chunks": 74,
       "title": "Claude Tag",
       "status": "indexed",
@@ -746,8 +746,8 @@
       "summary": "Explains the requirements and steps for running Claude Code Desktop sessions inside a WSL 2 distribution."
     },
     "https://code.claude.com/docs/en/desktop.md": {
-      "sha256": "d046be64dc879cee5f34c5bd75d38911b28a8d070acb193164888228b009220d",
-      "chunks": 171,
+      "sha256": "4015b1be397f8cc28845ef29ebf3a994b39f77e46481a6e5a1bc0d9e582febad",
+      "chunks": 175,
       "title": "Desktop application",
       "status": "indexed",
       "reason": "",
@@ -1034,7 +1034,7 @@
       "summary": "Explains how to use the Claude app on iOS and Android to start, monitor, and steer Claude Code sessions, including cloud sessions and Remote Control."
     },
     "https://code.claude.com/docs/en/model-config.md": {
-      "sha256": "f48150b0668a739bfbd8dce8cd02d5b1c29a6e7626ff066d5c481f394d568fb0",
+      "sha256": "924f97f9c6f8eec264d911d6272231aff7832e0902f38cee226dc9139f3b3ad4",
       "chunks": 81,
       "title": "Model configuration",
       "status": "indexed",
@@ -1538,8 +1538,8 @@
       "summary": "Provides copyable example settings files for personal, team, and organization-wide Claude Code configuration."
     },
     "https://code.claude.com/docs/en/settings-reference.md": {
-      "sha256": "4c1bbaf0b43d960994b1300651753e059b82fb16df049dceceab79485cf55364",
-      "chunks": 340,
+      "sha256": "91ab82b8fc8ffd9ad6188055541dfe881f50dcb557f94db8d1c9992176dc8459",
+      "chunks": 341,
       "title": "All settings",
       "status": "indexed",
       "reason": "",
@@ -3266,7 +3266,7 @@
       "summary": "Explains how to set up and use Cursor Security Review to scan pull requests for security issues."
     },
     "https://cursor.com/docs/security.md": {
-      "sha256": "d4e46daea732a2656e52c95a60912650d75d2281d50d66ad0f0943f50e7195aa",
+      "sha256": "c871e5b1b657aaa6f5ec79217ff92ef88299e1ef9d542350e010a99cc4b80e8e",
       "chunks": 10,
       "title": "Security",
       "status": "indexed",
@@ -3274,15 +3274,15 @@
       "summary": "An overview of Cursor’s team and organization security controls and where admins manage them."
     },
     "https://cursor.com/docs/security/api-keys.md": {
-      "sha256": "c433e17d5c43a8bc39b72ca9efe87db3093bd76c668e54e27e81330675b94ef0",
-      "chunks": 19,
+      "sha256": "478a8bf1bb0535fdef5a8cfaca46cc915edf033e24e92dbc0a494d3491ebca4a",
+      "chunks": 20,
       "title": "Api Keys",
       "status": "indexed",
       "reason": "",
       "summary": "Explains Cursor API key owners, permissions, and expiry for configuring scripts, services, and integrations."
     },
     "https://cursor.com/docs/security/network-controls.md": {
-      "sha256": "6cd519513276ecbdd7e019074cc2f88f57f66ab7a6cbb00377cc27626a5aff2f",
+      "sha256": "9b6a6e7098c11a407c48e1feeff1e49772a160ce53bb6f01f7b37a977bc2980f",
       "chunks": 18,
       "title": "Network Controls",
       "status": "indexed",
@@ -3290,7 +3290,7 @@
       "summary": "Explains how to configure Cursor’s enterprise IP allowlist and agent network access controls."
     },
     "https://cursor.com/docs/security/oauth-applications.md": {
-      "sha256": "74cad1ba6ee736099c06f1bd48f444616a29275d961c1b2062f577df4ca540aa",
+      "sha256": "0405cf6f736da6efc9ec0c2d1a5dc91a002c3d3f6765be1930166da3125464a3",
       "chunks": 18,
       "title": "Oauth Applications",
       "status": "indexed",
@@ -3298,12 +3298,20 @@
       "summary": "Explains how to register and configure a Cursor OAuth application, including scopes, redirect URIs, and credential handling."
     },
     "https://cursor.com/docs/security/sessions.md": {
-      "sha256": "81572c6d9326ccbe800bf80971ca1b726edbe2f971df3ebe4f1ddd75e7dc8d64",
+      "sha256": "a878ec7d141083efaf3bb67287b4180a64ab8cc7c083c088420e2bacc3420d57",
       "chunks": 16,
       "title": "Sessions",
       "status": "indexed",
       "reason": "",
       "summary": "Explains how to view and revoke Cursor sign-in sessions, sign out everywhere, and optionally revoke personal API keys."
+    },
+    "https://cursor.com/docs/security/trusted-issuers.md": {
+      "sha256": "9983ca0d76b31a9de83b1e60c86cdea08a7cf9cfd11967dedc6f1f1aa4ddc926",
+      "chunks": 24,
+      "title": "Trusted Issuers",
+      "status": "indexed",
+      "reason": "",
+      "summary": "Explains how trusted issuers work and when to use them to provide scoped, short-lived access tokens for a Cursor team or organization."
     },
     "https://cursor.com/docs/skills.md": {
       "sha256": "c4052634b543c5b9b7b917e996e65843fac20db05d6ab65cef741bd25745e389",
@@ -5170,7 +5178,7 @@
       "summary": "Explains the MCP OAuth Client Credentials extension for machine-to-machine authentication and when to use it."
     },
     "https://modelcontextprotocol.io/extensions/client-matrix.md": {
-      "sha256": "539418cf4d10a56a178f8561f9f2d86894709982b8c9496deb9a7686fe20b5a8",
+      "sha256": "5af8e9ece8cb0d81dc399131e8ca19e0cdab63ab56b82ad56e0cad8b3ac41433",
       "chunks": 7,
       "title": "Extension Support Matrix",
       "status": "indexed",

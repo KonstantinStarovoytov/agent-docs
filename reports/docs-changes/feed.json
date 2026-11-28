@@ -1,6 +1,70 @@
 {
-  "checked": "2026-11-27",
+  "checked": "2026-11-28",
   "days": [
+    {
+      "added": [
+        {
+          "product": "cursor",
+          "url": "https://cursor.com/docs/security/trusted-issuers.md"
+        }
+      ],
+      "changed": [
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/claude-tag.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/desktop.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/model-config.md"
+        },
+        {
+          "new_sections": [],
+          "product": "claude-code",
+          "url": "https://code.claude.com/docs/en/settings-reference.md"
+        },
+        {
+          "new_sections": [
+            "OAuth Applications and trusted issuers"
+          ],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/security.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/security/api-keys.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/security/network-controls.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/security/oauth-applications.md"
+        },
+        {
+          "new_sections": [],
+          "product": "cursor",
+          "url": "https://cursor.com/docs/security/sessions.md"
+        },
+        {
+          "new_sections": [],
+          "product": "mcp",
+          "url": "https://modelcontextprotocol.io/extensions/client-matrix.md"
+        }
+      ],
+      "day": "2026-11-28",
+      "removed": []
+    },
     {
       "added": [
         {
